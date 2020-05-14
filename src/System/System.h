@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "Person.h"
-#include "Table.h"
+#include "Person/Person.h"
+#include "Utilities/Table.h"
 
 
 /// The System Class

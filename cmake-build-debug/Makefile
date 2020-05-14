@@ -123,140 +123,167 @@ MeatWagons/fast:
 	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/build
 .PHONY : MeatWagons/fast
 
-src/Date.o: src/Date.cpp.o
+src/Date/Date.o: src/Date/Date.cpp.o
 
-.PHONY : src/Date.o
-
-# target to build an object file
-src/Date.cpp.o:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Date.cpp.o
-.PHONY : src/Date.cpp.o
-
-src/Date.i: src/Date.cpp.i
-
-.PHONY : src/Date.i
-
-# target to preprocess a source file
-src/Date.cpp.i:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Date.cpp.i
-.PHONY : src/Date.cpp.i
-
-src/Date.s: src/Date.cpp.s
-
-.PHONY : src/Date.s
-
-# target to generate assembly for a file
-src/Date.cpp.s:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Date.cpp.s
-.PHONY : src/Date.cpp.s
-
-src/Menu.o: src/Menu.cpp.o
-
-.PHONY : src/Menu.o
+.PHONY : src/Date/Date.o
 
 # target to build an object file
-src/Menu.cpp.o:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Menu.cpp.o
-.PHONY : src/Menu.cpp.o
+src/Date/Date.cpp.o:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o
+.PHONY : src/Date/Date.cpp.o
 
-src/Menu.i: src/Menu.cpp.i
+src/Date/Date.i: src/Date/Date.cpp.i
 
-.PHONY : src/Menu.i
+.PHONY : src/Date/Date.i
 
 # target to preprocess a source file
-src/Menu.cpp.i:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Menu.cpp.i
-.PHONY : src/Menu.cpp.i
+src/Date/Date.cpp.i:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.i
+.PHONY : src/Date/Date.cpp.i
 
-src/Menu.s: src/Menu.cpp.s
+src/Date/Date.s: src/Date/Date.cpp.s
 
-.PHONY : src/Menu.s
+.PHONY : src/Date/Date.s
 
 # target to generate assembly for a file
-src/Menu.cpp.s:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Menu.cpp.s
-.PHONY : src/Menu.cpp.s
+src/Date/Date.cpp.s:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.s
+.PHONY : src/Date/Date.cpp.s
 
-src/Person.o: src/Person.cpp.o
+src/Menu/Menu.o: src/Menu/Menu.cpp.o
 
-.PHONY : src/Person.o
+.PHONY : src/Menu/Menu.o
 
 # target to build an object file
-src/Person.cpp.o:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Person.cpp.o
-.PHONY : src/Person.cpp.o
+src/Menu/Menu.cpp.o:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o
+.PHONY : src/Menu/Menu.cpp.o
 
-src/Person.i: src/Person.cpp.i
+src/Menu/Menu.i: src/Menu/Menu.cpp.i
 
-.PHONY : src/Person.i
+.PHONY : src/Menu/Menu.i
 
 # target to preprocess a source file
-src/Person.cpp.i:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Person.cpp.i
-.PHONY : src/Person.cpp.i
+src/Menu/Menu.cpp.i:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.i
+.PHONY : src/Menu/Menu.cpp.i
 
-src/Person.s: src/Person.cpp.s
+src/Menu/Menu.s: src/Menu/Menu.cpp.s
 
-.PHONY : src/Person.s
+.PHONY : src/Menu/Menu.s
 
 # target to generate assembly for a file
-src/Person.cpp.s:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Person.cpp.s
-.PHONY : src/Person.cpp.s
+src/Menu/Menu.cpp.s:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.s
+.PHONY : src/Menu/Menu.cpp.s
 
-src/System.o: src/System.cpp.o
+src/Person/Person.o: src/Person/Person.cpp.o
 
-.PHONY : src/System.o
+.PHONY : src/Person/Person.o
 
 # target to build an object file
-src/System.cpp.o:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/System.cpp.o
-.PHONY : src/System.cpp.o
+src/Person/Person.cpp.o:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o
+.PHONY : src/Person/Person.cpp.o
 
-src/System.i: src/System.cpp.i
+src/Person/Person.i: src/Person/Person.cpp.i
 
-.PHONY : src/System.i
+.PHONY : src/Person/Person.i
 
 # target to preprocess a source file
-src/System.cpp.i:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/System.cpp.i
-.PHONY : src/System.cpp.i
+src/Person/Person.cpp.i:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.i
+.PHONY : src/Person/Person.cpp.i
 
-src/System.s: src/System.cpp.s
+src/Person/Person.s: src/Person/Person.cpp.s
 
-.PHONY : src/System.s
+.PHONY : src/Person/Person.s
 
 # target to generate assembly for a file
-src/System.cpp.s:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/System.cpp.s
-.PHONY : src/System.cpp.s
+src/Person/Person.cpp.s:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.s
+.PHONY : src/Person/Person.cpp.s
 
-src/Time.o: src/Time.cpp.o
+src/System/System.o: src/System/System.cpp.o
 
-.PHONY : src/Time.o
+.PHONY : src/System/System.o
 
 # target to build an object file
-src/Time.cpp.o:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Time.cpp.o
-.PHONY : src/Time.cpp.o
+src/System/System.cpp.o:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/System/System.cpp.o
+.PHONY : src/System/System.cpp.o
 
-src/Time.i: src/Time.cpp.i
+src/System/System.i: src/System/System.cpp.i
 
-.PHONY : src/Time.i
+.PHONY : src/System/System.i
 
 # target to preprocess a source file
-src/Time.cpp.i:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Time.cpp.i
-.PHONY : src/Time.cpp.i
+src/System/System.cpp.i:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/System/System.cpp.i
+.PHONY : src/System/System.cpp.i
 
-src/Time.s: src/Time.cpp.s
+src/System/System.s: src/System/System.cpp.s
 
-.PHONY : src/Time.s
+.PHONY : src/System/System.s
 
 # target to generate assembly for a file
-src/Time.cpp.s:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Time.cpp.s
-.PHONY : src/Time.cpp.s
+src/System/System.cpp.s:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/System/System.cpp.s
+.PHONY : src/System/System.cpp.s
+
+src/Time/Time.o: src/Time/Time.cpp.o
+
+.PHONY : src/Time/Time.o
+
+# target to build an object file
+src/Time/Time.cpp.o:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o
+.PHONY : src/Time/Time.cpp.o
+
+src/Time/Time.i: src/Time/Time.cpp.i
+
+.PHONY : src/Time/Time.i
+
+# target to preprocess a source file
+src/Time/Time.cpp.i:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.i
+.PHONY : src/Time/Time.cpp.i
+
+src/Time/Time.s: src/Time/Time.cpp.s
+
+.PHONY : src/Time/Time.s
+
+# target to generate assembly for a file
+src/Time/Time.cpp.s:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.s
+.PHONY : src/Time/Time.cpp.s
+
+src/Utilities/utils.o: src/Utilities/utils.cpp.o
+
+.PHONY : src/Utilities/utils.o
+
+# target to build an object file
+src/Utilities/utils.cpp.o:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o
+.PHONY : src/Utilities/utils.cpp.o
+
+src/Utilities/utils.i: src/Utilities/utils.cpp.i
+
+.PHONY : src/Utilities/utils.i
+
+# target to preprocess a source file
+src/Utilities/utils.cpp.i:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.i
+.PHONY : src/Utilities/utils.cpp.i
+
+src/Utilities/utils.s: src/Utilities/utils.cpp.s
+
+.PHONY : src/Utilities/utils.s
+
+# target to generate assembly for a file
+src/Utilities/utils.cpp.s:
+	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.s
+.PHONY : src/Utilities/utils.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -285,33 +312,6 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-src/utils.o: src/utils.cpp.o
-
-.PHONY : src/utils.o
-
-# target to build an object file
-src/utils.cpp.o:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/utils.cpp.o
-.PHONY : src/utils.cpp.o
-
-src/utils.i: src/utils.cpp.i
-
-.PHONY : src/utils.i
-
-# target to preprocess a source file
-src/utils.cpp.i:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/utils.cpp.i
-.PHONY : src/utils.cpp.i
-
-src/utils.s: src/utils.cpp.s
-
-.PHONY : src/utils.s
-
-# target to generate assembly for a file
-src/utils.cpp.s:
-	$(MAKE) -f CMakeFiles/MeatWagons.dir/build.make CMakeFiles/MeatWagons.dir/src/utils.cpp.s
-.PHONY : src/utils.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -321,27 +321,27 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... MeatWagons"
-	@echo "... src/Date.o"
-	@echo "... src/Date.i"
-	@echo "... src/Date.s"
-	@echo "... src/Menu.o"
-	@echo "... src/Menu.i"
-	@echo "... src/Menu.s"
-	@echo "... src/Person.o"
-	@echo "... src/Person.i"
-	@echo "... src/Person.s"
-	@echo "... src/System.o"
-	@echo "... src/System.i"
-	@echo "... src/System.s"
-	@echo "... src/Time.o"
-	@echo "... src/Time.i"
-	@echo "... src/Time.s"
+	@echo "... src/Date/Date.o"
+	@echo "... src/Date/Date.i"
+	@echo "... src/Date/Date.s"
+	@echo "... src/Menu/Menu.o"
+	@echo "... src/Menu/Menu.i"
+	@echo "... src/Menu/Menu.s"
+	@echo "... src/Person/Person.o"
+	@echo "... src/Person/Person.i"
+	@echo "... src/Person/Person.s"
+	@echo "... src/System/System.o"
+	@echo "... src/System/System.i"
+	@echo "... src/System/System.s"
+	@echo "... src/Time/Time.o"
+	@echo "... src/Time/Time.i"
+	@echo "... src/Time/Time.s"
+	@echo "... src/Utilities/utils.o"
+	@echo "... src/Utilities/utils.i"
+	@echo "... src/Utilities/utils.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/utils.o"
-	@echo "... src/utils.i"
-	@echo "... src/utils.s"
 .PHONY : help
 
 

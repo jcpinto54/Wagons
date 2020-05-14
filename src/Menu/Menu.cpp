@@ -1,7 +1,7 @@
 #include "Menu.h"
-#include "utils.h"
-#include "Person.h"
-#include "Table.h"
+#include "Utilities/utils.h"
+#include "Person/Person.h"
+#include "Utilities/Table.h"
 
 using namespace std;
 

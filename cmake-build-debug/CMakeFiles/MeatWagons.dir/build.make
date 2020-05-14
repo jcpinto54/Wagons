@@ -57,18 +57,18 @@ include CMakeFiles/MeatWagons.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/MeatWagons.dir/flags.make
 
-CMakeFiles/MeatWagons.dir/src/Date.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
-CMakeFiles/MeatWagons.dir/src/Date.cpp.o: ../src/Date.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MeatWagons.dir/src/Date.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Date.cpp.o -c /home/joao/Documents/MeatWagons/src/Date.cpp
+CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
+CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o: ../src/Date/Date.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o -c /home/joao/Documents/MeatWagons/src/Date/Date.cpp
 
-CMakeFiles/MeatWagons.dir/src/Date.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Date.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Date.cpp > CMakeFiles/MeatWagons.dir/src/Date.cpp.i
+CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Date/Date.cpp > CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.i
 
-CMakeFiles/MeatWagons.dir/src/Date.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Date.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Date.cpp -o CMakeFiles/MeatWagons.dir/src/Date.cpp.s
+CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Date/Date.cpp -o CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.s
 
 CMakeFiles/MeatWagons.dir/src/main.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
 CMakeFiles/MeatWagons.dir/src/main.cpp.o: ../src/main.cpp
@@ -83,91 +83,91 @@ CMakeFiles/MeatWagons.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/main.cpp -o CMakeFiles/MeatWagons.dir/src/main.cpp.s
 
-CMakeFiles/MeatWagons.dir/src/Menu.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
-CMakeFiles/MeatWagons.dir/src/Menu.cpp.o: ../src/Menu.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/MeatWagons.dir/src/Menu.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Menu.cpp.o -c /home/joao/Documents/MeatWagons/src/Menu.cpp
+CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
+CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o: ../src/Menu/Menu.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o -c /home/joao/Documents/MeatWagons/src/Menu/Menu.cpp
 
-CMakeFiles/MeatWagons.dir/src/Menu.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Menu.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Menu.cpp > CMakeFiles/MeatWagons.dir/src/Menu.cpp.i
+CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Menu/Menu.cpp > CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.i
 
-CMakeFiles/MeatWagons.dir/src/Menu.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Menu.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Menu.cpp -o CMakeFiles/MeatWagons.dir/src/Menu.cpp.s
+CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Menu/Menu.cpp -o CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.s
 
-CMakeFiles/MeatWagons.dir/src/Person.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
-CMakeFiles/MeatWagons.dir/src/Person.cpp.o: ../src/Person.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MeatWagons.dir/src/Person.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Person.cpp.o -c /home/joao/Documents/MeatWagons/src/Person.cpp
+CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
+CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o: ../src/Person/Person.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o -c /home/joao/Documents/MeatWagons/src/Person/Person.cpp
 
-CMakeFiles/MeatWagons.dir/src/Person.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Person.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Person.cpp > CMakeFiles/MeatWagons.dir/src/Person.cpp.i
+CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Person/Person.cpp > CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.i
 
-CMakeFiles/MeatWagons.dir/src/Person.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Person.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Person.cpp -o CMakeFiles/MeatWagons.dir/src/Person.cpp.s
+CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Person/Person.cpp -o CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.s
 
-CMakeFiles/MeatWagons.dir/src/System.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
-CMakeFiles/MeatWagons.dir/src/System.cpp.o: ../src/System.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MeatWagons.dir/src/System.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/System.cpp.o -c /home/joao/Documents/MeatWagons/src/System.cpp
+CMakeFiles/MeatWagons.dir/src/System/System.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
+CMakeFiles/MeatWagons.dir/src/System/System.cpp.o: ../src/System/System.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/MeatWagons.dir/src/System/System.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/System/System.cpp.o -c /home/joao/Documents/MeatWagons/src/System/System.cpp
 
-CMakeFiles/MeatWagons.dir/src/System.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/System.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/System.cpp > CMakeFiles/MeatWagons.dir/src/System.cpp.i
+CMakeFiles/MeatWagons.dir/src/System/System.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/System/System.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/System/System.cpp > CMakeFiles/MeatWagons.dir/src/System/System.cpp.i
 
-CMakeFiles/MeatWagons.dir/src/System.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/System.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/System.cpp -o CMakeFiles/MeatWagons.dir/src/System.cpp.s
+CMakeFiles/MeatWagons.dir/src/System/System.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/System/System.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/System/System.cpp -o CMakeFiles/MeatWagons.dir/src/System/System.cpp.s
 
-CMakeFiles/MeatWagons.dir/src/Time.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
-CMakeFiles/MeatWagons.dir/src/Time.cpp.o: ../src/Time.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MeatWagons.dir/src/Time.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Time.cpp.o -c /home/joao/Documents/MeatWagons/src/Time.cpp
+CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
+CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o: ../src/Time/Time.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o -c /home/joao/Documents/MeatWagons/src/Time/Time.cpp
 
-CMakeFiles/MeatWagons.dir/src/Time.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Time.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Time.cpp > CMakeFiles/MeatWagons.dir/src/Time.cpp.i
+CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Time/Time.cpp > CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.i
 
-CMakeFiles/MeatWagons.dir/src/Time.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Time.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Time.cpp -o CMakeFiles/MeatWagons.dir/src/Time.cpp.s
+CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Time/Time.cpp -o CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.s
 
-CMakeFiles/MeatWagons.dir/src/utils.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
-CMakeFiles/MeatWagons.dir/src/utils.cpp.o: ../src/utils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MeatWagons.dir/src/utils.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/utils.cpp.o -c /home/joao/Documents/MeatWagons/src/utils.cpp
+CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o: CMakeFiles/MeatWagons.dir/flags.make
+CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o: ../src/Utilities/utils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o -c /home/joao/Documents/MeatWagons/src/Utilities/utils.cpp
 
-CMakeFiles/MeatWagons.dir/src/utils.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/utils.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/utils.cpp > CMakeFiles/MeatWagons.dir/src/utils.cpp.i
+CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/joao/Documents/MeatWagons/src/Utilities/utils.cpp > CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.i
 
-CMakeFiles/MeatWagons.dir/src/utils.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/utils.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/utils.cpp -o CMakeFiles/MeatWagons.dir/src/utils.cpp.s
+CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/joao/Documents/MeatWagons/src/Utilities/utils.cpp -o CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.s
 
 # Object files for target MeatWagons
 MeatWagons_OBJECTS = \
-"CMakeFiles/MeatWagons.dir/src/Date.cpp.o" \
+"CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o" \
 "CMakeFiles/MeatWagons.dir/src/main.cpp.o" \
-"CMakeFiles/MeatWagons.dir/src/Menu.cpp.o" \
-"CMakeFiles/MeatWagons.dir/src/Person.cpp.o" \
-"CMakeFiles/MeatWagons.dir/src/System.cpp.o" \
-"CMakeFiles/MeatWagons.dir/src/Time.cpp.o" \
-"CMakeFiles/MeatWagons.dir/src/utils.cpp.o"
+"CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o" \
+"CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o" \
+"CMakeFiles/MeatWagons.dir/src/System/System.cpp.o" \
+"CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o" \
+"CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o"
 
 # External object files for target MeatWagons
 MeatWagons_EXTERNAL_OBJECTS =
 
-MeatWagons: CMakeFiles/MeatWagons.dir/src/Date.cpp.o
+MeatWagons: CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o
 MeatWagons: CMakeFiles/MeatWagons.dir/src/main.cpp.o
-MeatWagons: CMakeFiles/MeatWagons.dir/src/Menu.cpp.o
-MeatWagons: CMakeFiles/MeatWagons.dir/src/Person.cpp.o
-MeatWagons: CMakeFiles/MeatWagons.dir/src/System.cpp.o
-MeatWagons: CMakeFiles/MeatWagons.dir/src/Time.cpp.o
-MeatWagons: CMakeFiles/MeatWagons.dir/src/utils.cpp.o
+MeatWagons: CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o
+MeatWagons: CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o
+MeatWagons: CMakeFiles/MeatWagons.dir/src/System/System.cpp.o
+MeatWagons: CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o
+MeatWagons: CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o
 MeatWagons: CMakeFiles/MeatWagons.dir/build.make
 MeatWagons: CMakeFiles/MeatWagons.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/joao/Documents/MeatWagons/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable MeatWagons"

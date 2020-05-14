@@ -1,5 +1,5 @@
-#include "System.h"
-#include "Menu.h"
+#include "System/System.h"
+#include "Menu/Menu.h"
 
 using namespace std;
 

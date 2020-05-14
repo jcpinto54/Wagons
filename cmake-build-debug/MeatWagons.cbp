@@ -86,49 +86,49 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Date.cpp">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Date/Date.cpp">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Date.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Date/Date.h">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/InvalidInput.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Menu/Menu.cpp">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Menu.cpp">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Menu/Menu.h">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Menu.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Person/Person.cpp">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Person.cpp">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Person/Person.h">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Person.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/System/System.cpp">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/System.cpp">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/System/System.h">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/System.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Time/Time.cpp">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Table.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Time/Time.h">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Time.cpp">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Utilities/InvalidInput.h">
 			<Option target="MeatWagons"/>
 		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/Time.h">
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Utilities/Table.h">
+			<Option target="MeatWagons"/>
+		</Unit>
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Utilities/utils.cpp">
+			<Option target="MeatWagons"/>
+		</Unit>
+		<Unit filename="/home/joao/Documents/MeatWagons/src/Utilities/utils.h">
 			<Option target="MeatWagons"/>
 		</Unit>
 		<Unit filename="/home/joao/Documents/MeatWagons/src/main.cpp">
-			<Option target="MeatWagons"/>
-		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/utils.cpp">
-			<Option target="MeatWagons"/>
-		</Unit>
-		<Unit filename="/home/joao/Documents/MeatWagons/src/utils.h">
 			<Option target="MeatWagons"/>
 		</Unit>
 		<Unit filename="/home/joao/Documents/MeatWagons/CMakeLists.txt">
