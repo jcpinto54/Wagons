@@ -17,7 +17,8 @@ int main() {
     try {
         MainMenu m(sys);
     } catch (exception &error) {
-        cout << "Error" << endl;
+        cout << "Error in Menu" << endl;
+        Util::pause();
         return 2;
     }
     return 0;

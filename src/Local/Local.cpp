@@ -9,6 +9,7 @@
 using namespace Util;
 
 Local::Local(unsigned id, int x, int y) : id(id), x(x), y(y) {
+    this->tag = Tag::DEFAULT;
     if (x < Local::minX) {
         Local::minX = x;
     }
@@ -83,4 +84,34 @@ int Local::getMinY() {
 int Local::getMaxY() {
     return maxY;
 }
+
+void Local::setTag(string tag) {
+    this->tag = strToTag(tag);
+}
+
+Tag Local::getTag() const {
+    return tag;
+}
+
+string tagToStr(Tag tag) {
+    switch(tag) {
+        case PRISON: return "prison";
+        case POLICE: return "police";
+        case COURT: return "court";
+        case HQ: return "hq";
+        case DEFAULT: return "default";
+    }
+    throw InvalidTagConversion();
+}
+
+Tag strToTag(string tagStr) {
+    if (tagStr == "prison") return PRISON;
+    else if (tagStr == "police") return POLICE;
+    else if (tagStr == "court") return COURT;
+    else if (tagStr == "hq") return HQ;
+    else if (tagStr == "default") return DEFAULT;
+    throw InvalidTagConversion();
+}
+
+
 

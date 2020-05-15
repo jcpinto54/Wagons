@@ -75,16 +75,6 @@ public:
 	 */
 	GraphViewer(int width, int height, bool dynamic, int port_n);
 
-    /**
-     * Construtor que cria um novo grafo a partir de um grafo e atribui automaticamente a porta.
-     * Exemplo: GraphViewer *gv = new GraphViewer(600, 600, true); instancia um grafo
-     * 600x600, onde a posição dos nós é determinada automaticamente.
-     *
-     * @param graph Grafo a representar
-     */
-    template<class T>
-    GraphViewer(Graph<T> graph);
-
 	/**
 	 * Função que cria a janela para visualização.
 	 * Exemplo, para um apontador gv onde foi instanciada a classe GraphViewer:

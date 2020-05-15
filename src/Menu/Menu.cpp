@@ -195,6 +195,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'V' : {
+                cout << "DO NOT CLOSE THE GRAPH VIEWER WINDOW!!! IT WILL CRASH THE PROGRAM" << endl;
                 sys->viewGraph();
             }
                 break;

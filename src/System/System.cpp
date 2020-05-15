@@ -5,7 +5,10 @@
 #include <algorithm>
 #include <sstream>
 #include <utility>
-#include <Utilities/InvalidInput.h>
+#include "Utilities/InvalidInput.h"
+#include <unordered_map>
+#include <sys/wait.h>
+
 
 using namespace std;
 
@@ -39,6 +42,8 @@ System::System(const string &fileName) {
     string graphNodesFile = graphPath + "/nodes.txt";
     int nInputs;
 
+    unordered_map<unsigned, Vertex<Local *> *> tempGraph;
+
     file.open(graphNodesFile);
     if (!file.is_open()) throw InvalidInput();
     file >> nInputs;
@@ -46,32 +51,54 @@ System::System(const string &fileName) {
     for (int i = 0; i < nInputs; i++) {
         Local *l;
         file >> &l;
-        this->graph.addVertex(l);
+        tempGraph[l->getId()] = new Vertex<Local *>(l);
     }
     file.close();
 
-    string graphEdges = graphPath + "/edges.txt";
-
-    file.open(graphEdges);
+    string graphEdgesFile = graphPath + "/edges.txt";
+    string line;
+    file.open(graphEdgesFile);
     file >> nInputs;
     file.ignore(100, '\n');
     for (int i = 0; i < nInputs; i++) {
-        string line;
+
         getline(file, line);
         line[0] = ' ';
         line.pop_back();
         aux = trim(split(line, ","));
         if (aux.size() != 2) throw InvalidInput("Invalid edge reading");
-        Local *from = new Local(stoi(aux.at(0)));
-        Local *to = new Local(stoi(aux.at(1)));
 
-        this->graph.addEdge(from, to, 0.0);
+        unsigned idFrom = stoi(aux.at(0));
+        unsigned idTo = stoi(aux.at(1));
+        tempGraph[idFrom]->getAdj().emplace_back(tempGraph[idTo], 0.0);
     }
     file.close();
 
-    int width = (Local::getMaxX() - Local::getMinX()) + 50;
+    string graphTagsFile = graphPath + "/tags.txt";
 
+    file.open(graphTagsFile);
+    file >> nInputs;
+    file.ignore(100, '\n');
+    string tagName;
+    int nTags, nodeId;
+    for (int i = 0; i < nInputs; i++) {
+        getline(file, tagName);
+        file >> nTags;
+        file.ignore(100, '\n');
+        for (int j = 0; j < nTags; j++) {
+            getline(file, line);
+            nodeId = stoi(line);
+            tempGraph[nodeId]->getInfo()->setTag(tagName);
+        }
+    }
+
+    for (auto it = tempGraph.begin(); it != tempGraph.end(); it++) {
+        this->graph.addVertex(it->second);
+    }
+
+    int width = (Local::getMaxX() - Local::getMinX()) + 50;
     int height = (Local::getMaxY() - Local::getMinY()) + 50;
+
 
     this->graphViewer = new GraphViewer(width, height, false);
 
@@ -136,6 +163,7 @@ System::~System() {
     }
     file.close();
 
+    wait(NULL);
 
 }
 
@@ -210,6 +238,10 @@ void System::viewGraph() {
 
     for (auto vertex : graph.getVertexSet()) {
         graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX(), vertex->getInfo()->getY());
+//        switch (vertex->getInfo()->getTag()) {
+//            case Tag::COURT:
+//
+//        }
     }
     int i = 0;
     for (auto vertex : graph.getVertexSet()) {
@@ -219,6 +251,7 @@ void System::viewGraph() {
         }
     }
 
+    graphViewer->setVertexSize(5, 40);
     graphViewer->rearrange();
     Util::pause();
     graphViewer->closeWindow();

@@ -43,7 +43,7 @@ public:
 
     bool operator<(Vertex<T> & vertex) const;
 
-    const vector<Edge<T>> &getAdj() const;
+    vector<Edge<T>> &getAdj();
 
     // // required by MutablePriorityQueue
     friend class Graph<T>;
@@ -51,7 +51,7 @@ public:
 };
 
 template<class T>
-const vector<Edge<T>> &Vertex<T>::getAdj() const {
+vector<Edge<T>> &Vertex<T>::getAdj() {
     return adj;
 }
 
@@ -118,6 +118,7 @@ class Graph {
 public:
     Vertex<T> *findVertex(const T &in) const;
     bool addVertex(const T &in);
+    bool addVertex(Vertex<T> *in);
     bool addEdge(const T &sourc, const T &dest, double w);
     int getNumVertex() const;
     vector<Vertex<T> *> getVertexSet() const;
@@ -231,6 +232,14 @@ vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
     vector<T> res;
     // TODO
     return res;
+}
+
+template<class T>
+bool Graph<T>::addVertex(Vertex<T> *in) {
+    if ( findVertex(in->getInfo()) != NULL)
+        return false;
+    vertexSet.push_back(in);
+    return true;
 }
 
 

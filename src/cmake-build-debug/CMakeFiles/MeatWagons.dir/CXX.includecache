@@ -85,6 +85,8 @@ connection.h
 ../Local/Local.h
 iostream
 -
+map
+-
 
 ../Person/Person.h
 ostream
@@ -144,6 +146,10 @@ sstream
 utility
 -
 Utilities/InvalidInput.h
+/home/joao/Documents/MeatWagons/src/System/Utilities/InvalidInput.h
+unordered_map
+-
+sys/wait.h
 -
 
 /home/joao/Documents/MeatWagons/src/System/System.h
