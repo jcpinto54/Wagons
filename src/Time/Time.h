@@ -7,6 +7,7 @@
 #include "Utilities/utils.h"
 
 using namespace std;
+using namespace Util;
 
 /// @brief The Time Class
 class Time {

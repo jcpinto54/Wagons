@@ -1,8 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <Graph/graphviewer.h>
+#include "Local/Local.h"
 #include "Person/Person.h"
 #include "Utilities/Table.h"
+#include "Graph/Graph.h"
 
 
 /// The System Class
@@ -12,10 +15,14 @@ private:
 
     /// @brief The file with the names of the other database files
     string fileName;
-public:
+
     /// @brief All People memory positions in a vector
     vector<Person *> people;
 
+    Graph<Local *> graph;
+    GraphViewer *graphViewer;
+
+public:
     /// @brief Creates a new system with the information provided by the file.
     /// @param fileName The path to the file where the information is stored.
     explicit System(const string &fileName/*,const string pass*/);
@@ -58,6 +65,8 @@ public:
     void updatePersonName(vector<Person *>::const_iterator iterator);
 
     void updatePersonContact(vector<Person *>::const_iterator iterator);
+
+    void viewGraph();
 };
 
 ///@brief Receives a vector of Person and transforms in a table.

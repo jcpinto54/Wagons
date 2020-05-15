@@ -5,20 +5,26 @@
 #include <algorithm>
 #include <sstream>
 #include <utility>
+#include <Utilities/InvalidInput.h>
 
 using namespace std;
 
 System::System(const string &fileName) {
     this->fileName = fileName;
+
     ifstream file;
     vector<string> aux = split(fileName, "/");
     aux.pop_back();
     string path = join(aux, '/');
-    string peopleFile;
+    string peopleFile, graphPath;
+
     file.open(fileName);
-    file >> peopleFile;
-    peopleFile = path + peopleFile;
+    getline(file, peopleFile);
+    getline(file, graphPath);
     file.close();
+
+    peopleFile = path + peopleFile;
+    graphPath = path + graphPath;
 
     file.open(peopleFile);
 
@@ -29,6 +35,46 @@ System::System(const string &fileName) {
     }
 
     file.close();
+
+    string graphNodesFile = graphPath + "/nodes.txt";
+    int nInputs;
+
+    file.open(graphNodesFile);
+    if (!file.is_open()) throw InvalidInput();
+    file >> nInputs;
+    file.ignore(100, '\n');
+    for (int i = 0; i < nInputs; i++) {
+        Local *l;
+        file >> &l;
+        this->graph.addVertex(l);
+    }
+    file.close();
+
+    string graphEdges = graphPath + "/edges.txt";
+
+    file.open(graphEdges);
+    file >> nInputs;
+    file.ignore(100, '\n');
+    for (int i = 0; i < nInputs; i++) {
+        string line;
+        getline(file, line);
+        line[0] = ' ';
+        line.pop_back();
+        aux = trim(split(line, ","));
+        if (aux.size() != 2) throw InvalidInput("Invalid edge reading");
+        Local *from = new Local(stoi(aux.at(0)));
+        Local *to = new Local(stoi(aux.at(1)));
+
+        this->graph.addEdge(from, to, 0.0);
+    }
+    file.close();
+
+    int width = (Local::getMaxX() - Local::getMinX()) + 50;
+
+    int height = (Local::getMaxY() - Local::getMinY()) + 50;
+
+    this->graphViewer = new GraphViewer(width, height, false);
+
 }
 
 void System::readPerson() const {
@@ -49,7 +95,7 @@ void System::readPeople(const vector<Person *> &container) const {
     }
     auto read = toTable(container, this);
     cout << read;
-    pause();
+    Util::pause();
 }
 
 
@@ -145,7 +191,7 @@ void System::updatePersonName(vector<Person *>::const_iterator person) {
     }
     (*person)->setName(name);
     cout << "Person name changed to : " << name << " successfully!" << endl;
-    pause();
+    Util::pause();
 }
 
 void System::updatePersonContact(vector<Person *>::const_iterator person) {
@@ -156,7 +202,26 @@ void System::updatePersonContact(vector<Person *>::const_iterator person) {
     unsigned cont = stoi(contStr);
     (*person)->setContact(cont);
     cout << "Person contact changed successfully!" << endl;
-    pause();
+    Util::pause();
+}
+
+void System::viewGraph() {
+    graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
+
+    for (auto vertex : graph.getVertexSet()) {
+        graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX(), vertex->getInfo()->getY());
+    }
+    int i = 0;
+    for (auto vertex : graph.getVertexSet()) {
+        for (auto edge : vertex->getAdj()) {
+            graphViewer->addEdge(i, vertex->getInfo()->getId(), edge.getDest()->getInfo()->getId(), EdgeType::UNDIRECTED);
+            i++;
+        }
+    }
+
+    graphViewer->rearrange();
+    Util::pause();
+    graphViewer->closeWindow();
 }
 
 

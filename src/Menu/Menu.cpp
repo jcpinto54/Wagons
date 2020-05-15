@@ -53,6 +53,9 @@ MainMenu::MainMenu(System *system) : Menu(system) {
             case 'P':
                 call = new PersonMenu(system);
                 break;
+            case 'G':
+                call = new GraphMenu(system);
+                break;
             case 'Q':
                 return;
             default:
@@ -63,6 +66,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
 
 vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"P", "Person Menu"},
+                                   {"G", "Graph Menu"},
                                    {"Q", "Quit Program"}});
 }
 
@@ -111,9 +115,9 @@ UpdatePersonMenu::UpdatePersonMenu(System *system) : Menu(system) {
     if (aux == ":q") return;
     unsigned id = stoi(aux);
     auto prs = sys->findPerson(id);
-    if (prs == sys->people.end()) {
+    if (prs == sys->getPeople().end()) {
         cout << "This person doesn't exist!" << endl;
-        pause();
+        Util::pause();
         return;
     }
     while (true) {
@@ -148,22 +152,26 @@ ReadPersonMenu::ReadPersonMenu(System *system) : ReadMenu<Person>(system) {
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'N' : {
-                sort(sys->people.begin(), sys->people.end(), compareName);
-                sys->readPeople(sys->people);
+                sort(sys->getPeople().begin(), sys->getPeople().end(), compareName);
+                sys->readPeople(sys->getPeople());
+                Util::pause();
             }
                 break;
             case 'B' : {
-                sort(sys->people.begin(), sys->people.end(), compareBirthday);
-                sys->readPeople(sys->people);
+                sort(sys->getPeople().begin(), sys->getPeople().end(), compareBirthday);
+                sys->readPeople(sys->getPeople());
+                Util::pause();
             }
                 break;
             case 'I' : {
-                sort(sys->people.begin(), sys->people.end(), compareId);
-                sys->readPeople(sys->people);
+                sort(sys->getPeople().begin(), sys->getPeople().end(), compareId);
+                sys->readPeople(sys->getPeople());
+                Util::pause();
             }
                 break;
             case 'V' : {
                 sys->readPerson();
+                Util::pause();
             }
                 break;
             case 'G':
@@ -180,4 +188,28 @@ vector<vector<string>> ReadPersonMenu::getOptions() const {
                                    {"I", "Sort by ID"},
                                    {"V", "View just one Person"},
                                    {"G", "Go Back"}});
+}
+
+GraphMenu::GraphMenu(System *system) : Menu(system) {
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'V' : {
+                sys->viewGraph();
+            }
+                break;
+            case 'M':
+                return;
+            case 'Q':
+                return;
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> GraphMenu::getOptions() const {
+    return vector<vector<string>>({{"V", "View Graph"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
 }

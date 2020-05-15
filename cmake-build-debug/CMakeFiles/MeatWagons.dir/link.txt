@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/MeatWagons.dir/src/Date/Date.cpp.o CMakeFiles/MeatWagons.dir/src/main.cpp.o CMakeFiles/MeatWagons.dir/src/Menu/Menu.cpp.o CMakeFiles/MeatWagons.dir/src/Person/Person.cpp.o CMakeFiles/MeatWagons.dir/src/System/System.cpp.o CMakeFiles/MeatWagons.dir/src/Time/Time.cpp.o CMakeFiles/MeatWagons.dir/src/Utilities/utils.cpp.o  -o MeatWagons 
