@@ -195,13 +195,62 @@ bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
 
 template<class T>
 void Graph<T>::unweightedShortestPath(const T &orig) {
-    // TODO
+    for (auto v : vertexSet)
+    {
+        v->dist = INF;
+        v->path = nullptr;
+    }
+    auto s = findVertex(orig);
+    s->dist = 0;
+    queue<Vertex<T> *> q;
+    q.push(s);
+    while (!q.empty())
+    {
+        auto v = q.front();
+        q.pop();
+        for (auto &e : v->adj)
+        {
+            auto w = e.dest;
+            if (v->dist + 1 < w->dist)
+            {
+                w->dist = v->dist + 1;
+                w->path = v;
+                q.push(w);
+            }
+        }
+    }
 }
 
 
 template<class T>
 void Graph<T>::dijkstraShortestPath(const T &origin) {
-    // TODO
+    for (auto v : vertexSet)
+    {
+        v->dist = INF;
+        v->path = nullptr;
+    }
+    auto s = findVertex(origin);
+    s->dist = 0;
+    MutablePriorityQueue<Vertex<T>> q;
+    q.insert(s);
+    while(!q.empty())
+    {
+        auto v = q.extractMin();
+        for(auto &e : v->adj)
+        {
+            auto od = e.dest->dist;
+            auto w = e.dest;
+            if(v->dist + e.weight < w->dist)
+            {
+                w->dist = v->dist + e.weight;
+                w->path = v;
+                if (od == INF)
+                    q.insert(w);
+                else
+                    q.decreaseKey(w);
+            }
+        }
+    }
 }
 
 

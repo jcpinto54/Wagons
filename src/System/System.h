@@ -7,6 +7,7 @@
 #include "Utilities/Table.h"
 #include "GraphTemplate/Graph.h"
 #include "Wagon/Wagon.h"
+#include "Map/Map.h"
 
 /// The System Class
 class System {
@@ -21,8 +22,7 @@ private:
 
     vector<Wagon *> wagons;
 
-    Graph<Local *> graph;
-    GraphViewer *graphViewer;
+    Map map;
 
 public:
     /// @brief Creates a new system with the information provided by the file.
@@ -40,7 +40,6 @@ public:
     /// @param birthday A date equal to the person's birthday.
     /// @return Returns a iterator to the Person, people.end() otherwise.
     vector<Person *>::const_iterator findPerson(unsigned id) const;
-
 
     /// @brief Inserts a new person in the People vector
     /// @param Person The person to be inserted
@@ -62,7 +61,7 @@ public:
     ///@brief It's called by deletePerson() and deletes a Client.
     ///@param name The name of the client to be deleted.
     ///@param birthday The birthday of the client to be deleted.
-    void deletePerson(const unsigned id);
+    void deletePerson(unsigned id);
 
     void updatePersonName(vector<Person *>::const_iterator iterator);
 
