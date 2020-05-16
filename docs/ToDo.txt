@@ -1,3 +1,9 @@
 -Prisioneiros/Condutores
 -Carrinha
 -Por um algoritmo a funcionar
+
+a completar se tiver tempo:
+-grids nao apresentarem duas arestas para cada lado
+-Passar vetores para hash (só os que fizerem sentido!!)
+-trocar chamadas findVertex(): trocar por uma pesquisa num unordered_map no Map.h
+

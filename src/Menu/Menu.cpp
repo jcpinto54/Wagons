@@ -46,28 +46,32 @@ Menu::Menu(System *system) {
 }
 
 MainMenu::MainMenu(System *system) : Menu(system) {
-    Menu *call = nullptr;
     do {
         char o = this->option();
         switch (o) {
             case 'P':
-                call = new PersonMenu(system);
+                new PersonMenu(system);
                 break;
             case 'V' : {
-                cout << "DO NOT CLOSE THE GRAPH VIEWER WINDOW!!! IT WILL CRASH THE PROGRAM" << endl;
                 sys->viewGraph();
             }
+                break;
+            case 'G' : {
+                new GraphMenu(system);
+            }
+                break;
             case 'Q':
                 return;
             default:
                 break;
         }
-    } while (call->getNext() != 'Q');
+    } while (true);
 }
 
 vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"P", "Person Menu"},
                                    {"V", "View Graph"},
+                                   {"G", "Graph Menu"},
                                    {"Q", "Quit Program"}});
 }
 
@@ -187,27 +191,33 @@ vector<vector<string>> ReadPersonMenu::getOptions() const {
                                    {"G", "Go Back"}});
 }
 
-//GraphMenu::GraphMenu(System *system) : Menu(system) {
-//    while (true) {
-//        this->nextMenu = this->option();
-//        switch (this->nextMenu) {
-//            case 'V' : {
-//                cout << "DO NOT CLOSE THE GRAPH VIEWER WINDOW!!! IT WILL CRASH THE PROGRAM" << endl;
-//                sys->viewGraph();
-//            }
-//                break;
-//            case 'M':
-//                return;
-//            case 'Q':
-//                return;
-//            default:
-//                break;
-//        }
-//    }
-//}
-//
-//vector<vector<string>> GraphMenu::getOptions() const {
-//    return vector<vector<string>>({{"V", "View Graph"},
-//                                   {"M", "Main Menu"},
-//                                   {"Q", "Quit Program"}});
-//}
+GraphMenu::GraphMenu(System *system) : Menu(system) {
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'P' : {
+                string idFromStr, idToStr;
+                idFromStr = getInput(isNum, "Enter the start vertex id: ", "Invalid Number");
+                idToStr = getInput(isNum, "Enter the end vertex id: ", "Invalid Number");
+                try {
+                    sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr));
+                } catch (NonExistingVertex e) {
+                    cout << e.getMsg() << endl;
+                }
+            }
+                break;
+            case 'M':
+                return;
+            case 'Q':
+                return;
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> GraphMenu::getOptions() const {
+    return vector<vector<string>>({{"P", "Path between two Vertices"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}

@@ -31,4 +31,8 @@ add_executable(MeatWagons
         src/Local/Local.cpp
         src/Wagon/Wagon.h
         src/Wagon/Wagon.cpp
-        src/Map/Map.cpp src/Map/Map.h)
+        src/Map/Map.cpp
+        src/Map/Map.h
+#        src/Person/Prisioner.cpp
+#        src/Person/Prisioner.h
+        )

@@ -9,7 +9,9 @@
 #include <list>
 #include <limits>
 #include <cmath>
+#include <sstream>
 #include "MutablePriorityQueue.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -263,7 +265,17 @@ void Graph<T>::bellmanFordShortestPath(const T &orig) {
 template<class T>
 vector<T> Graph<T>::getPathTo(const T &dest) const{
     vector<T> res;
-    // TODO
+
+    auto v = findVertex(dest);
+
+    if (v == nullptr || v->dist == INF)
+        return res;
+
+    for (; v != nullptr; v = v->path)
+        res.push_back(v->info);
+
+    reverse(res.begin(), res.end());
+
     return res;
 }
 
@@ -289,6 +301,14 @@ bool Graph<T>::addVertex(Vertex<T> *in) {
         return false;
     vertexSet.push_back(in);
     return true;
+}
+
+template<class T>
+string pathToStr(vector<T> &path) {
+    stringstream ss;
+    for(unsigned int i = 0; i < path.size(); i++)
+        ss << path[i] << " ";
+    return ss.str();
 }
 
 

@@ -23,7 +23,6 @@ private:
     vector<Wagon *> wagons;
 
     Map map;
-
 public:
     /// @brief Creates a new system with the information provided by the file.
     /// @param fileName The path to the file where the information is stored.
@@ -68,6 +67,8 @@ public:
     void updatePersonContact(vector<Person *>::const_iterator iterator);
 
     void viewGraph();
+
+    void viewPathBetween2Points(unsigned idFrom, unsigned idTo);
 };
 
 ///@brief Receives a vector of Person and transforms in a table.

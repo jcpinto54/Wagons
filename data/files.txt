@@ -1,3 +1,3 @@
 people.txt
 wagons.txt
-GridGraphs/4x4/
+GridGraphs/16x16/

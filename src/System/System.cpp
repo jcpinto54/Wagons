@@ -27,6 +27,9 @@ System::System(const string &fileName) {
     getline(file, graphPath);
     file.close();
 
+    if (graphPath.find("GridGraphs") != string::npos)
+        this->map.setDirected(false);
+
     peopleFile = path + peopleFile;
     wagonsFile = path + wagonsFile;
     graphPath = path + graphPath;
@@ -82,7 +85,10 @@ System::System(const string &fileName) {
 
         unsigned idFrom = stoi(aux.at(0));
         unsigned idTo = stoi(aux.at(1));
-        tempGraph[idFrom]->getAdj().emplace_back(tempGraph[idTo], 0.0);
+        tempGraph[idFrom]->getAdj().emplace_back(tempGraph[idTo], 1.0);
+        if (!this->map.isDirected()) {
+            tempGraph[idTo]->getAdj().emplace_back(tempGraph[idFrom], 1.0);
+        }
     }
     file.close();
 
@@ -104,7 +110,7 @@ System::System(const string &fileName) {
         }
     }
 
-    this->map = Map(tempGraph);
+    this->map.init(tempGraph);
 }
 
 void System::readPerson() const {
@@ -238,6 +244,11 @@ void System::updatePersonContact(vector<Person *>::const_iterator person) {
 
 void System::viewGraph() {
     map.viewGraph();
+}
+
+void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
+    this->map.viewGraph();
+    this->map.viewPath(idFrom, idTo);
 }
 
 
