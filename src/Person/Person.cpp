@@ -5,7 +5,7 @@
 
 //Person
 
-string Person::getName() const{
+string Person::getName() const {
     return name;
 }
 

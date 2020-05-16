@@ -8,7 +8,7 @@ using namespace std;
 int main() {
     System *sys;
     try {
-        sys = new System("../../data/files.txt");
+        sys = new System("../data/files.txt");
     } catch (InvalidInput &error) {
         cout << error.getMsg() << endl;
         Util::pause();

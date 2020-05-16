@@ -53,9 +53,10 @@ MainMenu::MainMenu(System *system) : Menu(system) {
             case 'P':
                 call = new PersonMenu(system);
                 break;
-            case 'G':
-                call = new GraphMenu(system);
-                break;
+            case 'V' : {
+                cout << "DO NOT CLOSE THE GRAPH VIEWER WINDOW!!! IT WILL CRASH THE PROGRAM" << endl;
+                sys->viewGraph();
+            }
             case 'Q':
                 return;
             default:
@@ -66,7 +67,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
 
 vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"P", "Person Menu"},
-                                   {"G", "Graph Menu"},
+                                   {"V", "View Graph"},
                                    {"Q", "Quit Program"}});
 }
 
@@ -154,24 +155,20 @@ ReadPersonMenu::ReadPersonMenu(System *system) : ReadMenu<Person>(system) {
             case 'N' : {
                 sort(sys->getPeople().begin(), sys->getPeople().end(), compareName);
                 sys->readPeople(sys->getPeople());
-                Util::pause();
             }
                 break;
             case 'B' : {
                 sort(sys->getPeople().begin(), sys->getPeople().end(), compareBirthday);
                 sys->readPeople(sys->getPeople());
-                Util::pause();
             }
                 break;
             case 'I' : {
                 sort(sys->getPeople().begin(), sys->getPeople().end(), compareId);
                 sys->readPeople(sys->getPeople());
-                Util::pause();
             }
                 break;
             case 'V' : {
                 sys->readPerson();
-                Util::pause();
             }
                 break;
             case 'G':
@@ -190,27 +187,27 @@ vector<vector<string>> ReadPersonMenu::getOptions() const {
                                    {"G", "Go Back"}});
 }
 
-GraphMenu::GraphMenu(System *system) : Menu(system) {
-    while (true) {
-        this->nextMenu = this->option();
-        switch (this->nextMenu) {
-            case 'V' : {
-                cout << "DO NOT CLOSE THE GRAPH VIEWER WINDOW!!! IT WILL CRASH THE PROGRAM" << endl;
-                sys->viewGraph();
-            }
-                break;
-            case 'M':
-                return;
-            case 'Q':
-                return;
-            default:
-                break;
-        }
-    }
-}
-
-vector<vector<string>> GraphMenu::getOptions() const {
-    return vector<vector<string>>({{"V", "View Graph"},
-                                   {"M", "Main Menu"},
-                                   {"Q", "Quit Program"}});
-}
+//GraphMenu::GraphMenu(System *system) : Menu(system) {
+//    while (true) {
+//        this->nextMenu = this->option();
+//        switch (this->nextMenu) {
+//            case 'V' : {
+//                cout << "DO NOT CLOSE THE GRAPH VIEWER WINDOW!!! IT WILL CRASH THE PROGRAM" << endl;
+//                sys->viewGraph();
+//            }
+//                break;
+//            case 'M':
+//                return;
+//            case 'Q':
+//                return;
+//            default:
+//                break;
+//        }
+//    }
+//}
+//
+//vector<vector<string>> GraphMenu::getOptions() const {
+//    return vector<vector<string>>({{"V", "View Graph"},
+//                                   {"M", "Main Menu"},
+//                                   {"Q", "Quit Program"}});
+//}

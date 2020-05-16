@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>
-#include <Graph/graphviewer.h>
+#include "GraphTemplate/graphviewer.h"
 #include "Local/Local.h"
 #include "Person/Person.h"
 #include "Utilities/Table.h"
-#include "Graph/Graph.h"
-
+#include "GraphTemplate/Graph.h"
+#include "Wagon/Wagon.h"
 
 /// The System Class
 class System {
@@ -18,6 +18,8 @@ private:
 
     /// @brief All People memory positions in a vector
     vector<Person *> people;
+
+    vector<Wagon *> wagons;
 
     Graph<Local *> graph;
     GraphViewer *graphViewer;
@@ -31,7 +33,7 @@ public:
     ~System();
 
     /// @return Returns a vector with the people of the system.
-    vector<Person *> getPeople() const;
+    vector<Person *> &getPeople();
 
     /// @brief Finds the memory position of a Person.
     /// @param name A string equal to the name of the person. Not case sensitive.

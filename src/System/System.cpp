@@ -19,14 +19,16 @@ System::System(const string &fileName) {
     vector<string> aux = split(fileName, "/");
     aux.pop_back();
     string path = join(aux, '/');
-    string peopleFile, graphPath;
+    string peopleFile, wagonsFile, graphPath;
 
     file.open(fileName);
     getline(file, peopleFile);
+    getline(file, wagonsFile);
     getline(file, graphPath);
     file.close();
 
     peopleFile = path + peopleFile;
+    wagonsFile = path + wagonsFile;
     graphPath = path + graphPath;
 
     file.open(peopleFile);
@@ -39,13 +41,23 @@ System::System(const string &fileName) {
 
     file.close();
 
-    string graphNodesFile = graphPath + "/nodes.txt";
+    file.open(wagonsFile);
+
+    while (file.peek() != -1) {
+        Wagon *w;
+        file >> &w;
+        this->wagons.push_back(w);
+    }
+
+    file.close();
+
+    string graphNodesFile = graphPath + "nodes.txt";
     int nInputs;
 
     unordered_map<unsigned, Vertex<Local *> *> tempGraph;
 
     file.open(graphNodesFile);
-    if (!file.is_open()) throw InvalidInput();
+    if (!file.is_open()) throw InvalidInput("graph nodes is not open");
     file >> nInputs;
     file.ignore(100, '\n');
     for (int i = 0; i < nInputs; i++) {
@@ -55,7 +67,7 @@ System::System(const string &fileName) {
     }
     file.close();
 
-    string graphEdgesFile = graphPath + "/edges.txt";
+    string graphEdgesFile = graphPath + "edges.txt";
     string line;
     file.open(graphEdgesFile);
     file >> nInputs;
@@ -74,7 +86,7 @@ System::System(const string &fileName) {
     }
     file.close();
 
-    string graphTagsFile = graphPath + "/tags.txt";
+    string graphTagsFile = graphPath + "tags.txt";
 
     file.open(graphTagsFile);
     file >> nInputs;
@@ -191,7 +203,7 @@ void System::createPerson(Person *person) {
     throw ExistingPerson(*person);
 }
 
-vector<Person *> System::getPeople() const {
+vector<Person *> &System::getPeople() {
     return this->people;
 }
 
@@ -238,10 +250,20 @@ void System::viewGraph() {
 
     for (auto vertex : graph.getVertexSet()) {
         graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX(), vertex->getInfo()->getY());
-//        switch (vertex->getInfo()->getTag()) {
-//            case Tag::COURT:
-//
-//        }
+        switch (vertex->getInfo()->getTag()) {
+            case Tag::COURT:
+                graphViewer->setVertexIcon(vertex->getInfo()->getId(), "../data/court.png");
+                break;
+            case Tag::POLICE:
+                graphViewer->setVertexIcon(vertex->getInfo()->getId(), "../data/police.png");
+                break;
+            case Tag::PRISON:
+                graphViewer->setVertexIcon(vertex->getInfo()->getId(), "../data/prison.png");
+                break;
+            case Tag::HQ:
+                graphViewer->setVertexIcon(vertex->getInfo()->getId(), "../data/high.png");
+                break;
+        }
     }
     int i = 0;
     for (auto vertex : graph.getVertexSet()) {
@@ -251,7 +273,6 @@ void System::viewGraph() {
         }
     }
 
-    graphViewer->setVertexSize(5, 40);
     graphViewer->rearrange();
     Util::pause();
     graphViewer->closeWindow();
