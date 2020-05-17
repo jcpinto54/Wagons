@@ -13,14 +13,14 @@ Local::Local(unsigned id, int x, int y) : id(id), x(x), y(y) {
     if (x < Local::minX) {
         Local::minX = x;
     }
-    else if (x > Local::maxX) {
+    if (x > Local::maxX) {
         Local::maxX = x;
     }
 
     if (y < Local::minY) {
         Local::minY = y;
     }
-    else if (y > Local::maxY) {
+    if (y > Local::maxY) {
         Local::maxY = y;
     }
 
@@ -109,8 +109,7 @@ Tag strToTag(string tagStr) {
     else if (tagStr == "police") return POLICE;
     else if (tagStr == "court") return COURT;
     else if (tagStr == "hq") return HQ;
-    else if (tagStr == "default") return DEFAULT;
-    throw InvalidTagConversion();
+    throw InvalidTagConversion(tagStr);
 }
 
 

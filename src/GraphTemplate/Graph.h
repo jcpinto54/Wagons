@@ -117,6 +117,9 @@ template <class T>
 class Graph {
     vector<Vertex<T> *> vertexSet;    // vertex set
 
+    vector<vector<double>> dist;
+    vector<vector<Vertex<T>*>> pred;
+    bool floydWarshallSolved = false;
 public:
     Vertex<T> *findVertex(const T &in) const;
     bool addVertex(const T &in);
@@ -126,14 +129,16 @@ public:
     vector<Vertex<T> *> getVertexSet() const;
 
     // Fp05 - single source
-    void unweightedShortestPath(const T &s);    //TODO...
+    void unweightedShortestPath(const T &s);
     void dijkstraShortestPath(const T &s);      //TODO...
     void bellmanFordShortestPath(const T &s);   //TODO...
-    vector<T> getPathTo(const T &dest) const;   //TODO...
+    vector<T> getPathTo(const T &dest) const;
 
     // Fp05 - all pairs
-    void floydWarshallShortestPath();   //TODO...
-    vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;   //TODO...
+    void floydWarshallShortestPath();
+    vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
+
+    bool isFloydWarshallSolved() const;
 
 };
 
@@ -255,6 +260,10 @@ void Graph<T>::dijkstraShortestPath(const T &origin) {
     }
 }
 
+template<class T>
+bool Graph<T>::isFloydWarshallSolved() const {
+    return floydWarshallSolved;
+}
 
 template<class T>
 void Graph<T>::bellmanFordShortestPath(const T &orig) {
@@ -264,6 +273,7 @@ void Graph<T>::bellmanFordShortestPath(const T &orig) {
 
 template<class T>
 vector<T> Graph<T>::getPathTo(const T &dest) const{
+
     vector<T> res;
 
     auto v = findVertex(dest);
@@ -285,13 +295,72 @@ vector<T> Graph<T>::getPathTo(const T &dest) const{
 
 template<class T>
 void Graph<T>::floydWarshallShortestPath() {
-    // TODO
+    if (this->floydWarshallSolved) return;
+
+    dist.clear();
+    dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
+    pred.clear();
+    pred = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
+
+    // Build dist matrix
+    int i = 0, j = 0;
+    for (auto v1 : vertexSet) {
+        for (auto v2 : vertexSet) {
+            if (i == j)
+                dist[i][j] = 0;
+            else
+                for (Edge<T> edge: v1->adj)
+                    if (edge.dest->info == v2->info) {
+                        dist[i][j] = edge.weight;
+                        pred[i][j] = v1;
+                    }
+            j++;
+        }
+        i++;
+        j = 0;
+    }
+
+    for (int k = 0; k < vertexSet.size(); k++) {
+        int i = 0, j = 0;
+        for (auto v1 : vertexSet) {
+            for (auto v2 : vertexSet) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    pred[i][j] = pred[k][j];
+                }
+                j++;
+            }
+            i++;
+            j = 0;
+        }
+    }
+    floydWarshallSolved = true;
 }
 
 template<class T>
 vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
     vector<T> res;
-    // TODO
+    int srcIndex, destIndex;
+
+    for (int i = 0; i < vertexSet.size(); i++) {
+        if (vertexSet.at(i)->info == orig)
+            srcIndex = i;
+        else if (vertexSet.at(i)->info == dest)
+            destIndex = i;
+    }
+
+    while (pred[srcIndex][destIndex] != vertexSet[srcIndex]) {
+        res.emplace(res.begin(), pred[srcIndex][destIndex]->info);
+        for (int i = 0; i < vertexSet.size(); i++) {
+            if (vertexSet.at(i)->info == pred[srcIndex][destIndex]->info) {
+                destIndex = i;
+                break;
+            }
+        }
+    }
+    res.push_back(dest);
+    res.insert(res.begin(), orig);
+
     return res;
 }
 

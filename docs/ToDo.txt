@@ -1,6 +1,6 @@
--Prisioneiros/Condutores
--Carrinha
--Por um algoritmo a funcionar
+-Trabalhar com carrinha, e a seguir com diferentes tipos de pessoas
+-correr um grafo grande
+
 
 a completar se tiver tempo:
 -grids nao apresentarem duas arestas para cada lado

@@ -60,12 +60,13 @@ public:
 /// Invalid Tag Conversion Exception
 class InvalidTagConversion : public std::exception {
 private:
+    string input;
     /// @brief The msg to be displayed when this exception occurs
     std::string msg = "Invalid Tag Conversion!";
 public:
     /// @brief Constructs an InvalidTagConversion exception
-    /// @param msg The msg of the new InvalidTagConversion exception
-    InvalidTagConversion(std::string msg) : msg(move(msg)) {};
+    /// @param in The input of the new InvalidTagConversion exception
+    InvalidTagConversion(std::string in) : input(move(in)) {};
 
     /// @brief Construct an InvalidTagConversion exception with an empty msg
     InvalidTagConversion() = default;

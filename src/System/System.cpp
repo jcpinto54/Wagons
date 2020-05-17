@@ -251,6 +251,10 @@ void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
     this->map.viewPath(idFrom, idTo);
 }
 
+void System::applyFloydWarshall() {
+    this->map.applyFloydWarshall();
+}
+
 
 Table<string> toTable(const vector<Person *> &container, const System *sys) {
     vector<string> header = {"Name", "Birthday", "Contact", "ID"};

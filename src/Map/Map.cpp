@@ -14,7 +14,7 @@ void Map::viewGraph(bool toContinue) {
     graphViewer->defineVertexColor("white");
 
     for (auto vertex : graph.getVertexSet()) {
-        graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX(), vertex->getInfo()->getY());
+        graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX() - Local::getMinX(), vertex->getInfo()->getY()-Local::getMinY());
         switch (vertex->getInfo()->getTag()) {
             case Tag::COURT:
                 graphViewer->setVertexColor(vertex->getInfo()->getId(), "orange");
@@ -58,7 +58,6 @@ void Map::viewGraph(bool toContinue) {
 Map::Map() {}
 
 void Map::init(unordered_map<unsigned int, Vertex<Local *> *> &map) {
-    this->locs.resize(map.size());
     for (auto & pair : map) {
         this->graph.addVertex(pair.second);
         locs[pair.first] = pair.second->getInfo()->getTag();
@@ -88,6 +87,10 @@ vector<Local *> Map::getPath(unsigned int idFrom, unsigned int idTo) {
     if (to == NULL) {
         throw NonExistingVertex(idTo);
     }
+
+    if (this->graph.isFloydWarshallSolved())
+        return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
+
     this->graph.unweightedShortestPath(from->getInfo());
     return this->graph.getPathTo(to->getInfo());
 }
@@ -156,6 +159,10 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo) {
         }
     }
     graphViewer->rearrange();
+}
+
+void Map::applyFloydWarshall() {
+    this->graph.floydWarshallShortestPath();
 }
 
 

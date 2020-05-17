@@ -206,6 +206,10 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 }
             }
                 break;
+            case 'C' : {
+                sys->applyFloydWarshall();
+            }
+                break;
             case 'M':
                 return;
             case 'Q':
@@ -218,6 +222,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
 
 vector<vector<string>> GraphMenu::getOptions() const {
     return vector<vector<string>>({{"P", "Path between two Vertices"},
+                                   {"C", "Calculate all paths between all pairs of vertices"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }

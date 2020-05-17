@@ -69,6 +69,8 @@ public:
     void viewGraph();
 
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo);
+
+    void applyFloydWarshall();
 };
 
 ///@brief Receives a vector of Person and transforms in a table.

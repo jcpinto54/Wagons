@@ -46,7 +46,7 @@ class Map {
     Graph<Local *> graph;
     GraphViewer *graphViewer;
 
-    vector<Tag> locs;
+    unordered_map<unsigned, Tag> locs;
     unordered_map<pair<Local *, Local *>, unsigned, edgeMapHash, edgeMapHash> edgeIds;
 
     bool directed = true;
@@ -64,6 +64,8 @@ public:
     bool isDirected() const;
 
     void viewPath(unsigned idFrom, unsigned idTo);
+
+    void applyFloydWarshall();
 };
 
 /// NonExistingVertex Exception
