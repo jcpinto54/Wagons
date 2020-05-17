@@ -5,35 +5,39 @@
 #include "Map.h"
 #include "Utilities/utils.h"
 
-void Map::viewGraph() {
+void Map::viewGraph(bool toContinue) {
     graphViewer->closeWindow();
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
     if (!this->directed)
         graphViewer->defineEdgeCurved(false);
+
+    graphViewer->defineVertexColor("white");
 
     for (auto vertex : graph.getVertexSet()) {
         graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX(), vertex->getInfo()->getY());
         switch (vertex->getInfo()->getTag()) {
             case Tag::COURT:
                 graphViewer->setVertexColor(vertex->getInfo()->getId(), "orange");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 30);
                 graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Court");
+                graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
                 break;
             case Tag::POLICE:
                 graphViewer->setVertexColor(vertex->getInfo()->getId(), "blue");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 30);
+                graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
                 graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Police");
                 break;
             case Tag::PRISON:
                 graphViewer->setVertexColor(vertex->getInfo()->getId(), "black");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 30);
+                graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
                 graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Prison");
                 break;
             case Tag::HQ:
                 graphViewer->setVertexColor(vertex->getInfo()->getId(), "cyan");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 35);
+                graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
                 graphViewer->setVertexLabel(vertex->getInfo()->getId(), "HQ");
                 break;
+            case Tag::DEFAULT:
+                graphViewer->setVertexSize(vertex->getInfo()->getId(),5);
         }
     }
     int i = 0;
@@ -47,8 +51,8 @@ void Map::viewGraph() {
             i++;
         }
     }
-
-    graphViewer->rearrange();
+    if (!toContinue)
+        graphViewer->rearrange();
 }
 
 Map::Map() {}
@@ -95,7 +99,9 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo) {
     } catch (NonExistingVertex e) {
         throw e;
     }
+
     graphViewer->setVertexColor(idFrom, "green");
+    graphViewer->setVertexSize(idFrom, 30);
     switch(this->locs[idFrom]) {
         case Tag::DEFAULT:
             graphViewer->setVertexLabel(idFrom, "Start");
@@ -114,6 +120,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo) {
             break;
     }
     graphViewer->setVertexColor(idTo, "red");
+    graphViewer->setVertexSize(idTo, 30);
     switch(this->locs[idTo]) {
         case Tag::DEFAULT:
             graphViewer->setVertexLabel(idTo, "End");
@@ -131,11 +138,22 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo) {
             graphViewer->setVertexLabel(idTo, "End/HQ");
             break;
     }
-
     for (auto it = path.begin(); it != path.end() - 1; it++) {
         unsigned idEdge = edgeIds[pair<Local*, Local*>(*it, *(it + 1))];
         graphViewer->setEdgeThickness(idEdge, 5);
         graphViewer->setEdgeColor(idEdge, "green");
+        if (it == path.begin()) continue;
+
+        graphViewer->setVertexSize((*it)->getId(), 10);
+        switch(this->locs[(*it)->getId()]) {
+            case Tag::DEFAULT:
+                break;
+            case Tag::HQ:
+                graphViewer->setVertexSize((*it)->getId(), 25);
+                break;
+            default:
+                graphViewer->setVertexSize((*it)->getId(), 20);
+        }
     }
     graphViewer->rearrange();
 }

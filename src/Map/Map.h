@@ -57,7 +57,7 @@ public:
 
     void init(unordered_map<unsigned,Vertex<Local *> *> &map);
 
-    void viewGraph();
+    void viewGraph(bool toContinue = false);
 
     void setDirected(bool directed);
 

@@ -247,7 +247,7 @@ void System::viewGraph() {
 }
 
 void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
-    this->map.viewGraph();
+    this->map.viewGraph(true);
     this->map.viewPath(idFrom, idTo);
 }
 
