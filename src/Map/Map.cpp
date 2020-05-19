@@ -7,19 +7,18 @@
 
 void Map::viewGraph(bool toContinue) {
 
-    if (this->graph.getNumVertex() > 300) {
-        cout << "The graph is too big to represent in the gui mode!" << endl;
-        return;
-    }
+//    if (this->graph.getNumVertex() > 300) {
+//        cout << "The graph is too big to represent in the gui mode!" << endl;
+//        return;
+//    }
     graphViewer->closeWindow();
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
-    if (!this->directed)
-        graphViewer->defineEdgeCurved(false);
+    graphViewer->defineEdgeCurved(false);
 
     graphViewer->defineVertexColor("white");
 
     for (auto vertex : graph.getVertexSet()) {
-        graphViewer->addNode(vertex->getInfo()->getId(), vertex->getInfo()->getX() - Local::getMinX(), vertex->getInfo()->getY()-Local::getMinY());
+        graphViewer->addNode(vertex->getInfo()->getId(), convertXToAPI(vertex->getInfo()->getX()), convertYToAPI(vertex->getInfo()->getY()));
         switch (vertex->getInfo()->getTag()) {
             case Tag::COURT:
                 graphViewer->setVertexColor(vertex->getInfo()->getId(), "orange");
@@ -68,12 +67,14 @@ void Map::init(unordered_map<unsigned int, Vertex<Local *> *> &map) {
         locs[pair.first] = pair.second->getInfo()->getTag();
     }
 
-    int width = (Local::getMaxX() - Local::getMinX()) + 50;
-    int height = (Local::getMaxY() - Local::getMinY()) + 50;
-
-    this->graphViewer = new GraphViewer(width, height, false);
-
     this->solveTarjanAlgorithm();
+
+//    int width = (Local::getMaxX() - Local::getMinX()) + 50;
+//    int height = (Local::getMaxY() - Local::getMinY()) + 50;
+
+    this->graphViewer = new GraphViewer(600, 600, false);
+
+
 }
 
 void Map::setDirected(bool directed) {
@@ -278,4 +279,18 @@ void Map::testTarjanAlgorithm() {
     locs.push_back(new Local(8));
     cout << "(5, 7, 3, 8) Needs to be 0: " << this->areStronglyConected(locs) << endl;
 
+}
+
+double Map::convertXToAPI(double x) {
+    if (abs(Local::maxX - Local::minX) <= 0.001)
+        return -x * PRECISION;
+    else
+        return (x * PRECISION - Local::minX * PRECISION) / ((Local::maxX - Local::minX)  * PRECISION / (double)this->graphViewer->getWidth());
+}
+
+double Map::convertYToAPI(double y) {
+    if (abs(Local::maxY - Local::minY) <= 0.001)
+        return y;
+    else
+        return ((-y * PRECISION + Local::minY * PRECISION) + (Local::maxY -Local::minY) * PRECISION) / ((Local::maxY - Local::minY) * PRECISION / this->graphViewer->getHeight());
 }

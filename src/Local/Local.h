@@ -54,6 +54,8 @@ public:
 
     Tag getTag() const;
 
+    friend class Map;
+
 };
 
 

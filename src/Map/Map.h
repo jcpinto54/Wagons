@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <utility>
 
+#define PRECISION 10e9
 
 struct edgeMapHash
 {
@@ -31,6 +32,9 @@ class Map {
     vector<Local *> getPath(unsigned idFrom, unsigned idTo);
 
     void testTarjanAlgorithm();
+
+    double convertXToAPI(double x);
+    double convertYToAPI(double y);
 public:
     Map();
 

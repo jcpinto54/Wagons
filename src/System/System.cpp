@@ -115,6 +115,7 @@ System::System(const string &fileName) {
                 this->POIs.push_back(tempGraph[nodeId]->getInfo());
         }
     }
+    file.close();
 
     this->map.init(tempGraph);
     this->map.setNumEdges(edgeCounter);
@@ -316,6 +317,10 @@ void System::readPOIs() {
     auto read = toTable(this->POIs, this);
     cout << read;
     Util::pause();
+}
+
+void System::orderPOIs() {
+    // TSP
 }
 
 

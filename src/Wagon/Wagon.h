@@ -6,8 +6,9 @@
 
 class Wagon {
     Vertex<Local *> *pos;
-    vector<Local *> pointsOfInterest;
-    vector<Vertex<Local *> *> paths;
+
+    vector<Local *> path;
+
     const unsigned id;
 public:
     Wagon(unsigned int id);
@@ -20,5 +21,5 @@ public:
 
     unsigned int getId() const;
 
-    void calcPath();            // ordenação dos pontos de interesse
+
 };

@@ -81,6 +81,8 @@ public:
     vector<Local *>::iterator findPOI(unsigned id);
 
     void readPOIs();
+
+    void orderPOIs();
 };
 
 ///@brief Receives a vector of Person and transforms in a table.
