@@ -105,7 +105,15 @@ namespace Util {
     }
 
     bool isYorN(const string &toTest) {
-        return (toTest == "1" or toTest == "0");
+        return (toTest == "1" || toTest == "0" || toTest == "Y" || toTest == "N" || toTest == "y" || toTest == "n");
+    }
+
+    bool isY(const string &toTest) {
+        return (toTest == "1" || toTest == "Y" || toTest == "y");
+    }
+
+    bool isN(const string &toTest) {
+        return (toTest == "0" || toTest == "N" || toTest == "n");
     }
 
     bool notEmptyString(const string &toTest) {

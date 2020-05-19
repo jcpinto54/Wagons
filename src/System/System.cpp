@@ -70,6 +70,7 @@ System::System(const string &fileName) {
     }
     file.close();
 
+    int edgeCounter = 0;
     string graphEdgesFile = graphPath + "edges.txt";
     string line;
     file.open(graphEdgesFile);
@@ -85,9 +86,12 @@ System::System(const string &fileName) {
 
         unsigned idFrom = stoi(aux.at(0));
         unsigned idTo = stoi(aux.at(1));
-        tempGraph[idFrom]->getAdj().emplace_back(tempGraph[idTo], 1.0);
+        double distEdge = this->map.dist(tempGraph[idFrom]->getInfo(), tempGraph[idTo]->getInfo());
+        tempGraph[idFrom]->getAdj().emplace_back(tempGraph[idTo], distEdge);
+        edgeCounter++;
         if (!this->map.isDirected()) {
-            tempGraph[idTo]->getAdj().emplace_back(tempGraph[idFrom], 1.0);
+            tempGraph[idTo]->getAdj().emplace_back(tempGraph[idFrom], distEdge);
+            edgeCounter++;
         }
     }
     file.close();
@@ -111,6 +115,8 @@ System::System(const string &fileName) {
     }
 
     this->map.init(tempGraph);
+    this->map.setNumEdges(edgeCounter);
+    this->map.solveTarjanAlgorithm();
 }
 
 void System::readPerson() const {
@@ -126,7 +132,7 @@ void System::readPerson() const {
 
 void System::readPeople(const vector<Person *> &container) const {
     if (container.empty()) {
-        cout << "The search is empty :(" << endl;
+        cout << "The container is empty" << endl;
         return;
     }
     auto read = toTable(container, this);
@@ -247,12 +253,71 @@ void System::viewGraph() {
 }
 
 void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
-    this->map.viewGraph(true);
-    this->map.viewPath(idFrom, idTo);
+    string viewWithAPI = "N";
+    if (map.numVertex() < 300)
+        viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
+
+    if (isY(viewWithAPI))
+        this->map.viewGraph(true);
+    this->map.viewPath(idFrom, idTo, isY(viewWithAPI));
 }
 
 void System::applyFloydWarshall() {
     this->map.applyFloydWarshall();
+}
+
+
+void System::addPOI() {
+    string locIdStr = getInput(isNum, "Enter Local ID: ", "Invalid Number");
+    if (locIdStr == ":q")
+        return;
+    unsigned locId = stoi(locIdStr);
+    Local *loc;
+    try {
+        loc = this->map.findLocal(locId);
+    } catch (NonExistingVertex e) {
+        throw NonExistingVertex(e);
+    }
+
+    this->POIs.push_back(loc);
+    bool connected = this->map.areStronglyConected(this->POIs);
+    if (!connected) {
+        this->POIs.pop_back();
+        throw ImpossiblePath(loc);
+    }
+}
+
+void System::erasePOI() {
+    string locIdStr = getInput(isNum, "Enter POI Local ID: ", "Invalid Number");
+    if (locIdStr == ":q")
+        return;
+
+    auto itPoi = this->findPOI(stoi(locIdStr));
+    if (itPoi == this->POIs.end()) {
+        cout << "ID is not of a POI!" << endl;
+        return;
+    }
+
+    this->POIs.erase(itPoi);
+}
+
+vector<Local *>::iterator System::findPOI(unsigned int id) {
+    for (auto it = this->POIs.begin(); it != this->POIs.end(); it++) {
+        if (**it == Local(id)) {
+            return it;
+        }
+    }
+    return this->POIs.end();
+}
+
+void System::readPOIs() {
+    if (this->POIs.empty()) {
+        cout << "The container of POIs is empty" << endl;
+        return;
+    }
+    auto read = toTable(this->POIs, this);
+    cout << read;
+    Util::pause();
 }
 
 
@@ -264,6 +329,18 @@ Table<string> toTable(const vector<Person *> &container, const System *sys) {
         birthday << person->getBirthday();
         vector<string> aux = {person->getName(), birthday.str(),
                               to_string(person->getContact()), to_string(person->getId())};
+        content.push_back(aux);
+    }
+    Table<string> data(header, content);
+    return data;
+}
+
+Table<string> toTable(const vector<Local *> &container, const System *sys) {
+    vector<string> header = {"ID", "X Coordinate", "Y Coordinate", "Tag"};
+    vector<vector<string>> content;
+    for (auto local : container) {
+        vector<string> aux = {to_string(local->getId()),to_string(local->getX()),
+                              to_string(local->getY()), tagToStr(local->getTag())};
         content.push_back(aux);
     }
     Table<string> data(header, content);

@@ -60,8 +60,12 @@ MainMenu::MainMenu(System *system) : Menu(system) {
                 new GraphMenu(system);
             }
                 break;
+            case 'T' : {
+                new TripMenu(system);
+            }
+                break;
             case 'Q':
-                return;
+                exit(0);
             default:
                 break;
         }
@@ -72,6 +76,7 @@ vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"P", "Person Menu"},
                                    {"V", "View Graph"},
                                    {"G", "Graph Menu"},
+                                   {"T", "Trip Menu"},
                                    {"Q", "Quit Program"}});
 }
 
@@ -98,7 +103,7 @@ PersonMenu::PersonMenu(System *system) : Menu(system) {
             case 'M':
                 return;
             case 'Q':
-                return;
+                exit(0);
             default:
                 break;
         }
@@ -140,7 +145,7 @@ UpdatePersonMenu::UpdatePersonMenu(System *system) : Menu(system) {
                 return;
             }
             default:
-                break;
+                continue;
         }
     }
 }
@@ -213,7 +218,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
             case 'M':
                 return;
             case 'Q':
-                return;
+                exit(0);
             default:
                 break;
         }
@@ -226,3 +231,59 @@ vector<vector<string>> GraphMenu::getOptions() const {
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }
+
+
+TripMenu::TripMenu(System *system) : Menu(system) {
+        while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'A' : {
+                try {
+                    sys->addPOI();
+                } catch (ImpossiblePath e) {
+                    cout << e.getMsg() << endl;
+                } catch (NonExistingVertex e) {
+                    cout << e.getMsg() << endl;
+                }
+            }
+                break;
+            case 'E' : {
+                sys->erasePOI();
+            }
+                break;
+            case 'R' : {
+                sys->readPOIs();
+            }
+                break;
+            case 'C' : {
+                // TSP algorithm
+            }
+                break;
+            case 'I' : {
+                cout << "Instructions for this Menu:" << endl
+                     << "-When a POI is added, it is stored in a Vector" << endl
+                     << "-If you want more than one POI just add more than one POI" << endl
+                     << "-You can leave this menu and the inserted POIs will still be here" << endl
+                     << "-If you want to know the optimal path that passes by all the POIs, then calculate the path('C')" << endl;
+            }
+                break;
+            case 'M':
+                return;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> TripMenu::getOptions() const {
+    return vector<vector<string>>({{"A", "Add POI"},
+                                   {"E", "Erase POI"},
+                                   {"R", "Read POIs"},
+                                   {"C", "Calculate Trips"},
+                                   {"I", "Instructions"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+

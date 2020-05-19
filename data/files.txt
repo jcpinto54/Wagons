@@ -1,3 +1,3 @@
 people.txt
 wagons.txt
-GridGraphs/16x16/
+PortugalMaps/Gondomar/

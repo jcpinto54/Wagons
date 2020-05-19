@@ -2,32 +2,8 @@
 #include "GraphTemplate/Graph.h"
 #include "GraphTemplate/graphviewer.h"
 #include <unordered_map>
+#include <utility>
 
-/*
-struct apostaHash
-{
-	int operator() (const Aposta & ap) const
-	{
-		return ap.somaNumeros();
-	}
-
-	bool operator() (const Aposta & ap1, const Aposta & ap2) const
-	{
-		if ( ap1.tamanho() != ap2.tamanho() )
-			return false;
-
-		unsigned int n = ap1.calculaCertos(ap2.getNumeros());
-		if ( n == ap1.tamanho() )
-			return true;
-		else
-			return false;
-	}
-};
-
-
-
-typedef unordered_set<Aposta, apostaHash, apostaHash> tabHAposta;
-*/
 
 struct edgeMapHash
 {
@@ -52,6 +28,8 @@ class Map {
     bool directed = true;
 
     vector<Local *> getPath(unsigned idFrom, unsigned idTo);
+
+
 public:
     Map();
 
@@ -63,9 +41,23 @@ public:
 
     bool isDirected() const;
 
-    void viewPath(unsigned idFrom, unsigned idTo);
+    void viewPath(unsigned idFrom, unsigned idTo, bool api);
 
     void applyFloydWarshall();
+
+    double dist(Local *l1, Local *l2);
+
+    int numVertex();
+
+    int numEdges();
+
+    void setNumEdges(int numEdges);
+
+    void solveTarjanAlgorithm();
+
+    bool areStronglyConected(vector<Local *> &POIs);
+
+    Local *findLocal(unsigned id);
 };
 
 /// NonExistingVertex Exception
@@ -82,6 +74,30 @@ public:
 
     NonExistingVertex(NonExistingVertex const &e) {
         this->id = e.id;
+        this->msg = e.msg;
+    }
+
+    /// Gets the message to be showed
+    /// @return Returns the msg attribute of the object
+    std::string getMsg() { return this->msg; }
+
+};
+
+/// ImpossiblePath Exception
+class ImpossiblePath : public std::exception {
+private:
+    Local * loc;
+    /// @brief The msg to be displayed when this exception occurs
+    std::string msg = "Adding this POI (ID:" + to_string(loc->getId()) + ") would make an impossible route!";
+public:
+    /// @brief Constructs an ImpossiblePath exception
+    /// @param idFrom The id of the start vertex
+    /// @param idTo The id of the end vertex
+    explicit ImpossiblePath(Local * l) : loc(l){}
+
+    ImpossiblePath(ImpossiblePath const &e) {
+        this->loc = e.loc;
+        this->msg = e.msg;
     }
 
     /// Gets the message to be showed

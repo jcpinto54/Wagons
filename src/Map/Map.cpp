@@ -6,6 +6,11 @@
 #include "Utilities/utils.h"
 
 void Map::viewGraph(bool toContinue) {
+
+    if (this->graph.getNumVertex() > 300) {
+        cout << "The graph is too big to represent in the gui mode!" << endl;
+        return;
+    }
     graphViewer->closeWindow();
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
     if (!this->directed)
@@ -91,11 +96,11 @@ vector<Local *> Map::getPath(unsigned int idFrom, unsigned int idTo) {
     if (this->graph.isFloydWarshallSolved())
         return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
 
-    this->graph.unweightedShortestPath(from->getInfo());
+    this->graph.dijkstraShortestPath(from->getInfo());
     return this->graph.getPathTo(to->getInfo());
 }
 
-void Map::viewPath(unsigned int idFrom, unsigned int idTo) {
+void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
     vector<Local *> path;
     try {
         path = this->getPath(idFrom, idTo);
@@ -103,66 +108,132 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo) {
         throw e;
     }
 
-    graphViewer->setVertexColor(idFrom, "green");
-    graphViewer->setVertexSize(idFrom, 30);
-    switch(this->locs[idFrom]) {
-        case Tag::DEFAULT:
-            graphViewer->setVertexLabel(idFrom, "Start");
-            break;
-        case Tag::PRISON:
-            graphViewer->setVertexLabel(idFrom, "Start/Prison");
-            break;
-        case Tag::POLICE:
-            graphViewer->setVertexLabel(idFrom, "Start/Police");
-            break;
-        case Tag::COURT:
-            graphViewer->setVertexLabel(idFrom, "Start/Court");
-            break;
-        case Tag::HQ:
-            graphViewer->setVertexLabel(idFrom, "Start/HQ");
-            break;
+    if (!api) {
+        for (int i = 0; i < path.size()-1; i++) {
+            cout << path[i]->getId() << " -> ";
+            if (i % 20 == 0 && i != 0) {
+                cout << endl;
+            }
+        }
+        cout << path.back()->getId() << endl;
     }
-    graphViewer->setVertexColor(idTo, "red");
-    graphViewer->setVertexSize(idTo, 30);
-    switch(this->locs[idTo]) {
-        case Tag::DEFAULT:
-            graphViewer->setVertexLabel(idTo, "End");
-            break;
-        case Tag::PRISON:
-            graphViewer->setVertexLabel(idTo, "End/Prison");
-            break;
-        case Tag::POLICE:
-            graphViewer->setVertexLabel(idTo, "End/Police");
-            break;
-        case Tag::COURT:
-            graphViewer->setVertexLabel(idTo, "End/Court");
-            break;
-        case Tag::HQ:
-            graphViewer->setVertexLabel(idTo, "End/HQ");
-            break;
-    }
-    for (auto it = path.begin(); it != path.end() - 1; it++) {
-        unsigned idEdge = edgeIds[pair<Local*, Local*>(*it, *(it + 1))];
-        graphViewer->setEdgeThickness(idEdge, 5);
-        graphViewer->setEdgeColor(idEdge, "green");
-        if (it == path.begin()) continue;
 
-        graphViewer->setVertexSize((*it)->getId(), 10);
-        switch(this->locs[(*it)->getId()]) {
+
+    if (api) {
+        graphViewer->setVertexColor(idFrom, "green");
+        graphViewer->setVertexSize(idFrom, 30);
+        switch (this->locs[idFrom]) {
             case Tag::DEFAULT:
+                graphViewer->setVertexLabel(idFrom, "Start");
+                break;
+            case Tag::PRISON:
+                graphViewer->setVertexLabel(idFrom, "Start/Prison");
+                break;
+            case Tag::POLICE:
+                graphViewer->setVertexLabel(idFrom, "Start/Police");
+                break;
+            case Tag::COURT:
+                graphViewer->setVertexLabel(idFrom, "Start/Court");
                 break;
             case Tag::HQ:
-                graphViewer->setVertexSize((*it)->getId(), 25);
+                graphViewer->setVertexLabel(idFrom, "Start/HQ");
                 break;
-            default:
-                graphViewer->setVertexSize((*it)->getId(), 20);
         }
+        graphViewer->setVertexColor(idTo, "red");
+        graphViewer->setVertexSize(idTo, 30);
+        switch (this->locs[idTo]) {
+            case Tag::DEFAULT:
+                graphViewer->setVertexLabel(idTo, "End");
+                break;
+            case Tag::PRISON:
+                graphViewer->setVertexLabel(idTo, "End/Prison");
+                break;
+            case Tag::POLICE:
+                graphViewer->setVertexLabel(idTo, "End/Police");
+                break;
+            case Tag::COURT:
+                graphViewer->setVertexLabel(idTo, "End/Court");
+                break;
+            case Tag::HQ:
+                graphViewer->setVertexLabel(idTo, "End/HQ");
+                break;
+        }
+        for (auto it = path.begin(); it != path.end() - 1; it++) {
+            unsigned idEdge = edgeIds[pair<Local *, Local *>(*it, *(it + 1))];
+            graphViewer->setEdgeThickness(idEdge, 5);
+            graphViewer->setEdgeColor(idEdge, "green");
+            if (!this->directed) {
+                unsigned idEdgeBack = edgeIds[pair<Local *, Local *>(*(it + 1), *it)];
+                graphViewer->setEdgeThickness(idEdgeBack, 5);
+                graphViewer->setEdgeColor(idEdgeBack, "green");
+            }
+            if (it == path.begin()) continue;
+
+            graphViewer->setVertexSize((*it)->getId(), 10);
+            switch (this->locs[(*it)->getId()]) {
+                case Tag::DEFAULT:
+                    break;
+                case Tag::HQ:
+                    graphViewer->setVertexSize((*it)->getId(), 25);
+                    break;
+                default:
+                    graphViewer->setVertexSize((*it)->getId(), 20);
+            }
+        }
+        graphViewer->rearrange();
     }
-    graphViewer->rearrange();
 }
 
 void Map::applyFloydWarshall() {
     this->graph.floydWarshallShortestPath();
 }
 
+double Map::dist(Local *l1, Local *l2) {
+    return sqrt(pow(l1->getX() - l2->getX(), 2) + pow(l1->getY() - l2->getY(), 2));
+}
 
+
+int Map::numEdges() {
+    return this->graph.getEdgeCounter();
+}
+
+int Map::numVertex() {
+    return this->graph.getNumVertex();
+}
+
+void Map::setNumEdges(int numEdges) {
+    this->graph.setEdgeCounter(numEdges);
+}
+
+void Map::solveTarjanAlgorithm() {
+    this->graph.tarjanStronglyConnectedComponents();
+}
+
+bool Map::areStronglyConected(vector<Local *> &POIs) {
+    if (!this->graph.isTarjanSolved()) this->solveTarjanAlgorithm();
+
+    bool connected = true;
+    bool firstTime = true;
+    unsigned lowlink;
+
+    for (auto loc : POIs) {
+        Vertex<Local *> * v = this->graph.findVertex(loc);
+        if (v == NULL) throw NonExistingVertex(loc->getId());
+        if (firstTime) {
+            firstTime = false;
+            lowlink = v->getSSC();
+        }
+        if (lowlink != v->getSSC()) {
+            connected = false;
+            break;
+        }
+    }
+
+    return connected;
+}
+
+Local *Map::findLocal(unsigned int id) {
+    Vertex<Local *> *v = this->graph.findVertex(new Local(id));
+    if (v == NULL) throw NonExistingVertex(id);
+    return v->getInfo();
+}

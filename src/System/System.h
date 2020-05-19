@@ -22,11 +22,13 @@ private:
 
     vector<Wagon *> wagons;
 
+    vector<Local *> POIs;
+
     Map map;
 public:
     /// @brief Creates a new system with the information provided by the file.
     /// @param fileName The path to the file where the information is stored.
-    explicit System(const string &fileName/*,const string pass*/);
+    explicit System(const string &fileName);
 
     /// @brief Writes the new information of the system on the files and frees the memory from the objects created during the execution of the program.
     ~System();
@@ -71,9 +73,19 @@ public:
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo);
 
     void applyFloydWarshall();
+
+    void addPOI();
+
+    void erasePOI();
+
+    vector<Local *>::iterator findPOI(unsigned id);
+
+    void readPOIs();
 };
 
 ///@brief Receives a vector of Person and transforms in a table.
 Table<string> toTable(const vector<Person *> &container, const System *sys);
+
+Table<string> toTable(const vector<Local *> &container, const System *sys);
 
 

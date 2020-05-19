@@ -120,5 +120,9 @@ namespace Util {
         }
         return nullptr;
     }
-}
 
+    bool isY(const string &toTest);
+
+    bool isN(const string &toTest);
+
+}

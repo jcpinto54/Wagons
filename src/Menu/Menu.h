@@ -9,7 +9,6 @@
 ///Menu Class
 class Menu {
 protected:
-    friend class System;
 
     /// @brief The next menu to be called
     char nextMenu;
@@ -105,6 +104,18 @@ public:
     GraphMenu(System *system);
 
     ///@brief Gets GraphMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+};
+
+
+///@brief Trip menu
+class TripMenu : public Menu {
+public:
+    ///@brief TripMenu Constructor
+    TripMenu(System *system);
+
+    ///@brief Gets TripMenu in organized manner
     ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
     vector<vector<string>> getOptions() const override;
 };

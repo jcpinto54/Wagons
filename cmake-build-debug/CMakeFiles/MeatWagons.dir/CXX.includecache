@@ -31,6 +31,8 @@ cmath
 -
 sstream
 -
+stack
+-
 MutablePriorityQueue.h
 ../src/GraphTemplate/MutablePriorityQueue.h
 algorithm
@@ -101,6 +103,8 @@ GraphTemplate/graphviewer.h
 ../src/Map/GraphTemplate/graphviewer.h
 unordered_map
 -
+utility
+-
 
 ../src/Person/Person.h
 ostream
@@ -109,24 +113,6 @@ utility
 -
 Date/Date.h
 ../src/Person/Date/Date.h
-
-../src/System/System.h
-vector
--
-GraphTemplate/graphviewer.h
-../src/System/GraphTemplate/graphviewer.h
-Local/Local.h
-../src/System/Local/Local.h
-Person/Person.h
-../src/System/Person/Person.h
-Utilities/Table.h
-../src/System/Utilities/Table.h
-GraphTemplate/Graph.h
-../src/System/GraphTemplate/Graph.h
-Wagon/Wagon.h
-../src/System/Wagon/Wagon.h
-Map/Map.h
-../src/System/Map/Map.h
 
 ../src/Time/Time.h
 ctime
@@ -139,6 +125,10 @@ vector
 -
 Utilities/utils.h
 ../src/Time/Utilities/utils.h
+
+../src/Utilities/InvalidInput.h
+string
+-
 
 ../src/Utilities/Table.h
 iostream
@@ -166,27 +156,27 @@ Local/Local.h
 GraphTemplate/Graph.h
 ../src/Wagon/GraphTemplate/Graph.h
 
-/home/joao/Documents/MeatWagons/src/Menu/Menu.cpp
-Menu.h
-/home/joao/Documents/MeatWagons/src/Menu/Menu.h
+/home/joao/Documents/MeatWagons/src/System/System.cpp
+System.h
+/home/joao/Documents/MeatWagons/src/System/System.h
 Utilities/utils.h
-/home/joao/Documents/MeatWagons/src/Menu/Utilities/utils.h
+/home/joao/Documents/MeatWagons/src/System/Utilities/utils.h
 Person/Person.h
-/home/joao/Documents/MeatWagons/src/Menu/Person/Person.h
-Utilities/Table.h
-/home/joao/Documents/MeatWagons/src/Menu/Utilities/Table.h
-
-/home/joao/Documents/MeatWagons/src/Menu/Menu.h
-iostream
--
-string
+/home/joao/Documents/MeatWagons/src/System/Person/Person.h
+fstream
 -
 algorithm
 -
+sstream
+-
 utility
 -
-System/System.h
-/home/joao/Documents/MeatWagons/src/Menu/System/System.h
+Utilities/InvalidInput.h
+/home/joao/Documents/MeatWagons/src/System/Utilities/InvalidInput.h
+unordered_map
+-
+sys/wait.h
+-
 
 /home/joao/Documents/MeatWagons/src/System/System.h
 vector
@@ -205,26 +195,4 @@ Wagon/Wagon.h
 /home/joao/Documents/MeatWagons/src/System/Wagon/Wagon.h
 Map/Map.h
 /home/joao/Documents/MeatWagons/src/System/Map/Map.h
-
-/home/joao/Documents/MeatWagons/src/Utilities/InvalidInput.h
-string
--
-
-/home/joao/Documents/MeatWagons/src/Utilities/utils.h
-string
--
-vector
--
-sstream
--
-
-/home/joao/Documents/MeatWagons/src/main.cpp
-System/System.h
-/home/joao/Documents/MeatWagons/src/System/System.h
-Menu/Menu.h
-/home/joao/Documents/MeatWagons/src/Menu/Menu.h
-Utilities/InvalidInput.h
-/home/joao/Documents/MeatWagons/src/Utilities/InvalidInput.h
-Utilities/utils.h
-/home/joao/Documents/MeatWagons/src/Utilities/utils.h
 

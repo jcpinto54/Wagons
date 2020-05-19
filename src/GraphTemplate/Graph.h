@@ -10,6 +10,7 @@
 #include <limits>
 #include <cmath>
 #include <sstream>
+#include <stack>
 #include "MutablePriorityQueue.h"
 #include <algorithm>
 
@@ -32,8 +33,13 @@ class Vertex {
     Vertex<T> *path = NULL;
     int queueIndex = 0; 		// required by MutablePriorityQueue
 
-    bool visited = false;		// auxiliary field
-    bool processing = false;	// auxiliary field
+    // used for dfs and bfs
+    bool visited = false;
+    bool processing = false;
+
+    // used for tarjan algorithm
+    unsigned tarjanId, tarjanLowlink;
+    bool onStack;
 
     void addEdge(Vertex<T> *dest, double w);
 
@@ -42,6 +48,7 @@ public:
     T getInfo() const;
     double getDist() const;
     Vertex *getPath() const;
+    unsigned getSSC() const;
 
     bool operator<(Vertex<T> & vertex) const;
 
@@ -116,32 +123,57 @@ Vertex<T> *Edge<T>::getDest() const {
 template <class T>
 class Graph {
     vector<Vertex<T> *> vertexSet;    // vertex set
+    int edgeCounter = 0;
 
+    void dfsVisit(Vertex<T> *v,  vector<T> & res) const;
+
+    // Data for Tarjan Algorithm
+    std::stack<Vertex<T> *> stack;
+    unsigned nextTarjanId;
+    bool tarjanSolved = false;
+    unsigned sccCount;
+
+    // Data Structures for FloydWarshall Algorithm
     vector<vector<double>> dist;
     vector<vector<Vertex<T>*>> pred;
     bool floydWarshallSolved = false;
+
 public:
     Vertex<T> *findVertex(const T &in) const;
     bool addVertex(const T &in);
     bool addVertex(Vertex<T> *in);
     bool addEdge(const T &sourc, const T &dest, double w);
     int getNumVertex() const;
-    vector<Vertex<T> *> getVertexSet() const;
 
-    // Fp05 - single source
-    void unweightedShortestPath(const T &s);
-    void dijkstraShortestPath(const T &s);      //TODO...
-    void bellmanFordShortestPath(const T &s);   //TODO...
+    void setEdgeCounter(int edgeCounter);
+
+    int getEdgeCounter() const;
+
+    vector<Vertex<T> *> getVertexSet() const;
+    vector<T> dfs() const;
+    vector<T> bfs(const T &source) const;
+
+    // Dijkstra
+    void dijkstraShortestPath(const T &s);
     vector<T> getPathTo(const T &dest) const;
 
-    // Fp05 - all pairs
+    // FloydWarshall Functions
     void floydWarshallShortestPath();
     vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
-
     bool isFloydWarshallSolved() const;
+
+    // Tarjan Algorithm / Strongly Connected Components "finder"
+    void tarjanStronglyConnectedComponents();
+    void tarjanDfs(Vertex<T> *at);
+
+    bool isTarjanSolved() const;
 
 };
 
+template<class T>
+unsigned Vertex<T>::getSSC() const {
+    return this->tarjanLowlink;
+}
 
 
 template <class T>
@@ -197,37 +229,76 @@ bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
     return true;
 }
 
+/*
+ * Performs a depth-first search (dfs) in a graph (this).
+ * Returns a vector with the contents of the vertices by dfs order.
+ * Follows the algorithm described in theoretical classes.
+ */
+template <class T>
+vector<T> Graph<T>::dfs() const {
+    vector<T> res;
+    auto it = this->vertexSet.begin();
 
-/**************** Single Source Shortest Path algorithms ************/
-
-template<class T>
-void Graph<T>::unweightedShortestPath(const T &orig) {
-    for (auto v : vertexSet)
-    {
-        v->dist = INF;
-        v->path = nullptr;
+    for (; it != this->vertexSet.end(); it++) {
+        dfsVisit(*it, res);
     }
-    auto s = findVertex(orig);
-    s->dist = 0;
-    queue<Vertex<T> *> q;
-    q.push(s);
-    while (!q.empty())
-    {
-        auto v = q.front();
-        q.pop();
-        for (auto &e : v->adj)
-        {
-            auto w = e.dest;
-            if (v->dist + 1 < w->dist)
-            {
-                w->dist = v->dist + 1;
-                w->path = v;
-                q.push(w);
-            }
-        }
+
+    for (auto v : this->vertexSet) {
+        v->visited = false;
+    }
+    return res;
+}
+
+/*
+ * Auxiliary function that visits a vertex (v) and its adjacent not yet visited, recursively.
+ * Updates a parameter with the list of visited node contents.
+ */
+template <class T>
+void Graph<T>::dfsVisit(Vertex<T> *v, vector<T> & res) const {
+    if (v->visited) return;
+    res.push_back(v->info);
+    v->visited = true;
+
+    Vertex<T> *cur;
+    for (auto edge : v->adj) {
+        cur = edge.dest;
+        dfsVisit(cur, res);
     }
 }
 
+/*
+ * Performs a breadth-first search (bfs) in a graph (this), starting
+ * from the vertex with the given source contents (source).
+ * Returns a vector with the contents of the vertices by bfs order.
+ * Follows the algorithm described in theoretical classes.
+ */
+template <class T>
+vector<T> Graph<T>::bfs(const T & source) const {
+    // HINT: Use the flag "visited" to mark newly discovered vertices.
+    // HINT: Use the "queue<>" class to temporarily store the vertices.
+    vector<T> res;
+    queue<Vertex<T> *> auxQueue;
+    if (this->vertexSet.empty()) return vector<T>();
+
+    auxQueue.push(this->vertexSet[0]);
+    Vertex<T> * cur;
+    while (!auxQueue.empty()) {
+        cur = auxQueue.front();
+        if (!cur->visited) {
+            cur->visited = true;
+            for (auto edge : cur->adj) {
+                auxQueue.push(edge.dest);
+            }
+            res.push_back(cur->info);
+        }
+        auxQueue.pop();
+    }
+
+    return res;
+}
+
+
+/**************** Single Source Shortest Path algorithms ************/
 
 template<class T>
 void Graph<T>::dijkstraShortestPath(const T &origin) {
@@ -265,10 +336,6 @@ bool Graph<T>::isFloydWarshallSolved() const {
     return floydWarshallSolved;
 }
 
-template<class T>
-void Graph<T>::bellmanFordShortestPath(const T &orig) {
-    // TODO
-}
 
 
 template<class T>
@@ -338,6 +405,11 @@ void Graph<T>::floydWarshallShortestPath() {
 }
 
 template<class T>
+bool Graph<T>::isTarjanSolved() const {
+    return tarjanSolved;
+}
+
+template<class T>
 vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
     vector<T> res;
     int srcIndex, destIndex;
@@ -373,12 +445,53 @@ bool Graph<T>::addVertex(Vertex<T> *in) {
 }
 
 template<class T>
-string pathToStr(vector<T> &path) {
-    stringstream ss;
-    for(unsigned int i = 0; i < path.size(); i++)
-        ss << path[i] << " ";
-    return ss.str();
+int Graph<T>::getEdgeCounter() const {
+    return edgeCounter;
 }
 
+template<class T>
+void Graph<T>::setEdgeCounter(int edgeCounter) {
+    Graph::edgeCounter = edgeCounter;
+}
+
+template <class T>
+void Graph<T>::tarjanDfs(Vertex<T> *at) {
+    stack.push(at);
+    at->onStack = true;
+    at->tarjanId = nextTarjanId;
+    at->tarjanLowlink = nextTarjanId++;
+
+    for (Edge<T> edge : at->adj) {
+        Vertex<T> *to = edge.getDest();
+        if (at->visited) tarjanDfs(at);
+        if (at->onStack) at->tarjanLowlink = min(at->tarjanLowlink, to->tarjanLowlink);
+    }
+
+    if (at->tarjanId == at->tarjanLowlink) {
+        for (Vertex<T> *v = stack.top(); ; stack.pop()) {
+            v->onStack = false;
+            v->tarjanLowlink = at->tarjanId;
+            if (v->tarjanId == at->tarjanId) break;
+        }
+        this->sccCount++;
+    }
+}
+
+template<class T>
+void Graph<T>::tarjanStronglyConnectedComponents() {
+    if (tarjanSolved) return;
+
+    while (!stack.empty()) stack.pop();
+    this->nextTarjanId = 0;
+    this->sccCount = 0;
+
+    for (Vertex<T> *v : this->vertexSet) {
+        if (!v->visited) {
+            tarjanDfs(v);
+        }
+    }
+
+    while (!stack.empty()) stack.pop();
+}
 
 #endif /* GRAPH_H_ */
