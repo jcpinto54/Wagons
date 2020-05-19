@@ -111,12 +111,13 @@ System::System(const string &fileName) {
             getline(file, line);
             nodeId = stoi(line);
             tempGraph[nodeId]->getInfo()->setTag(tagName);
+            if (tagName == "hq")
+                this->POIs.push_back(tempGraph[nodeId]->getInfo());
         }
     }
 
     this->map.init(tempGraph);
     this->map.setNumEdges(edgeCounter);
-    this->map.solveTarjanAlgorithm();
 }
 
 void System::readPerson() const {
@@ -256,9 +257,6 @@ void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
     string viewWithAPI = "N";
     if (map.numVertex() < 300)
         viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
-
-    if (isY(viewWithAPI))
-        this->map.viewGraph(true);
     this->map.viewPath(idFrom, idTo, isY(viewWithAPI));
 }
 

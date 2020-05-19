@@ -5,6 +5,8 @@
 
 using namespace std;
 
+bool Menu::firstTripMenu = true;
+
 string Menu::readOption() const {
     string input;
     getline(cin, input);
@@ -203,7 +205,9 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
             case 'P' : {
                 string idFromStr, idToStr;
                 idFromStr = getInput(isNum, "Enter the start vertex id: ", "Invalid Number");
+                if (idFromStr == ":q") break;
                 idToStr = getInput(isNum, "Enter the end vertex id: ", "Invalid Number");
+                if (idToStr == ":q") break;
                 try {
                     sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr));
                 } catch (NonExistingVertex e) {
@@ -234,6 +238,11 @@ vector<vector<string>> GraphMenu::getOptions() const {
 
 
 TripMenu::TripMenu(System *system) : Menu(system) {
+        if (Menu::firstTripMenu) {
+            Menu::firstTripMenu = false;
+            cout << "HQ is the starting point:" << endl;
+            sys->readPOIs();
+        }
         while (true) {
         this->nextMenu = this->option();
         switch (this->nextMenu) {
@@ -261,10 +270,10 @@ TripMenu::TripMenu(System *system) : Menu(system) {
                 break;
             case 'I' : {
                 cout << "Instructions for this Menu:" << endl
-                     << "-When a POI is added, it is stored in a Vector" << endl
-                     << "-If you want more than one POI just add more than one POI" << endl
-                     << "-You can leave this menu and the inserted POIs will still be here" << endl
-                     << "-If you want to know the optimal path that passes by all the POIs, then calculate the path('C')" << endl;
+                     << "- When a POI is added, it is stored in a Vector" << endl
+                     << "- If you want more than one POI just add more than one POI" << endl
+                     << "- You can leave this menu and the inserted POIs will still be here" << endl
+                     << "- If you want to know the optimal path that passes by all the POIs, then calculate the path('C')" << endl;
             }
                 break;
             case 'M':

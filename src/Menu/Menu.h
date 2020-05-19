@@ -15,6 +15,8 @@ protected:
 
     /// @brief The system that the menu will interact with
     System *sys;
+
+    static bool firstTripMenu;
 public:
     ///@brief Constructs a new menu
     ///@param system The system that the menu will interact with

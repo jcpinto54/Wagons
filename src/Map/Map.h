@@ -24,12 +24,13 @@ class Map {
 
     unordered_map<unsigned, Tag> locs;
     unordered_map<pair<Local *, Local *>, unsigned, edgeMapHash, edgeMapHash> edgeIds;
+    vector<unsigned> greenEdges;
 
     bool directed = true;
 
     vector<Local *> getPath(unsigned idFrom, unsigned idTo);
 
-
+    void testTarjanAlgorithm();
 public:
     Map();
 
@@ -56,6 +57,7 @@ public:
     void solveTarjanAlgorithm();
 
     bool areStronglyConected(vector<Local *> &POIs);
+    bool areStronglyConected(unsigned id1, unsigned id2);
 
     Local *findLocal(unsigned id);
 };
@@ -66,11 +68,13 @@ private:
     /// @brief The id of the not found vertex
     unsigned id;
     /// @brief The msg to be displayed when this exception occurs
-    std::string msg = "The vertex with id " + to_string(id) + " doesn't exist";
+    std::string msg;
 public:
     /// @brief Constructs an NonExistingVertex exception
     /// @param id The id of the not found vertex
-    explicit NonExistingVertex(unsigned id) : id(id) {}
+    explicit NonExistingVertex(unsigned id) : id(id) {
+        this->msg = "The vertex with id " + to_string(id) + " doesn't exist";
+    }
 
     NonExistingVertex(NonExistingVertex const &e) {
         this->id = e.id;
@@ -88,12 +92,14 @@ class ImpossiblePath : public std::exception {
 private:
     Local * loc;
     /// @brief The msg to be displayed when this exception occurs
-    std::string msg = "Adding this POI (ID:" + to_string(loc->getId()) + ") would make an impossible route!";
+    std::string msg;
 public:
     /// @brief Constructs an ImpossiblePath exception
     /// @param idFrom The id of the start vertex
     /// @param idTo The id of the end vertex
-    explicit ImpossiblePath(Local * l) : loc(l){}
+    explicit ImpossiblePath(Local * l) : loc(l){
+        this->msg = "Adding this POI (ID:" + to_string(loc->getId()) + ") would make an impossible route!";
+    }
 
     ImpossiblePath(ImpossiblePath const &e) {
         this->loc = e.loc;

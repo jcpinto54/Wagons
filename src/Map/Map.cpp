@@ -72,6 +72,8 @@ void Map::init(unordered_map<unsigned int, Vertex<Local *> *> &map) {
     int height = (Local::getMaxY() - Local::getMinY()) + 50;
 
     this->graphViewer = new GraphViewer(width, height, false);
+
+    this->solveTarjanAlgorithm();
 }
 
 void Map::setDirected(bool directed) {
@@ -120,6 +122,17 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
 
 
     if (api) {
+        this->graphViewer->setVertexColor(idFrom, "white");
+        this->graphViewer->setVertexColor(idTo, "white");
+        for (int i = 0; i < this->numVertex(); i++) {
+            this->graphViewer->clearVertexLabel(this->graph.getVertexSet()[i]->getInfo()->getId());
+        }
+        for (unsigned int & greenEdge : greenEdges) {
+            this->graphViewer->clearEdgeColor(greenEdge);
+            this->graphViewer->setEdgeThickness(greenEdge, 1);
+        }
+        this->viewGraph(true);
+
         graphViewer->setVertexColor(idFrom, "green");
         graphViewer->setVertexSize(idFrom, 30);
         switch (this->locs[idFrom]) {
@@ -162,10 +175,12 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
             unsigned idEdge = edgeIds[pair<Local *, Local *>(*it, *(it + 1))];
             graphViewer->setEdgeThickness(idEdge, 5);
             graphViewer->setEdgeColor(idEdge, "green");
+            greenEdges.push_back(idEdge);
             if (!this->directed) {
                 unsigned idEdgeBack = edgeIds[pair<Local *, Local *>(*(it + 1), *it)];
                 graphViewer->setEdgeThickness(idEdgeBack, 5);
                 graphViewer->setEdgeColor(idEdgeBack, "green");
+                greenEdges.push_back(idEdgeBack);
             }
             if (it == path.begin()) continue;
 
@@ -236,4 +251,31 @@ Local *Map::findLocal(unsigned int id) {
     Vertex<Local *> *v = this->graph.findVertex(new Local(id));
     if (v == NULL) throw NonExistingVertex(id);
     return v->getInfo();
+}
+
+bool Map::areStronglyConected(unsigned id1, unsigned id2) {
+    if (!this->graph.isTarjanSolved()) this->solveTarjanAlgorithm();
+
+    Vertex<Local *> * v1 = this->graph.findVertex(new Local(id1)), *v2 = this->graph.findVertex(new Local(id2));
+    if (v1 == NULL) throw NonExistingVertex(id1);
+    if (v2 == NULL) throw NonExistingVertex(id2);
+
+    return v1->getSSC() == v2->getSSC();
+}
+
+void Map::testTarjanAlgorithm() {
+
+    cout << "Tarjan Algorithm Testing" << endl;
+    cout << "Pair Testing" << endl;
+    cout << "(1, 5) Needs to be 0: " << this->areStronglyConected(1, 5) << endl;
+    cout << "(8, 10) Needs to be 0: " << this->areStronglyConected(8, 10) << endl;
+    cout << "(10, 12) Needs to be 1: " << this->areStronglyConected(10, 12) << endl;
+
+    cout << "Vector Testing" << endl;
+    vector<Local *> locs;
+    locs.push_back(new Local(5)); locs.push_back(new Local(7)); locs.push_back(new Local(3));
+    cout << "(5, 7, 3) Needs to be 1: " << this->areStronglyConected(locs) << endl;
+    locs.push_back(new Local(8));
+    cout << "(5, 7, 3, 8) Needs to be 0: " << this->areStronglyConected(locs) << endl;
+
 }
