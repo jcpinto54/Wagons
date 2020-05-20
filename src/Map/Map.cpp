@@ -88,10 +88,6 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo) {
         throw NonExistingVertex(idTo);
     }
 
-    vector<int> ids = {0, 4, 3, 21};
-
-    minimumWeightPath(ids);
-
     if (this->graph.isFloydWarshallSolved())
         return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
 
