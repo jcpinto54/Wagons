@@ -88,6 +88,10 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo) {
         throw NonExistingVertex(idTo);
     }
 
+    vector<int> ids = {0, 4, 3, 21};
+
+    minimumWeightPath(ids);
+
     if (this->graph.isFloydWarshallSolved())
         return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
 
@@ -307,6 +311,44 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
 
     this->graph.dijkstraShortestPath(from->getInfo());
     return this->graph.getDijkstraWeightTo(to->getInfo());
+}
+
+double Map::getTotalWeight(vector<int> poi_ids) {
+    double weight = 0;
+
+    int origin_id = poi_ids[0];
+
+    for (int i = 0; i < poi_ids.size(); i++) {
+        if (i == poi_ids.size() - 1)
+            weight += getWeight(poi_ids[i], origin_id);
+
+        else
+            weight += getWeight(poi_ids[i], poi_ids[i + 1]);
+    }
+
+    return weight;
+}
+
+vector<int> Map::minimumWeightPath(vector<int> poi_ids)
+{
+    vector<int> res;
+
+    sort(poi_ids.begin(), poi_ids.end());
+
+    double cost, minCost = INT64_MAX;
+
+    do{
+        cost = getTotalWeight(poi_ids);
+
+        if (cost < minCost)
+        {
+            minCost = cost;
+
+            res = poi_ids;
+        }
+    }while (next_permutation(poi_ids.begin(), poi_ids.end()));
+
+    return res;
 }
 
 void Map::viewGraphConectivity() {

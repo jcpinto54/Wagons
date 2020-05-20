@@ -71,6 +71,10 @@ public:
     Local *findLocal(unsigned id);
 
     void viewGraphConectivity();
+
+    double getTotalWeight(vector<int> poi_ids);
+
+    vector<int> minimumWeightPath(vector<int> poi_ids);
 };
 
 /// NonExistingVertex Exception
