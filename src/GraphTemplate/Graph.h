@@ -127,6 +127,9 @@ class Graph {
 
     void dfsVisit(Vertex<T> *v,  vector<T> & res) const;
 
+    //Data for Dijkstra
+    pair<bool, unsigned> dijkstraSolved = pair<bool, unsigned>(false, 0);
+
     // Data for Tarjan Algorithm
     std::stack<Vertex<T> *> stack;
     unsigned nextTarjanId;
@@ -155,18 +158,18 @@ public:
 
     // Dijkstra
     void dijkstraShortestPath(const T &s);
-    vector<T> getPathTo(const T &dest) const;
+    vector<T> *getDijkstraPathTo(const T &dest) const;
+    double getDijkstraWeightTo(const T &dest) const;
 
     // FloydWarshall Functions
     void floydWarshallShortestPath();
-    vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
+    vector<T> *getfloydWarshallPath(const T &origin, const T &dest) const;
     double getFloydWarshallWeight(const T &origin, const T &dest) const;
     bool isFloydWarshallSolved() const;
 
     // Tarjan Algorithm / Strongly Connected Components "finder"
     void tarjanStronglyConnectedComponents();
     void tarjanDfs(Vertex<T> *at);
-
     bool isTarjanSolved() const;
 
 };
@@ -180,6 +183,16 @@ unsigned Vertex<T>::getSSC() const {
 template <class T>
 int Graph<T>::getNumVertex() const {
     return vertexSet.size();
+}
+
+template<class T>
+int Graph<T>::getEdgeCounter() const {
+    return edgeCounter;
+}
+
+template<class T>
+void Graph<T>::setEdgeCounter(int edgeCounter) {
+    Graph::edgeCounter = edgeCounter;
 }
 
 template <class T>
@@ -303,6 +316,20 @@ vector<T> Graph<T>::bfs(const T & source) const {
 
 template<class T>
 void Graph<T>::dijkstraShortestPath(const T &origin) {
+    int originIndex = -1, i = 0;
+    for (Vertex<T>* v : vertexSet) {
+        if (origin == v->info) {
+            originIndex = i;
+        }
+        i++;
+    }
+    if (originIndex == -1) {
+        cerr << "This vertex doesn't exist!" << endl;
+        return;
+    }
+
+    if (dijkstraSolved.first && dijkstraSolved.second == originIndex) return;
+
     for (auto v : vertexSet)
     {
         v->dist = INF;
@@ -330,19 +357,13 @@ void Graph<T>::dijkstraShortestPath(const T &origin) {
             }
         }
     }
-}
-
-template<class T>
-bool Graph<T>::isFloydWarshallSolved() const {
-    return floydWarshallSolved;
+    dijkstraSolved = pair<bool, unsigned>(true, originIndex);
 }
 
 
-
 template<class T>
-vector<T> Graph<T>::getPathTo(const T &dest) const{
-
-    vector<T> res;
+vector<T> *Graph<T>::getDijkstraPathTo(const T &dest) const{
+    vector<T> *res = new vector<T>;
 
     auto v = findVertex(dest);
 
@@ -350,12 +371,24 @@ vector<T> Graph<T>::getPathTo(const T &dest) const{
         return res;
 
     for (; v != nullptr; v = v->path)
-        res.push_back(v->info);
+        res->push_back(v->info);
 
-    reverse(res.begin(), res.end());
+    reverse(res->begin(), res->end());
 
     return res;
 }
+
+template<class T>
+double Graph<T>::getDijkstraWeightTo(const T &dest) const{
+    Vertex<T> *v = findVertex(dest);
+
+    if (v == nullptr || v->dist == INF)
+        return INF;
+
+    return v->dist;
+}
+
+
 
 
 
@@ -406,13 +439,13 @@ void Graph<T>::floydWarshallShortestPath() {
 }
 
 template<class T>
-bool Graph<T>::isTarjanSolved() const {
-    return tarjanSolved;
+bool Graph<T>::isFloydWarshallSolved() const {
+    return floydWarshallSolved;
 }
 
 template<class T>
-vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
-    vector<T> res;
+vector<T> *Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
+    vector<T> *res = new vector<T>();
     int srcIndex, destIndex;
 
     for (int i = 0; i < vertexSet.size(); i++) {
@@ -423,7 +456,7 @@ vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
     }
 
     while (pred[srcIndex][destIndex] != vertexSet[srcIndex]) {
-        res.emplace(res.begin(), pred[srcIndex][destIndex]->info);
+        res->emplace(res->begin(), pred[srcIndex][destIndex]->info);
         for (int i = 0; i < vertexSet.size(); i++) {
             if (vertexSet.at(i)->info == pred[srcIndex][destIndex]->info) {
                 destIndex = i;
@@ -431,11 +464,12 @@ vector<T> Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
             }
         }
     }
-    res.push_back(dest);
-    res.insert(res.begin(), orig);
+    res->push_back(dest);
+    res->insert(res->begin(), orig);
 
     return res;
 }
+
 
 template<class T>
 bool Graph<T>::addVertex(Vertex<T> *in) {
@@ -445,16 +479,8 @@ bool Graph<T>::addVertex(Vertex<T> *in) {
     return true;
 }
 
-template<class T>
-int Graph<T>::getEdgeCounter() const {
-    return edgeCounter;
-}
 
-template<class T>
-void Graph<T>::setEdgeCounter(int edgeCounter) {
-    Graph::edgeCounter = edgeCounter;
-}
-
+/** Conectivity Analisys **/
 template <class T>
 void Graph<T>::tarjanDfs(Vertex<T> *at) {
     stack.push(at);
@@ -493,6 +519,25 @@ void Graph<T>::tarjanStronglyConnectedComponents() {
     }
 
     while (!stack.empty()) stack.pop();
+}
+
+template<class T>
+bool Graph<T>::isTarjanSolved() const {
+    return tarjanSolved;
+}
+
+template<class T>
+double Graph<T>::getFloydWarshallWeight(const T &origin, const T &dest) const {
+    int srcIndex, destIndex;
+
+    for (int i = 0; i < vertexSet.size(); i++) {
+        if (vertexSet.at(i)->info == origin)
+            srcIndex = i;
+        else if (vertexSet.at(i)->info == dest)
+            destIndex = i;
+    }
+
+    return dist[srcIndex][destIndex];
 }
 
 #endif /* GRAPH_H_ */

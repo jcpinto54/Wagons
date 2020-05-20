@@ -85,7 +85,7 @@ bool Map::isDirected() const {
     return directed;
 }
 
-vector<Local *> Map::getPath(unsigned int idFrom, unsigned int idTo) {
+vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo) {
     Vertex<Local *> *from, *to;
     from = this->graph.findVertex(new Local(idFrom));
     to = this->graph.findVertex(new Local(idTo));
@@ -100,24 +100,28 @@ vector<Local *> Map::getPath(unsigned int idFrom, unsigned int idTo) {
         return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
 
     this->graph.dijkstraShortestPath(from->getInfo());
-    return this->graph.getPathTo(to->getInfo());
+    return this->graph.getDijkstraPathTo(to->getInfo());
 }
 
 void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
-    vector<Local *> path;
+    vector<Local *> *path;
+    double weight;
     try {
         path = this->getPath(idFrom, idTo);
+        weight = this->getWeight(idFrom, idTo);
     } catch (NonExistingVertex e) {
         throw e;
     }
+
+    cout << "Path total weight: " << weight << endl;
     if (!api) {
-        for (int i = 0; i < path.size()-1; i++) {
-            cout << path[i]->getId() << " -> ";
+        for (int i = 0; i < (*path).size()-1; i++) {
+            cout << (*path)[i]->getId() << " -> ";
             if (i % 20 == 0 && i != 0) {
                 cout << endl;
             }
         }
-        cout << path.back()->getId() << endl;
+        cout << (*path).back()->getId() << endl;
     }
 
 
@@ -171,7 +175,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
                 graphViewer->setVertexLabel(idTo, "End/HQ");
                 break;
         }
-        for (auto it = path.begin(); it != path.end() - 1; it++) {
+        for (auto it = (*path).begin(); it != (*path).end() - 1; it++) {
             unsigned idEdge = edgeIds[pair<Local *, Local *>(*it, *(it + 1))];
             graphViewer->setEdgeThickness(idEdge, 5);
             graphViewer->setEdgeColor(idEdge, "green");
@@ -182,7 +186,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
                 graphViewer->setEdgeColor(idEdgeBack, "green");
                 greenEdges.push_back(idEdgeBack);
             }
-            if (it == path.begin()) continue;
+            if (it == (*path).begin()) continue;
 
             graphViewer->setVertexSize((*it)->getId(), 10);
             switch (this->locs[(*it)->getId()]) {
@@ -296,4 +300,22 @@ double Map::convertYToAPI(double y) {
         return y;
     else
         return ((-y * PRECISION + Local::minY * PRECISION) + (Local::maxY -Local::minY) * PRECISION) / ((Local::maxY - Local::minY) * PRECISION / this->graphViewer->getHeight());
+}
+
+double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
+    Vertex<Local *> *from, *to;
+    from = this->graph.findVertex(new Local(idFrom));
+    to = this->graph.findVertex(new Local(idTo));
+    if (from == NULL) {
+        throw NonExistingVertex(idFrom);
+    }
+    if (to == NULL) {
+        throw NonExistingVertex(idTo);
+    }
+
+    if (this->graph.isFloydWarshallSolved())
+        return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
+
+    this->graph.dijkstraShortestPath(from->getInfo());
+    return this->graph.getDijkstraWeightTo(to->getInfo());
 }

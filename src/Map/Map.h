@@ -29,7 +29,9 @@ class Map {
 
     bool directed = true;
 
-    vector<Local *> getPath(unsigned idFrom, unsigned idTo);
+    vector<Local *> *getPath(unsigned idFrom, unsigned idTo);
+
+    double getWeight(unsigned idFrom, unsigned idTo);
 
     void testTarjanAlgorithm();
 
