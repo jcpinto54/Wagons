@@ -251,7 +251,7 @@ void System::updatePersonContact(vector<Person *>::const_iterator person) {
 }
 
 void System::viewGraph() {
-    map.viewGraph();
+    map.viewGraph(VIEW);
 }
 
 void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {

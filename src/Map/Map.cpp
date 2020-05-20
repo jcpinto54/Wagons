@@ -8,7 +8,11 @@
 void Map::viewGraph(ViewGraph type) {
 
     graphViewer->closeWindow();
-    if (type == PATH)
+
+    if (type == PATH) {
+        graphViewer->defineVertexSize(5);
+    }
+
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
     graphViewer->defineEdgeCurved(false);
 
