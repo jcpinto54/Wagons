@@ -5,13 +5,10 @@
 #include "Map.h"
 #include "Utilities/utils.h"
 
-void Map::viewGraph(bool toContinue) {
+void Map::viewGraph(ViewGraph type) {
 
-//    if (this->graph.getNumVertex() > 300) {
-//        cout << "The graph is too big to represent in the gui mode!" << endl;
-//        return;
-//    }
     graphViewer->closeWindow();
+    if (type == PATH)
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
     graphViewer->defineEdgeCurved(false);
 
@@ -55,7 +52,7 @@ void Map::viewGraph(bool toContinue) {
             i++;
         }
     }
-    if (!toContinue)
+    if (type == VIEW)
         graphViewer->rearrange();
 }
 
@@ -67,14 +64,9 @@ void Map::init(unordered_map<unsigned int, Vertex<Local *> *> &map) {
         locs[pair.first] = pair.second->getInfo()->getTag();
     }
 
-    this->solveTarjanAlgorithm();
-
-//    int width = (Local::getMaxX() - Local::getMinX()) + 50;
-//    int height = (Local::getMaxY() - Local::getMinY()) + 50;
+    this->graph.tarjanStronglyConnectedComponents();
 
     this->graphViewer = new GraphViewer(600, 600, false);
-
-
 }
 
 void Map::setDirected(bool directed) {
@@ -135,7 +127,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
             this->graphViewer->clearEdgeColor(greenEdge);
             this->graphViewer->setEdgeThickness(greenEdge, 1);
         }
-        this->viewGraph(true);
+        this->viewGraph(PATH);
 
         graphViewer->setVertexColor(idFrom, "green");
         graphViewer->setVertexSize(idFrom, 30);
@@ -228,12 +220,9 @@ void Map::setNumEdges(int numEdges) {
     this->graph.setEdgeCounter(numEdges);
 }
 
-void Map::solveTarjanAlgorithm() {
-    this->graph.tarjanStronglyConnectedComponents();
-}
 
 bool Map::areStronglyConected(vector<Local *> &POIs) {
-    if (!this->graph.isTarjanSolved()) this->solveTarjanAlgorithm();
+    if (!this->graph.isTarjanSolved()) this->graph.tarjanStronglyConnectedComponents();
 
     bool connected = true;
     bool firstTime = true;
@@ -262,7 +251,7 @@ Local *Map::findLocal(unsigned int id) {
 }
 
 bool Map::areStronglyConected(unsigned id1, unsigned id2) {
-    if (!this->graph.isTarjanSolved()) this->solveTarjanAlgorithm();
+    if (!this->graph.isTarjanSolved()) this->graph.tarjanStronglyConnectedComponents();
 
     Vertex<Local *> * v1 = this->graph.findVertex(new Local(id1)), *v2 = this->graph.findVertex(new Local(id2));
     if (v1 == NULL) throw NonExistingVertex(id1);
@@ -318,4 +307,44 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
 
     this->graph.dijkstraShortestPath(from->getInfo());
     return this->graph.getDijkstraWeightTo(to->getInfo());
+}
+
+void Map::viewGraphConectivity() {
+    if (this->graph.isTarjanSolved()) this->graph.tarjanStronglyConnectedComponents();
+
+    for (Vertex<Local *> *v : this->graph.getVertexSet()) {
+
+    }
+
+}
+
+string giveColorToSSC(int ssc) {
+    switch(ssc % 13) {
+        case 0:
+            return BLUE;
+        case 1:
+            return RED;
+        case 2:
+            return PINK;
+        case 3:
+            return MAGENTA;
+        case 4:
+            return ORANGE;
+        case 5:
+            return YELLOW;
+        case 6:
+            return GREEN;
+        case 7:
+            return CYAN;
+        case 8:
+            return GRAY;
+        case 9:
+            return LIGHT_GRAY;
+        case 10:
+            return DARK_GRAY;
+        case 11:
+            return BLACK;
+        case 12:
+            return WHITE;
+    }
 }

@@ -256,8 +256,7 @@ void System::viewGraph() {
 
 void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
     string viewWithAPI = "N";
-    if (map.numVertex() < 300)
-        viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
+    viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
     this->map.viewPath(idFrom, idTo, isY(viewWithAPI));
 }
 

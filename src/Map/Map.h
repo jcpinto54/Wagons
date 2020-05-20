@@ -6,6 +6,10 @@
 
 #define PRECISION 10e9
 
+enum ViewGraph {
+    VIEW, PATH, CONECTIVITY
+};
+
 struct edgeMapHash
 {
     int operator() (const pair<Local *, Local *> & key) const
@@ -42,7 +46,7 @@ public:
 
     void init(unordered_map<unsigned,Vertex<Local *> *> &map);
 
-    void viewGraph(bool toContinue = false);
+    void viewGraph(ViewGraph type);
 
     void setDirected(bool directed);
 
@@ -60,12 +64,13 @@ public:
 
     void setNumEdges(int numEdges);
 
-    void solveTarjanAlgorithm();
 
     bool areStronglyConected(vector<Local *> &POIs);
     bool areStronglyConected(unsigned id1, unsigned id2);
 
     Local *findLocal(unsigned id);
+
+    void viewGraphConectivity();
 };
 
 /// NonExistingVertex Exception
@@ -118,4 +123,4 @@ public:
 
 };
 
-
+string giveColorToSSC(int ssc);
