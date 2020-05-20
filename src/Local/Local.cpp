@@ -49,7 +49,7 @@ istream &operator>>(istream &in, Local ** local) {
     aux.pop_back();
     vector<string> auxvec = trim(split(aux,","));
     if (auxvec.size() != 3) throw InvalidInput("Input error reading a Local");
-    int x = stoi(auxvec.at(1)) + 10, y = stoi(auxvec.at(2)) + 10;
+    int x = stoi(auxvec.at(1)), y = stoi(auxvec.at(2));
     *local = new Local(stoi(auxvec.at(0)), x, y);
     return in;
 }

@@ -160,6 +160,7 @@ public:
     // FloydWarshall Functions
     void floydWarshallShortestPath();
     vector<T> getfloydWarshallPath(const T &origin, const T &dest) const;
+    double getFloydWarshallWeight(const T &origin, const T &dest) const;
     bool isFloydWarshallSolved() const;
 
     // Tarjan Algorithm / Strongly Connected Components "finder"

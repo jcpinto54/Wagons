@@ -110,7 +110,6 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
     } catch (NonExistingVertex e) {
         throw e;
     }
-
     if (!api) {
         for (int i = 0; i < path.size()-1; i++) {
             cout << path[i]->getId() << " -> ";
@@ -205,7 +204,11 @@ void Map::applyFloydWarshall() {
 }
 
 double Map::dist(Local *l1, Local *l2) {
-    return sqrt(pow(l1->getX() - l2->getX(), 2) + pow(l1->getY() - l2->getY(), 2));
+    int distY = l1->getY() - l2->getY();
+    int distX = l1->getX() - l2->getX();
+    double distXPow = pow((double)distX, 2);
+    double distYPow = pow((double)distY, 2);
+    return sqrt(distXPow + distYPow);
 }
 
 
