@@ -276,6 +276,10 @@ void System::addPOI() {
     } catch (NonExistingVertex e) {
         throw NonExistingVertex(e);
     }
+    if (find(this->POIs.begin(), this->POIs.end(), loc) != this->POIs.end()) {
+        cout << "This point has already been added" << endl;
+        return;
+    }
 
     this->POIs.push_back(loc);
     bool connected = this->map.areStronglyConected(this->POIs);
@@ -318,8 +322,20 @@ void System::readPOIs() {
     Util::pause();
 }
 
-void System::orderPOIs() {
-    // TSP
+pair<vector<Local *>, double> System::solvePOITour() {
+    vector<unsigned> poisInIds;
+    for (auto & POI : this->POIs) {
+        poisInIds.push_back(POI->getId());
+    }
+    return this->map.minimumWeightTour(&poisInIds);
+}
+
+Map &System::getMap() {
+    return map;
+}
+
+const vector<Local*> &System::getPoIs() const{
+    return this->POIs;
 }
 
 

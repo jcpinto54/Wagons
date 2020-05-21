@@ -487,18 +487,23 @@ void Graph<T>::tarjanDfs(Vertex<T> *at) {
     at->onStack = true;
     at->tarjanId = nextTarjanId;
     at->tarjanLowlink = nextTarjanId++;
+    at->visited = true;
 
     for (Edge<T> edge : at->adj) {
         Vertex<T> *to = edge.getDest();
-        if (at->visited) tarjanDfs(at);
-        if (at->onStack) at->tarjanLowlink = min(at->tarjanLowlink, to->tarjanLowlink);
+        if (!to->visited)
+            tarjanDfs(to);
+        if (to->onStack)
+            at->tarjanLowlink = min(at->tarjanLowlink, to->tarjanLowlink);
     }
 
     if (at->tarjanId == at->tarjanLowlink) {
-        for (Vertex<T> *v = stack.top(); ; stack.pop()) {
+        while(true) {
+            Vertex<T> *v = stack.top();
             v->onStack = false;
             v->tarjanLowlink = at->tarjanId;
             if (v->tarjanId == at->tarjanId) break;
+            stack.pop();
         }
         this->sccCount++;
     }
@@ -519,6 +524,8 @@ void Graph<T>::tarjanStronglyConnectedComponents() {
     }
 
     while (!stack.empty()) stack.pop();
+
+    tarjanSolved = true;
 }
 
 template<class T>
