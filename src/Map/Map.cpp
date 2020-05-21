@@ -8,10 +8,18 @@
 void Map::viewGraph(ViewGraph type) {
 
     graphViewer->closeWindow();
-
+    
     if (type == PATH) {
-        graphViewer->defineVertexSize(5);
+        for (int i = 0; i < this->numVertex(); i++) {
+            this->graphViewer->clearVertexLabel(this->graph.getVertexSet()[i]->getInfo()->getId());
+        }
+        for (unsigned int &greenEdge : greenEdges) {
+            this->graphViewer->clearEdgeColor(greenEdge);
+            this->graphViewer->setEdgeThickness(greenEdge, 1);
+        }
     }
+    if (type == CONECTIVITY)
+        this->graphViewer->defineVertexSize(10);
 
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
     graphViewer->defineEdgeCurved(false);
@@ -20,30 +28,31 @@ void Map::viewGraph(ViewGraph type) {
 
     for (auto vertex : graph.getVertexSet()) {
         graphViewer->addNode(vertex->getInfo()->getId(), convertXToAPI(vertex->getInfo()->getX()), convertYToAPI(vertex->getInfo()->getY()));
-        switch (vertex->getInfo()->getTag()) {
-            case Tag::COURT:
-                graphViewer->setVertexColor(vertex->getInfo()->getId(), "orange");
-                graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Court");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
-                break;
-            case Tag::POLICE:
-                graphViewer->setVertexColor(vertex->getInfo()->getId(), "blue");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
-                graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Police");
-                break;
-            case Tag::PRISON:
-                graphViewer->setVertexColor(vertex->getInfo()->getId(), "black");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
-                graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Prison");
-                break;
-            case Tag::HQ:
-                graphViewer->setVertexColor(vertex->getInfo()->getId(), "cyan");
-                graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
-                graphViewer->setVertexLabel(vertex->getInfo()->getId(), "HQ");
-                break;
-            case Tag::DEFAULT:
-                graphViewer->setVertexSize(vertex->getInfo()->getId(),5);
-        }
+        if (type != CONECTIVITY)
+            switch (vertex->getInfo()->getTag()) {
+                case Tag::COURT:
+                    graphViewer->setVertexColor(vertex->getInfo()->getId(), "orange");
+                    graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Court");
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
+                    break;
+                case Tag::POLICE:
+                    graphViewer->setVertexColor(vertex->getInfo()->getId(), "blue");
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
+                    graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Police");
+                    break;
+                case Tag::PRISON:
+                    graphViewer->setVertexColor(vertex->getInfo()->getId(), "black");
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
+                    graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Prison");
+                    break;
+                case Tag::HQ:
+                    graphViewer->setVertexColor(vertex->getInfo()->getId(), "cyan");
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
+                    graphViewer->setVertexLabel(vertex->getInfo()->getId(), "HQ");
+                    break;
+                case Tag::DEFAULT:
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(),5);
+            }
     }
     int i = 0;
     for (auto vertex : graph.getVertexSet()) {
@@ -122,15 +131,6 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
 
 
     if (api) {
-        this->graphViewer->setVertexColor(idFrom, "white");
-        this->graphViewer->setVertexColor(idTo, "white");
-        for (int i = 0; i < this->numVertex(); i++) {
-            this->graphViewer->clearVertexLabel(this->graph.getVertexSet()[i]->getInfo()->getId());
-        }
-        for (unsigned int & greenEdge : greenEdges) {
-            this->graphViewer->clearEdgeColor(greenEdge);
-            this->graphViewer->setEdgeThickness(greenEdge, 1);
-        }
         this->viewGraph(PATH);
 
         graphViewer->setVertexColor(idFrom, "green");
@@ -226,7 +226,8 @@ void Map::setNumEdges(int numEdges) {
 
 
 bool Map::areStronglyConected(vector<Local *> &POIs) {
-    if (!this->graph.isTarjanSolved()) this->graph.tarjanStronglyConnectedComponents();
+    if (!this->graph.isTarjanSolved())
+        this->graph.tarjanStronglyConnectedComponents();
 
     bool connected = true;
     bool firstTime = true;
@@ -313,42 +314,191 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
     return this->graph.getDijkstraWeightTo(to->getInfo());
 }
 
+double Map::getTotalWeight(vector<unsigned> &poi_ids) {
+    double weight = 0;
+
+    int origin_id = poi_ids[0];
+
+    for (int i = 0; i < poi_ids.size(); i++) {
+        if (i == poi_ids.size() - 1)
+            weight += getWeight(poi_ids[i], origin_id);
+
+        else
+            weight += getWeight(poi_ids[i], poi_ids[i + 1]);
+    }
+
+    return weight;
+}
+
+pair<vector<Local *>, double> Map::minimumWeightTour(vector<unsigned> *poi_ids)
+{
+    vector<unsigned> res;
+
+    sort(poi_ids->begin(), poi_ids->end());
+
+    double cost, minCost = INT64_MAX;
+
+    do {
+        cost = getTotalWeight(*poi_ids);
+
+        if (cost < minCost)
+        {
+            minCost = cost;
+
+            res = *poi_ids;
+        }
+    } while (next_permutation(poi_ids->begin(), poi_ids->end()));
+
+    vector<Local *> path;
+    vector<Local *> *twoPointPath;
+    twoPointPath = this->getPath(res[0], res[1]);
+    path = *twoPointPath;
+    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
+        twoPointPath = this->getPath(*it, *(it+1));
+        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+    }
+    twoPointPath = this->getPath(res.back(), res[0]);
+    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+
+    return pair<vector<Local *>, double>(path, minCost);
+}
+
 void Map::viewGraphConectivity() {
     if (this->graph.isTarjanSolved()) this->graph.tarjanStronglyConnectedComponents();
-
+    this->viewGraph(CONECTIVITY);
     for (Vertex<Local *> *v : this->graph.getVertexSet()) {
-
+        this->graphViewer->setVertexColor(v->getInfo()->getId(), giveColorToSSC(v->getSSC()));
     }
+    this->graphViewer->rearrange();
 
 }
 
-string giveColorToSSC(int ssc) {
-    switch(ssc % 13) {
+void Map::viewTour(vector<Local *> path, double weight, vector<Local *> pois, bool api) {
+    cout << "Tour total weight: " << weight << endl;
+    if (!api) {
+        for (int i = 0; i < (path).size()-1; i++) {
+            cout << (path)[i]->getId() << " -> ";
+            if (i % 20 == 0 && i != 0) {
+                cout << endl;
+            }
+        }
+        cout << (path).back()->getId() << endl;
+    }
+
+    if (api) {
+        this->viewGraph(PATH);
+
+        switch (this->locs[(path)[0]->getId()]) {
+            case Tag::DEFAULT:
+                graphViewer->setVertexLabel((path)[0]->getId(), "Start");
+                break;
+            case Tag::PRISON:
+                graphViewer->setVertexLabel((path)[0]->getId(), "Start/Prison");
+                break;
+            case Tag::POLICE:
+                graphViewer->setVertexLabel((path)[0]->getId(), "Start/Police");
+                break;
+            case Tag::COURT:
+                graphViewer->setVertexLabel((path)[0]->getId(), "Start/Court");
+                break;
+            case Tag::HQ:
+                graphViewer->setVertexLabel((path)[0]->getId(), "Start/HQ");
+                break;
+        }
+        for (auto it = (path).begin(); it != (path).end() - 1; it++) {
+            unsigned idEdge = edgeIds[pair<Local *, Local *>((*it), (*(it +1)))];
+            graphViewer->setEdgeThickness(idEdge, 5);
+            graphViewer->setEdgeColor(idEdge, "green");
+            greenEdges.push_back(idEdge);
+            if (!this->directed) {
+                unsigned idEdgeBack = edgeIds[pair<Local *, Local *>((*it + 1), (*(it)))];
+                if (idEdgeBack == 0) continue;
+                graphViewer->setEdgeThickness(idEdgeBack, 5);
+                graphViewer->setEdgeColor(idEdgeBack, "green");
+                greenEdges.push_back(idEdgeBack);
+            }
+            if (it == (path).begin()) continue;
+
+            graphViewer->setVertexSize((*it)->getId(), 10);
+            switch (this->locs[(*it)->getId()]) {
+                case Tag::DEFAULT:
+                    break;
+                case Tag::HQ:
+                    graphViewer->setVertexSize((*it)->getId(), 20);
+                    break;
+                default:
+                    graphViewer->setVertexSize((*it)->getId(), 15);
+            }
+        }
+
+        for (auto poiID : pois) {
+            graphViewer->setVertexColor(poiID->getId(), CYAN);
+            graphViewer->setVertexSize(poiID->getId(), 20);
+            if (poiID == pois[0]) continue;
+            switch (this->locs[poiID->getId()]) {
+                case Tag::DEFAULT:
+                    graphViewer->setVertexLabel(poiID->getId(), "POI");
+                    break;
+                case Tag::PRISON:
+                    graphViewer->setVertexLabel(poiID->getId(), "POI/Prison");
+                    break;
+                case Tag::POLICE:
+                    graphViewer->setVertexLabel(poiID->getId(), "POI/Police");
+                    break;
+                case Tag::COURT:
+                    graphViewer->setVertexLabel(poiID->getId(), "POI/Court");
+                    break;
+                case Tag::HQ:
+                    graphViewer->setVertexLabel(poiID->getId(), "POI/HQ");
+                    break;
+            }
+        }
+        graphViewer->rearrange();
+    }
+}
+
+string Map::giveColorToSSC(int ssc) {
+    if (!sscToColor[ssc].empty()) return sscToColor[ssc];
+    int a = sscToColor.size();
+    switch(a % 13) {
         case 0:
-            return BLUE;
+            sscToColor[ssc] = DARK_GRAY;
+            return sscToColor[ssc];
         case 1:
-            return RED;
+            sscToColor[ssc] = RED;
+            return sscToColor[ssc];
         case 2:
-            return PINK;
+            sscToColor[ssc] = CYAN;
+            return sscToColor[ssc];
         case 3:
-            return MAGENTA;
+            sscToColor[ssc] = MAGENTA;
+            return sscToColor[ssc];
         case 4:
-            return ORANGE;
+            sscToColor[ssc] = BLUE;
+            return sscToColor[ssc];
         case 5:
-            return YELLOW;
+            sscToColor[ssc] = YELLOW;
+            return sscToColor[ssc];
         case 6:
-            return GREEN;
+            sscToColor[ssc] = GREEN;
+            return sscToColor[ssc];
         case 7:
-            return CYAN;
+            sscToColor[ssc] = ORANGE;
+            return sscToColor[ssc];
         case 8:
-            return GRAY;
+            sscToColor[ssc] = GRAY;
+            return sscToColor[ssc];
         case 9:
-            return LIGHT_GRAY;
+            sscToColor[ssc] = PINK;
+            return sscToColor[ssc];
         case 10:
-            return DARK_GRAY;
+            sscToColor[ssc] = BLACK;
+            return sscToColor[ssc];
         case 11:
-            return BLACK;
+            sscToColor[ssc] = WHITE;
+            return sscToColor[ssc];
         case 12:
-            return WHITE;
+            sscToColor[ssc] = LIGHT_GRAY;
+            return sscToColor[ssc];
     }
 }

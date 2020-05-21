@@ -5,8 +5,6 @@
 
 using namespace std;
 
-bool Menu::firstTripMenu = true;
-
 string Menu::readOption() const {
     string input;
     getline(cin, input);
@@ -63,6 +61,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
             }
                 break;
             case 'T' : {
+                sys->applyFloydWarshall();
                 new TripMenu(system);
             }
                 break;
@@ -219,6 +218,18 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 sys->applyFloydWarshall();
             }
                 break;
+            case 'G' : {
+                sys->getMap().viewGraphConectivity();
+            }
+                break;
+            case 'I' : {
+                cout << "Instructions for this Menu:" << endl
+                    << "- This menu can be used to calculate paths between two points only" << endl
+                    << "- Selecting option 'C', the program will pre-process the graph with Floyd-Warshall Algorithm.\n\tHowever with large maps, this may take a while: some seconds, even minutes" << endl
+                    << "- Selecting option 'P', the program will give you the path between 2 points.\n\t If the graph Floyd Warshall Algorithm has been solved, this only looks for the path in memory.\n\tIf the graph has not been pre-processed it will use Dijkstra Algorithm to get the shortest path" << endl
+                    << "- If you pre-process the graph, future paths calculating will be much faster (also applies for Trip Menu calculations)" << endl;
+            }
+                break;
             case 'M':
                 return;
             case 'Q':
@@ -232,17 +243,14 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
 vector<vector<string>> GraphMenu::getOptions() const {
     return vector<vector<string>>({{"P", "Path between two Vertices"},
                                    {"C", "Calculate all paths between all pairs of vertices"},
+                                   {"G", "View Graph Conectivity"},
+                                   {"I", "Instruction for this Menu"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }
 
 
 TripMenu::TripMenu(System *system) : Menu(system) {
-        if (Menu::firstTripMenu) {
-            Menu::firstTripMenu = false;
-            cout << "HQ is the starting point:" << endl;
-            sys->readPOIs();
-        }
         while (true) {
         this->nextMenu = this->option();
         switch (this->nextMenu) {
@@ -265,11 +273,17 @@ TripMenu::TripMenu(System *system) : Menu(system) {
             }
                 break;
             case 'C' : {
-                // TSP algorithm
+                if (sys->getPoIs().size() <= 1) {
+                    cout << "Not enough POIs: You need at least 2!" << endl;
+                }
+                pair<vector<Local *>, double> tour = sys->solvePOITour();
+                string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
+                sys->getMap().viewTour(tour.first, tour.second, sys->getPoIs(), Util::isY(viewWithAPI));
             }
                 break;
             case 'I' : {
                 cout << "Instructions for this Menu:" << endl
+                     << "- First POI is HQ" << endl
                      << "- When a POI is added, it is stored in a Vector" << endl
                      << "- If you want more than one POI just add more than one POI" << endl
                      << "- You can leave this menu and the inserted POIs will still be here" << endl
@@ -291,7 +305,7 @@ vector<vector<string>> TripMenu::getOptions() const {
                                    {"E", "Erase POI"},
                                    {"R", "Read POIs"},
                                    {"C", "Calculate Trips"},
-                                   {"I", "Instructions"},
+                                   {"I", "Menu Instructions"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }

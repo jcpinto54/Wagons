@@ -12,7 +12,6 @@
 /// The System Class
 class System {
 private:
-    friend class Menu;
 
     /// @brief The file with the names of the other database files
     string fileName;
@@ -26,6 +25,8 @@ private:
 
     Map map;
 public:
+    friend class Menu;
+
     /// @brief Creates a new system with the information provided by the file.
     /// @param fileName The path to the file where the information is stored.
     explicit System(const string &fileName);
@@ -82,7 +83,11 @@ public:
 
     void readPOIs();
 
-    void orderPOIs();
+    pair<vector<Local *>, double> solvePOITour();
+
+    Map &getMap();
+
+    const vector<Local*> &getPoIs() const;
 };
 
 ///@brief Receives a vector of Person and transforms in a table.

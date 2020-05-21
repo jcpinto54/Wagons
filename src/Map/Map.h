@@ -38,6 +38,8 @@ class Map {
     double getWeight(unsigned idFrom, unsigned idTo);
 
     void testTarjanAlgorithm();
+    string giveColorToSSC(int ssc);
+    unordered_map<int, string> sscToColor;
 
     double convertXToAPI(double x);
     double convertYToAPI(double y);
@@ -53,6 +55,7 @@ public:
     bool isDirected() const;
 
     void viewPath(unsigned idFrom, unsigned idTo, bool api);
+    void viewTour(vector<Local *> path, double weight, vector<Local *> pois, bool api);
 
     void applyFloydWarshall();
 
@@ -71,6 +74,11 @@ public:
     Local *findLocal(unsigned id);
 
     void viewGraphConectivity();
+
+    double getTotalWeight(vector<unsigned> &poi_ids);
+
+    // TSP Algorithm
+    pair<vector<Local *>, double> minimumWeightTour(vector<unsigned> *poi_ids);
 };
 
 /// NonExistingVertex Exception
