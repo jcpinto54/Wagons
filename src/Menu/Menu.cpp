@@ -177,7 +177,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
                 new TripMenu(system);
                 break;
             case 'L' :
-                delete this->sys;
+//                delete this->sys;
                 new InitMenu();
                 break;
             case 'Q':
@@ -283,6 +283,7 @@ TripMenu::TripMenu(System *system) : Menu(system) {
             case 'C' : {
                 if (sys->getPoIs().size() <= 1) {
                     cout << "Not enough POIs: You need at least 2!" << endl;
+                    break;
                 }
                 pair<vector<Local *>, double> tour = sys->solvePOITour();
                 string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");

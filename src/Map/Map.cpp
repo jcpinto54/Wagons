@@ -27,7 +27,7 @@ void Map::viewGraph(ViewGraph type) {
     graphViewer->defineVertexColor("white");
 
     for (auto vertex : graph.getVertexSet()) {
-        graphViewer->addNode(vertex->getInfo()->getId(), /*convertXToAPI*/(vertex->getInfo()->getX()), /*convertYToAPI*/(vertex->getInfo()->getY()));
+        graphViewer->addNode(vertex->getInfo()->getId(), (vertex->getInfo()->getX()), (vertex->getInfo()->getY()));
         if (type != CONECTIVITY)
             switch (vertex->getInfo()->getTag()) {
                 case Tag::COURT:
@@ -372,23 +372,6 @@ void Map::viewTour(vector<Local *> path, double weight, vector<Local *> pois, bo
     if (api) {
         this->viewGraph(PATH);
 
-        switch (this->locs[(path)[0]->getId()]) {
-            case Tag::DEFAULT:
-                graphViewer->setVertexLabel((path)[0]->getId(), "Start");
-                break;
-            case Tag::PRISON:
-                graphViewer->setVertexLabel((path)[0]->getId(), "Start/Prison");
-                break;
-            case Tag::POLICE:
-                graphViewer->setVertexLabel((path)[0]->getId(), "Start/Police");
-                break;
-            case Tag::COURT:
-                graphViewer->setVertexLabel((path)[0]->getId(), "Start/Court");
-                break;
-            case Tag::HQ:
-                graphViewer->setVertexLabel((path)[0]->getId(), "Start/HQ");
-                break;
-        }
         for (auto it = (path).begin(); it != (path).end() - 1; it++) {
             unsigned idEdge = edgeIds[pair<Local *, Local *>((*it), (*(it +1)))];
             graphViewer->setEdgeThickness(idEdge, 5);
@@ -416,8 +399,8 @@ void Map::viewTour(vector<Local *> path, double weight, vector<Local *> pois, bo
         }
 
         for (auto poiID : pois) {
-            graphViewer->setVertexColor(poiID->getId(), PINK);
-            graphViewer->setVertexSize(poiID->getId(), 25);
+            graphViewer->setVertexColor(poiID->getId(), GREEN);
+            graphViewer->setVertexSize(poiID->getId(), 30);
             if (poiID == pois[0]) continue;
             switch (this->locs[poiID->getId()]) {
                 case Tag::DEFAULT:
