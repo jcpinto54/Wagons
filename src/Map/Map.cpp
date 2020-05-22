@@ -18,40 +18,38 @@ void Map::viewGraph(ViewGraph type) {
             this->graphViewer->setEdgeThickness(greenEdge, 1);
         }
     }
+    this->graphViewer->defineVertexSize(10);
     if (type == CONECTIVITY)
-        this->graphViewer->defineVertexSize(10);
-
+        this->graphViewer->defineVertexSize(20);
     graphViewer->createWindow(graphViewer->getWidth(), graphViewer->getHeight());
     graphViewer->defineEdgeCurved(false);
 
     graphViewer->defineVertexColor("white");
 
     for (auto vertex : graph.getVertexSet()) {
-        graphViewer->addNode(vertex->getInfo()->getId(), convertXToAPI(vertex->getInfo()->getX()), convertYToAPI(vertex->getInfo()->getY()));
+        graphViewer->addNode(vertex->getInfo()->getId(), /*convertXToAPI*/(vertex->getInfo()->getX()), /*convertYToAPI*/(vertex->getInfo()->getY()));
         if (type != CONECTIVITY)
             switch (vertex->getInfo()->getTag()) {
                 case Tag::COURT:
                     graphViewer->setVertexColor(vertex->getInfo()->getId(), "orange");
                     graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Court");
-                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
                     break;
                 case Tag::POLICE:
                     graphViewer->setVertexColor(vertex->getInfo()->getId(), "blue");
-                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
                     graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Police");
                     break;
                 case Tag::PRISON:
                     graphViewer->setVertexColor(vertex->getInfo()->getId(), "black");
-                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 15);
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
                     graphViewer->setVertexLabel(vertex->getInfo()->getId(), "Prison");
                     break;
                 case Tag::HQ:
                     graphViewer->setVertexColor(vertex->getInfo()->getId(), "cyan");
-                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 25);
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 30);
                     graphViewer->setVertexLabel(vertex->getInfo()->getId(), "HQ");
                     break;
-                case Tag::DEFAULT:
-                    graphViewer->setVertexSize(vertex->getInfo()->getId(),5);
             }
     }
     int i = 0;
@@ -117,7 +115,10 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
     } catch (NonExistingVertex e) {
         throw e;
     }
-
+    if (path->empty()) {
+        cout << "There is no path between these points!" << endl;
+        return;
+    }
     cout << "Path total weight: " << weight << endl;
     if (!api) {
         for (int i = 0; i < (*path).size()-1; i++) {
@@ -134,7 +135,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
         this->viewGraph(PATH);
 
         graphViewer->setVertexColor(idFrom, "green");
-        graphViewer->setVertexSize(idFrom, 30);
+        graphViewer->setVertexSize(idFrom, 40);
         switch (this->locs[idFrom]) {
             case Tag::DEFAULT:
                 graphViewer->setVertexLabel(idFrom, "Start");
@@ -153,7 +154,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
                 break;
         }
         graphViewer->setVertexColor(idTo, "red");
-        graphViewer->setVertexSize(idTo, 30);
+        graphViewer->setVertexSize(idTo, 40);
         switch (this->locs[idTo]) {
             case Tag::DEFAULT:
                 graphViewer->setVertexLabel(idTo, "End");
@@ -184,9 +185,9 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
             }
             if (it == (*path).begin()) continue;
 
-            graphViewer->setVertexSize((*it)->getId(), 10);
             switch (this->locs[(*it)->getId()]) {
                 case Tag::DEFAULT:
+                    graphViewer->setVertexSize((*it)->getId(), 15);
                     break;
                 case Tag::HQ:
                     graphViewer->setVertexSize((*it)->getId(), 25);
@@ -263,23 +264,6 @@ bool Map::areStronglyConected(unsigned id1, unsigned id2) {
     if (v2 == NULL) throw NonExistingVertex(id2);
 
     return v1->getSSC() == v2->getSSC();
-}
-
-void Map::testTarjanAlgorithm() {
-
-    cout << "Tarjan Algorithm Testing" << endl;
-    cout << "Pair Testing" << endl;
-    cout << "(1, 5) Needs to be 0: " << this->areStronglyConected(1, 5) << endl;
-    cout << "(8, 10) Needs to be 0: " << this->areStronglyConected(8, 10) << endl;
-    cout << "(10, 12) Needs to be 1: " << this->areStronglyConected(10, 12) << endl;
-
-    cout << "Vector Testing" << endl;
-    vector<Local *> locs;
-    locs.push_back(new Local(5)); locs.push_back(new Local(7)); locs.push_back(new Local(3));
-    cout << "(5, 7, 3) Needs to be 1: " << this->areStronglyConected(locs) << endl;
-    locs.push_back(new Local(8));
-    cout << "(5, 7, 3, 8) Needs to be 0: " << this->areStronglyConected(locs) << endl;
-
 }
 
 double Map::convertXToAPI(double x) {
@@ -419,21 +403,21 @@ void Map::viewTour(vector<Local *> path, double weight, vector<Local *> pois, bo
             }
             if (it == (path).begin()) continue;
 
-            graphViewer->setVertexSize((*it)->getId(), 10);
             switch (this->locs[(*it)->getId()]) {
                 case Tag::DEFAULT:
+                    graphViewer->setVertexSize((*it)->getId(), 15);
                     break;
                 case Tag::HQ:
-                    graphViewer->setVertexSize((*it)->getId(), 20);
+                    graphViewer->setVertexSize((*it)->getId(), 25);
                     break;
                 default:
-                    graphViewer->setVertexSize((*it)->getId(), 15);
+                    graphViewer->setVertexSize((*it)->getId(), 20);
             }
         }
 
         for (auto poiID : pois) {
-            graphViewer->setVertexColor(poiID->getId(), CYAN);
-            graphViewer->setVertexSize(poiID->getId(), 20);
+            graphViewer->setVertexColor(poiID->getId(), PINK);
+            graphViewer->setVertexSize(poiID->getId(), 25);
             if (poiID == pois[0]) continue;
             switch (this->locs[poiID->getId()]) {
                 case Tag::DEFAULT:
@@ -502,3 +486,4 @@ string Map::giveColorToSSC(int ssc) {
             return sscToColor[ssc];
     }
 }
+

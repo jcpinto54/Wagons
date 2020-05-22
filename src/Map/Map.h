@@ -37,9 +37,9 @@ class Map {
 
     double getWeight(unsigned idFrom, unsigned idTo);
 
-    void testTarjanAlgorithm();
     string giveColorToSSC(int ssc);
     unordered_map<int, string> sscToColor;
+
 
     double convertXToAPI(double x);
     double convertYToAPI(double y);

@@ -1,3 +1,1 @@
-people.txt
-wagons.txt
-GridGraphs/4x4NotSC/
+GridGraphs/4x4/

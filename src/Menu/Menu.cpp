@@ -1,9 +1,10 @@
 #include "Menu.h"
 #include "Utilities/utils.h"
-#include "Person/Person.h"
 #include "Utilities/Table.h"
+#include "Utilities/InvalidInput.h"
 
 using namespace std;
+using namespace Util;
 
 string Menu::readOption() const {
     string input;
@@ -45,25 +46,139 @@ Menu::Menu(System *system) {
     this->sys = system;
 }
 
+InitMenu::InitMenu() : Menu(nullptr) {
+    cout << "What Graph do you want to load?" << endl;
+    do {
+        char o = this->option();
+        switch (o) {
+            case '0' :
+                try {
+                    this->sys = new System("../data/GridGraphs/4x4/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '1' :
+                try {
+                    this->sys = new System("../data/GridGraphs/4x4NotSC/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '2' :
+                try {
+                    this->sys = new System("../data/GridGraphs/8x8/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '3' :
+                try {
+                    this->sys = new System("../data/GridGraphs/16x16/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '4' :
+                try {
+                    this->sys = new System("../data/PenafielFull/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '5' :
+                try {
+                    this->sys = new System("../data/PenafielStrong/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '6' :
+                try {
+                    this->sys = new System("../data/EspinhoFull/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '7' :
+                try {
+                    this->sys = new System("../data/EspinhoStrong/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '8' :
+                try {
+                    this->sys = new System("../data/PortoFull/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case '9' :
+                try {
+                    this->sys = new System("../data/PortoStrong/");
+                } catch (InvalidInput &e) {
+                    cout << e.getMsg() << endl;
+                }
+                new MainMenu(this->sys);
+                break;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    } while (true);
+}
+
+vector<vector<string>> InitMenu::getOptions() const {
+    return vector<vector<string>>({{"0", "Grid 4x4", "25", "40"},
+                                   {"1", "Grid 4x4 Not Strongly Conected", "25", "33"},
+                                   {"2", "Grid 8x8", "81", "144"},
+                                   {"3", "Grid 16x16", "289", "544"},
+                                   {"4", "Full Penafiel", "10365", "10916"},
+                                   {"5", "Strongly Conected Penafiel", "3964", "4237"},
+                                   {"6", "Full Espinho", "17772", "19260"},
+                                   {"7", "Strongly Conected Espinho", "7180", "7938"},
+                                   {"8", "Full Porto", "53621", "59526"},
+                                   {"9", "Strongly Conected Porto", "26098", "29488"},
+                                   {"Q", "Quit Program", "-", "-"}});
+}
+
+char InitMenu::option() const {
+    Table<string> options({"Letter", "Graph", "Nr. Nodes", "Nr. Edges"}, this->getOptions());
+    cout << options;
+    cout << "Choose a option: ";
+    string o = this->readOption();
+    while (!validOption(o)) {
+        cout << options;
+        cout << "'" << o << "' is not a valid option, choose a valid option: ";
+        o = this->readOption();
+    };
+    return o.at(0);
+}
+
 MainMenu::MainMenu(System *system) : Menu(system) {
     do {
         char o = this->option();
         switch (o) {
-            case 'P':
-                new PersonMenu(system);
-                break;
-            case 'V' : {
-                sys->viewGraph();
-            }
-                break;
-            case 'G' : {
+            case 'G' :
                 new GraphMenu(system);
-            }
                 break;
-            case 'T' : {
-                sys->applyFloydWarshall();
+            case 'T' :
                 new TripMenu(system);
-            }
+                break;
+            case 'L' :
+                delete this->sys;
+                new InitMenu();
                 break;
             case 'Q':
                 exit(0);
@@ -74,133 +189,20 @@ MainMenu::MainMenu(System *system) : Menu(system) {
 }
 
 vector<vector<string>> MainMenu::getOptions() const {
-    return vector<vector<string>>({{"P", "Person Menu"},
-                                   {"V", "View Graph"},
-                                   {"G", "Graph Menu"},
+    return vector<vector<string>>({{"G", "Graph Menu"},
                                    {"T", "Trip Menu"},
+                                   {"L", "Load another Graph"},
                                    {"Q", "Quit Program"}});
-}
-
-PersonMenu::PersonMenu(System *system) : Menu(system) {
-    while (true) {
-        this->nextMenu = this->option();
-        switch (this->nextMenu) {
-            case 'C' : {
-                sys->createPerson();
-            }
-                break;
-            case 'R' : {
-                new ReadPersonMenu(system);
-            }
-                break;
-            case 'U' : {
-                new UpdatePersonMenu(system);
-            }
-                break;
-            case 'D' : {
-                sys->deletePerson();
-            }
-                break;
-            case 'M':
-                return;
-            case 'Q':
-                exit(0);
-            default:
-                break;
-        }
-    }
-}
-
-vector<vector<string>> PersonMenu::getOptions() const {
-    return vector<vector<string>>({{"C", "Create Person"},
-                                   {"R", "Read People"},
-                                   {"U", "Update Person"},
-                                   {"D", "Delete Person"},
-                                   {"M", "Main Menu"},
-                                   {"Q", "Quit Program"}});
-}
-
-UpdatePersonMenu::UpdatePersonMenu(System *system) : Menu(system) {
-    string aux;
-    aux = getInput(isNum, "Introduce an id: ", "Invalid Number");
-    if (aux == ":q") return;
-    unsigned id = stoi(aux);
-    auto prs = sys->findPerson(id);
-    if (prs == sys->getPeople().end()) {
-        cout << "This person doesn't exist!" << endl;
-        Util::pause();
-        return;
-    }
-    while (true) {
-        this->nextMenu = this->option();
-        switch (this->nextMenu) {
-            case 'N' : {
-                sys->updatePersonName(prs);
-            }
-                break;
-            case 'C' : {
-                sys->updatePersonContact(prs);
-            }
-                break;
-            case 'G' : {
-                return;
-            }
-            default:
-                continue;
-        }
-    }
-}
-
-vector<vector<string>> UpdatePersonMenu::getOptions() const {
-    return vector<vector<string>>({{"N", "Update Name"},
-                                   {"C", "Update Contact"},
-                                   {"G", "Go Back"}});
-}
-
-
-ReadPersonMenu::ReadPersonMenu(System *system) : ReadMenu<Person>(system) {
-    do {
-        this->nextMenu = this->option();
-        switch (this->nextMenu) {
-            case 'N' : {
-                sort(sys->getPeople().begin(), sys->getPeople().end(), compareName);
-                sys->readPeople(sys->getPeople());
-            }
-                break;
-            case 'B' : {
-                sort(sys->getPeople().begin(), sys->getPeople().end(), compareBirthday);
-                sys->readPeople(sys->getPeople());
-            }
-                break;
-            case 'I' : {
-                sort(sys->getPeople().begin(), sys->getPeople().end(), compareId);
-                sys->readPeople(sys->getPeople());
-            }
-                break;
-            case 'V' : {
-                sys->readPerson();
-            }
-                break;
-            case 'G':
-                return;
-            default:
-                break;
-        }
-    } while (true);
-}
-
-vector<vector<string>> ReadPersonMenu::getOptions() const {
-    return vector<vector<string>>({{"N", "Sort by Name"},
-                                   {"B", "Sort by Birthday"},
-                                   {"I", "Sort by ID"},
-                                   {"V", "View just one Person"},
-                                   {"G", "Go Back"}});
 }
 
 GraphMenu::GraphMenu(System *system) : Menu(system) {
     while (true) {
         this->nextMenu = this->option();
         switch (this->nextMenu) {
+            case 'V' : {
+                sys->viewGraph();
+            }
+                break;
             case 'P' : {
                 string idFromStr, idToStr;
                 idFromStr = getInput(isNum, "Enter the start vertex id: ", "Invalid Number");
@@ -214,20 +216,25 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 }
             }
                 break;
-            case 'C' : {
-                sys->applyFloydWarshall();
+            case 'F' : {
+                string floydWarshallConfirmation = "N";
+                floydWarshallConfirmation = Util::getInput(Util::isYorN, "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ", "Invalid Input");
+                if (Util::isY(floydWarshallConfirmation))
+                    sys->applyFloydWarshall();
             }
                 break;
-            case 'G' : {
+            case 'C' : {
                 sys->getMap().viewGraphConectivity();
             }
                 break;
             case 'I' : {
                 cout << "Instructions for this Menu:" << endl
                     << "- This menu can be used to calculate paths between two points only" << endl
-                    << "- Selecting option 'C', the program will pre-process the graph with Floyd-Warshall Algorithm.\n\tHowever with large maps, this may take a while: some seconds, even minutes" << endl
+                    << "- Option 'V' makes you view the graph" << endl
+                    << "- Selecting option 'F', the program will pre-process the graph with Floyd-Warshall Algorithm.\n\tHowever with large maps, this may take a while: some seconds, even minutes" << endl
                     << "- Selecting option 'P', the program will give you the path between 2 points.\n\t If the graph Floyd Warshall Algorithm has been solved, this only looks for the path in memory.\n\tIf the graph has not been pre-processed it will use Dijkstra Algorithm to get the shortest path" << endl
-                    << "- If you pre-process the graph, future paths calculating will be much faster (also applies for Trip Menu calculations)" << endl;
+                    << "- If you pre-process the graph, future paths calculating will be much faster (also applies for Trip Menu calculations)" << endl
+                    << "- When vieweing graph conectivity (option 'C'), nodes belonging to the same strongly connected component have the same color.\n\tSince the GraphViewer API only supports 13 different colors, there might be color repetition." << endl;
             }
                 break;
             case 'M':
@@ -241,9 +248,10 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
 }
 
 vector<vector<string>> GraphMenu::getOptions() const {
-    return vector<vector<string>>({{"P", "Path between two Vertices"},
-                                   {"C", "Calculate all paths between all pairs of vertices"},
-                                   {"G", "View Graph Conectivity"},
+    return vector<vector<string>>({{"V", "View Graph"},
+                                   {"P", "Path between two Vertices"},
+                                   {"F", "Apply Floyd-Warshall algortihm"},
+                                   {"C", "View Graph Conectivity"},
                                    {"I", "Instruction for this Menu"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});

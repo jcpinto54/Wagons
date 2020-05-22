@@ -109,7 +109,8 @@ namespace Util {
     }
 
     bool isY(const string &toTest) {
-        return (toTest == "1" || toTest == "Y" || toTest == "y");
+        if (toTest == "1" || toTest == "Y" || toTest == "y") return true;
+        return !isN(toTest);
     }
 
     bool isN(const string &toTest) {

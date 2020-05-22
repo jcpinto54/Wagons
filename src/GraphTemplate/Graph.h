@@ -422,6 +422,7 @@ void Graph<T>::floydWarshallShortestPath() {
     }
 
     for (int k = 0; k < vertexSet.size(); k++) {
+        cout << "Working... - " << k << "/" << this->vertexSet.size() << endl;
         int i = 0, j = 0;
         for (auto v1 : vertexSet) {
             for (auto v2 : vertexSet) {
