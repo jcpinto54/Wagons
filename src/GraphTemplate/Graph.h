@@ -158,10 +158,10 @@ public:
 
     // Dijkstra
     void dijkstraShortestPath(const T &s);
-    vector<T> *getDijkstraPathTo(const T &dest) const;
+    vector<T> *getSingleSourcePathTo(const T &dest) const;
     double getDijkstraWeightTo(const T &dest) const;
 
-    void aStarAlgorithm(const T &s);
+    void aStarShortestPath(const T &orig, const T &destiny);
 
     // FloydWarshall Functions
     void floydWarshallShortestPath();
@@ -173,7 +173,6 @@ public:
     void tarjanStronglyConnectedComponents();
     void tarjanDfs(Vertex<T> *at);
     bool isTarjanSolved() const;
-
 };
 
 template<class T>
@@ -364,7 +363,7 @@ void Graph<T>::dijkstraShortestPath(const T &origin) {
 
 
 template<class T>
-vector<T> *Graph<T>::getDijkstraPathTo(const T &dest) const{
+vector<T> *Graph<T>::getSingleSourcePathTo(const T &dest) const{
     vector<T> *res = new vector<T>;
 
     auto v = findVertex(dest);
@@ -388,6 +387,81 @@ double Graph<T>::getDijkstraWeightTo(const T &dest) const{
         return INF;
 
     return v->dist;
+}
+
+template<class T>
+void Graph<T>::aStarShortestPath(const T &orig, const T &destiny)
+{
+    if (std::is_same<T, Local*>::value) {
+        Local *origin = (Local *) orig;
+        Local *dest = (Local *) destiny;
+
+        int originIndex = -1, i = 0;
+        for (Vertex<T>* v : vertexSet) {
+            if (origin == v->info) {
+                originIndex = i;
+            }
+            i++;
+        }
+        if (originIndex == -1) {
+            cerr << "This vertex doesn't exist!" << endl;
+            return;
+        }
+
+        for (Vertex<T>* v : vertexSet) {
+            v->path = nullptr;
+            v->dist = INF;
+        }
+
+        Vertex<Local *> *s = findVertex(origin), *d = findVertex(dest);
+        s->dist = origin->dist(dest);
+        MutablePriorityQueue<Vertex<Local *>> q;
+        q.insert(s);
+
+        while (!q.empty()) {
+            Vertex<Local *> *v = q.extractMin();
+
+            if (v == d)
+                break;
+
+            for (auto &e : v->adj) {
+                auto od = e.dest->dist;
+                auto w = e.dest;
+                auto l = v->info;
+
+                //
+                double h = v->dist - l->dist(dest) + e.weight + l->dist(dest);
+
+                if (h < w->dist) {
+                    w->dist = h;
+                    w->path = v;
+
+                    if (od == INF)
+                        q.insert(w);
+                    else
+                        q.decreaseKey(w);
+                }
+            }
+        }
+
+        Vertex<Local *> *v = d;
+        double l = 0;
+
+        while (v->path != NULL)
+        {
+            for (auto e : v->path->getAdj())
+            {
+                if (e.dest->info->getId() == v->info->getId())
+                {
+                    l += e.weight;
+                    break;
+                }
+            }
+            v = v->path;
+        }
+    }
+    else
+        cout << "A* algorithm only works for Local objects" << endl;
 }
 
 

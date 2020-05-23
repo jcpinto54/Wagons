@@ -133,5 +133,4 @@ namespace Util {
     bool isContact(const string &toTest) {
         return (isNum(toTest) && toTest.size() == 9);
     }
-
 }

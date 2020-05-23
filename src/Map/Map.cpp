@@ -89,7 +89,7 @@ bool Map::isDirected() const {
     return directed;
 }
 
-vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo) {
+vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) {
     Vertex<Local *> *from, *to;
     from = this->graph.findVertex(new Local(idFrom));
     to = this->graph.findVertex(new Local(idTo));
@@ -100,18 +100,30 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo) {
         throw NonExistingVertex(idTo);
     }
 
-    if (this->graph.isFloydWarshallSolved())
-        return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
+    switch (algo) {
+        case 2:
+            this->graph.aStarShortestPath(from->getInfo(), to->getInfo());
+            return this->graph.getSingleSourcePathTo(to->getInfo());
 
-    this->graph.dijkstraShortestPath(from->getInfo());
-    return this->graph.getDijkstraPathTo(to->getInfo());
+        case 1:
+            if (this->graph.isFloydWarshallSolved())
+                return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
+
+            else
+                cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
+
+        default:
+            this->graph.dijkstraShortestPath(from->getInfo());
+            return this->graph.getSingleSourcePathTo(to->getInfo());
+
+    }
 }
 
-void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api) {
+void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) {
     vector<Local *> *path;
     double weight;
     try {
-        path = this->getPath(idFrom, idTo);
+        path = this->getPath(idFrom, idTo, algo);
         weight = this->getWeight(idFrom, idTo);
     } catch (NonExistingVertex e) {
         throw e;
