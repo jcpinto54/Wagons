@@ -12,6 +12,8 @@
 /// The System Class
 class System {
 private:
+    string graphPath;
+
     Local *hq;
 
     vector<Wagon *> wagons;
@@ -20,6 +22,8 @@ private:
 
     Map map;
 public:
+    string getGraphPath();
+
     friend class Menu;
 
     explicit System(const string &graphPath);

@@ -13,6 +13,7 @@ using namespace std;
 using namespace Util;
 
 System::System(const string &graphPath) {
+    this->graphPath = graphPath;
     cout << "Loading Graph...\n";
 
     ifstream file;
@@ -240,4 +241,8 @@ bool isWagonOption(const string &toTest) {
     if (!isNum(toTest)) return false;
     int n = stoi(toTest);
     return n == 0 || n == 1;
+}
+
+string System::getGraphPath(){
+    return this->graphPath;
 }

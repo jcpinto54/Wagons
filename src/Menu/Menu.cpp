@@ -264,6 +264,8 @@ TripMenu::TripMenu(System *system) : Menu(system) {
         switch (this->nextMenu) {
             case 'A' : {
                 try {
+                    Table<string> sugestions({"Police", "Prison", "Court", "HQ"}, this->getSugestions(system));
+                    cout << "Here's some POI Id's examples:\n" << sugestions;
                     sys->addPOI();
                 } catch (ImpossiblePath e) {
                     cout << e.getMsg() << endl;
@@ -316,5 +318,33 @@ vector<vector<string>> TripMenu::getOptions() const {
                                    {"I", "Menu Instructions"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
+}
+
+vector<vector<string>> TripMenu::getSugestions(System *system) const {
+    if(system->getGraphPath() == "../data/EspinhoFull/"){
+        return vector<vector<string>>({{"15892", "13504", "17126", "8498"},
+                                       {"9882", "9243", "13357", "1"},
+                                       {"305", "10031", "8001", ""}});
+    } else if(system->getGraphPath() == "../data/EspinhoStrong/"){
+        return vector<vector<string>>({{"6042", "2374", "4818", "6927"},
+                                       {"4377", "4447", "230", "1"},
+                                       {"1211", "75", "4148", ""}});
+    } else if(system->getGraphPath() == "../data/PenafielFull/"){
+        return vector<vector<string>>({{"5531", "9432", "9051", "2485"},
+                                       {"2167", "5116", "10218", "1"},
+                                       {"8885", "6104", "8313", ""}});
+    } else if(system->getGraphPath() == "../data/PenafielStrong/"){
+        return vector<vector<string>>({{"962", "3421", "1146", "3620"},
+                                       {"3255", "1326", "3185", "1"},
+                                       {"3469", "3623", "774", ""}});
+    } else if(system->getGraphPath() == "../data/PortoFull/"){
+        return vector<vector<string>>({{"3754", "4746", "49178", "6638"},
+                                       {"18813", "5764", "38069", "1"},
+                                       {"19020", "15107", "547", ""}});
+    } else if(system->getGraphPath() == "../data/PortoStrong/"){
+        return vector<vector<string>>({{"9447", "22347", "13991", "14979"},
+                                       {"16993", "16760", "18897", "1"},
+                                       {"16573", "60", "10413", ""}});
+    }
 }
 
