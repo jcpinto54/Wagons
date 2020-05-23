@@ -161,6 +161,8 @@ public:
     vector<T> *getDijkstraPathTo(const T &dest) const;
     double getDijkstraWeightTo(const T &dest) const;
 
+    void aStarAlgorithm(const T &s);
+
     // FloydWarshall Functions
     void floydWarshallShortestPath();
     vector<T> *getfloydWarshallPath(const T &origin, const T &dest) const;
@@ -387,6 +389,7 @@ double Graph<T>::getDijkstraWeightTo(const T &dest) const{
 
     return v->dist;
 }
+
 
 
 

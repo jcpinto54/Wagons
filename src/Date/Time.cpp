@@ -88,3 +88,9 @@ bool operator<(Time left, Time right) {
     }
     return false;
 }
+
+string Time::str() const {
+    stringstream s;
+    s << (*this);
+    return s.str();
+}

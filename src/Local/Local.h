@@ -42,6 +42,8 @@ public:
 
     unsigned int getY() const;
 
+    double dist(Local *l2);
+
     ///@brief Reads an object person from the input stream in.
     ///@param in Stream from where the person will be read.
     ///@param person Pointer to pointer to a person object.
@@ -51,6 +53,8 @@ public:
     bool operator==(const Local &rhs) const;
 
     bool operator!=(const Local &rhs) const;
+
+
 
     Tag getTag() const;
 

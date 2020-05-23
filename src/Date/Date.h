@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "Time/Time.h"
+#include "Time.h"
 
 #define EPOCH 1900
 
@@ -127,6 +127,8 @@ public:
     /// @param date The Date that will be changed based on the istream
     /// @return Returns the istream object itself
     friend istream &operator>>(istream &in, Date &date);
+
+    string str() const;
 };
 
 /// @param year The year to test.

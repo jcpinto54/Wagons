@@ -292,7 +292,6 @@ TripMenu::TripMenu(System *system) : Menu(system) {
                 break;
             case 'I' : {
                 cout << "Instructions for this Menu:" << endl
-                     << "- First POI is HQ" << endl
                      << "- When a POI is added, it is stored in a Vector" << endl
                      << "- If you want more than one POI just add more than one POI" << endl
                      << "- You can leave this menu and the inserted POIs will still be here" << endl

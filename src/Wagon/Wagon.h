@@ -5,21 +5,10 @@
 #include "GraphTemplate/Graph.h"
 
 class Wagon {
-    Vertex<Local *> *pos;
 
-    vector<Local *> path;
-
-    const unsigned id;
+    double avgSpeed;
 public:
-    Wagon(unsigned int id);
+    Wagon(double avgSpeed);
 
-    Vertex<Local *> *getPos() const;
-
-    void setPos(Vertex<Local *> *pos);
-
-    friend istream &operator>>(istream &is, Wagon **wagon);
-
-    unsigned int getId() const;
-
-
+    double getAvgSpeed() const;
 };

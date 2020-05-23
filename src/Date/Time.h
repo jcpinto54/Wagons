@@ -64,6 +64,8 @@ public:
     /// @param time The Time that will be verified
     /// @return Returns true if the Time is after the actual Time
     friend bool futureTimeInSameDay(Time time);
+
+    string str() const;
 };
 
 

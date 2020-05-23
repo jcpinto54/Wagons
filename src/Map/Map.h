@@ -1,6 +1,8 @@
 #include "Local/Local.h"
+#include "Local/POI.h"
 #include "GraphTemplate/Graph.h"
 #include "GraphTemplate/graphviewer.h"
+#include "Wagon/Wagon.h"
 #include <unordered_map>
 #include <utility>
 
@@ -35,11 +37,12 @@ class Map {
 
     vector<Local *> *getPath(unsigned idFrom, unsigned idTo);
 
-    double getWeight(unsigned idFrom, unsigned idTo);
-
     string giveColorToSSC(int ssc);
     unordered_map<int, string> sscToColor;
 
+    double getWeight(unsigned idFrom, unsigned idTo);
+    double getTotalWeight(vector<POI *> &poi_ids);
+    vector<double> getPartedWeights(vector<POI *> &poi_ids);
 
     double convertXToAPI(double x);
     double convertYToAPI(double y);
@@ -55,7 +58,7 @@ public:
     bool isDirected() const;
 
     void viewPath(unsigned idFrom, unsigned idTo, bool api);
-    void viewTour(vector<Local *> path, double weight, vector<Local *> pois, bool api);
+    void viewTour(vector<Local *> path, double weight, vector<POI *> pois, bool api);
 
     void applyFloydWarshall();
 
@@ -68,17 +71,16 @@ public:
     void setNumEdges(int numEdges);
 
 
-    bool areStronglyConected(vector<Local *> &POIs);
+    bool areStronglyConected(vector<POI *> &POIs);
     bool areStronglyConected(unsigned id1, unsigned id2);
 
     Local *findLocal(unsigned id);
 
     void viewGraphConectivity();
 
-    double getTotalWeight(vector<unsigned> &poi_ids);
 
     // TSP Algorithm
-    pair<vector<Local *>, double> minimumWeightTour(vector<unsigned> *poi_ids);
+    pair<vector<Local *>, double> minimumWeightTour(vector<POI *> *pois, Wagon * wagon);
 };
 
 /// NonExistingVertex Exception

@@ -3,6 +3,7 @@
 #include <vector>
 #include "GraphTemplate/graphviewer.h"
 #include "Local/Local.h"
+#include "Local/POI.h"
 #include "Utilities/Table.h"
 #include "GraphTemplate/Graph.h"
 #include "Wagon/Wagon.h"
@@ -11,23 +12,18 @@
 /// The System Class
 class System {
 private:
-
-    /// @brief The file with the names of the other database files
-    string graphPath;
+    Local *hq;
 
     vector<Wagon *> wagons;
 
-    vector<Local *> POIs;
+    vector<POI *> POIs;
 
     Map map;
 public:
     friend class Menu;
 
-    /// @brief Creates a new system with the information provided by the file.
-    /// @param fileName The path to the file where the information is stored.
     explicit System(const string &graphPath);
 
-    /// @brief Writes the new information of the system on the files and frees the memory from the objects created during the execution of the program.
     ~System();
 
     void viewGraph();
@@ -40,7 +36,7 @@ public:
 
     void erasePOI();
 
-    vector<Local *>::iterator findPOI(unsigned id);
+    vector<POI *>::iterator findPOI(unsigned id);
 
     void readPOIs();
 
@@ -48,9 +44,14 @@ public:
 
     Map &getMap();
 
-    const vector<Local*> &getPoIs() const;
+    const vector<POI*> &getPoIs() const;
+
+    vector<POI *>::iterator findPOI(const POI * poi);
+
+    Wagon* chooseWagon();
 };
 
-Table<string> toTable(const vector<Local *> &container, const System *sys);
+Table<string> toTable(const vector<POI *> &container, const System *sys);
 
+bool isWagonOption(const string &toTest);
 

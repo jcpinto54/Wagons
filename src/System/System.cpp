@@ -14,7 +14,6 @@ using namespace Util;
 
 System::System(const string &graphPath) {
     cout << "Loading Graph...\n";
-    this->graphPath = graphPath;
 
     ifstream file;
 
@@ -80,7 +79,7 @@ System::System(const string &graphPath) {
             nodeId = stoi(line);
             tempGraph[nodeId]->getInfo()->setTag(tagName);
             if (tagName == "hq")
-                this->POIs.push_back(tempGraph[nodeId]->getInfo());
+                this->hq = (tempGraph[nodeId]->getInfo());
         }
     }
     file.close();
@@ -109,22 +108,39 @@ void System::applyFloydWarshall() {
 
 
 void System::addPOI() {
-    string locIdStr = getInput(isNum, "Enter Local ID: ", "Invalid Number");
-    if (locIdStr == ":q")
-        return;
-    unsigned locId = stoi(locIdStr);
+    string dateStr, timeStr, locIdStr;
+    string addHQ;
     Local *loc;
-    try {
-        loc = this->map.findLocal(locId);
-    } catch (NonExistingVertex e) {
-        throw NonExistingVertex(e);
+    if (this->POIs.empty()) {
+        addHQ = getInput(isYorN, "Do you want to add the company's hq to the POI(Y/N)?", "Invalid Input");
     }
-    if (find(this->POIs.begin(), this->POIs.end(), loc) != this->POIs.end()) {
+    if (!isY(addHQ) || !this->POIs.empty()) {
+        locIdStr = getInput(isNum, "Enter Local ID: ", "Invalid Number");
+        if (locIdStr == ":q")
+            return;
+        unsigned locId = stoi(locIdStr);
+        try {
+            loc = this->map.findLocal(locId);
+        } catch (NonExistingVertex e) {
+            throw NonExistingVertex(e);
+        }
+    }
+    else {
+        loc = this->hq;
+    }
+    dateStr = getInput(isDate, "Enter the max date a wagon needs to pass here(DD/MM/YYYY): ", "Invalid Time");
+    if (dateStr == ":q")
+        return;
+    timeStr = getInput(isTime, "Enter the max time a wagon needs to pass here(HH:MM): ", "Invalid Time");
+    if (timeStr == ":q")
+        return;
+    POI *poi = new POI(loc, Date(dateStr), Time(timeStr));
+    if (this->findPOI(poi) != this->POIs.end()) {
         cout << "This point has already been added" << endl;
         return;
     }
 
-    this->POIs.push_back(loc);
+    this->POIs.push_back(poi);
     bool connected = this->map.areStronglyConected(this->POIs);
     if (!connected) {
         this->POIs.pop_back();
@@ -146,9 +162,9 @@ void System::erasePOI() {
     this->POIs.erase(itPoi);
 }
 
-vector<Local *>::iterator System::findPOI(unsigned int id) {
+vector<POI *>::iterator System::findPOI(unsigned int id) {
     for (auto it = this->POIs.begin(); it != this->POIs.end(); it++) {
-        if (**it == Local(id)) {
+        if ((*(*it)->getLoc()) == Local(id)) {
             return it;
         }
     }
@@ -166,31 +182,62 @@ void System::readPOIs() {
 }
 
 pair<vector<Local *>, double> System::solvePOITour() {
-    vector<unsigned> poisInIds;
-    for (auto & POI : this->POIs) {
-        poisInIds.push_back(POI->getId());
-    }
-    return this->map.minimumWeightTour(&poisInIds);
+    Wagon * wagon = this->chooseWagon();
+    return this->map.minimumWeightTour(&this->POIs, wagon);
 }
 
 Map &System::getMap() {
     return map;
 }
 
-const vector<Local*> &System::getPoIs() const{
+const vector<POI*> &System::getPoIs() const{
     return this->POIs;
 }
 
+vector<POI *>::iterator System::findPOI(const POI *poi) {
+    for (auto it = this->POIs.begin(); it != this->POIs.end(); it++) {
+        if (**it == *poi) return it;
+    }
+    return this->POIs.end();
+}
 
-Table<string> toTable(const vector<Local *> &container, const System *sys) {
-    vector<string> header = {"ID", "X Coordinate", "Y Coordinate", "Tag"};
+Wagon* System::chooseWagon() {
+    vector<string> header = {"Option","Wagon", "Avg. Speed"};
+    vector<vector<string>> content;
+    vector<string> aux = {"0", "Regular","40km/h"};
+    content.push_back(aux);
+    aux = {"1", "Speedy","50km/h"};
+    content.push_back(aux);
+    Table<string> data(header, content);
+    string option = Util::getInput(isWagonOption, "Choose a Wagon to use: ", "Invalid Choice");
+    if (option == ":q")
+        return new Wagon(-1);
+    switch(stoi(option)) {
+        case 0:
+            return new Wagon(40.0/60.0*1000);
+        case 1:
+            return new Wagon(50.0/60.0*1000);
+    }
+    return new Wagon(0);
+}
+
+
+Table<string> toTable(const vector<POI *> &container, const System *sys) {
+    vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Date to Pass", "Time to Pass"};
     vector<vector<string>> content;
     for (auto local : container) {
-        vector<string> aux = {to_string(local->getId()),to_string(local->getX()),
-                              to_string(local->getY()), tagToStr(local->getTag())};
+        vector<string> aux = {to_string(local->getLoc()->getId()),to_string(local->getLoc()->getX()),
+                              to_string(local->getLoc()->getY()), tagToStr(local->getLoc()->getTag()),
+                              local->getDate().str(), local->getTime().str()};
         content.push_back(aux);
     }
     Table<string> data(header, content);
     return data;
 }
 
+bool isWagonOption(const string &toTest) {
+    if (toTest == ":q") return true;
+    if (!isNum(toTest)) return false;
+    int n = stoi(toTest);
+    return n == 0 || n == 1;
+}

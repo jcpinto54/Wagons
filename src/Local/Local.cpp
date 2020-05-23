@@ -5,6 +5,7 @@
 #include "Local.h"
 #include "Utilities/utils.h"
 #include "Utilities/InvalidInput.h"
+#include <math.h>
 
 using namespace Util;
 
@@ -91,6 +92,14 @@ void Local::setTag(string tag) {
 
 Tag Local::getTag() const {
     return tag;
+}
+
+double Local::dist(Local *l2) {
+    int distY = this->y - l2->y;
+    int distX = this->x - l2->x;
+    double distXPow = pow((double)distX, 2);
+    double distYPow = pow((double)distY, 2);
+    return sqrt(distXPow + distYPow);
 }
 
 string tagToStr(Tag tag) {

@@ -15,8 +15,8 @@ add_executable(MeatWagons
         src/System/System.cpp
         src/System/System.h
         src/Utilities/Table.h
-        src/Time/Time.cpp
-        src/Time/Time.h
+        src/Date/Time.cpp
+        src/Date/Time.h
         src/Utilities/utils.cpp
         src/Utilities/utils.h
         src/GraphTemplate/graphviewer.cpp
@@ -31,4 +31,8 @@ add_executable(MeatWagons
         src/Wagon/Wagon.cpp
         src/Map/Map.cpp
         src/Map/Map.h
+        src/Local/POI.cpp
+        src/Local/POI.h
+#        src/Date/DateTime.cpp
+#        src/Date/DateTime.h
         )

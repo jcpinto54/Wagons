@@ -47,10 +47,11 @@ void Map::viewGraph(ViewGraph type) {
                     break;
                 case Tag::HQ:
                     graphViewer->setVertexColor(vertex->getInfo()->getId(), "cyan");
-                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 30);
+                    graphViewer->setVertexSize(vertex->getInfo()->getId(), 50);
                     graphViewer->setVertexLabel(vertex->getInfo()->getId(), "HQ");
                     break;
             }
+        graphViewer->setVertexLabel(vertex->getInfo()->getId(), to_string(vertex->getInfo()->getId()));
     }
     int i = 0;
     for (auto vertex : graph.getVertexSet()) {
@@ -226,7 +227,7 @@ void Map::setNumEdges(int numEdges) {
 }
 
 
-bool Map::areStronglyConected(vector<Local *> &POIs) {
+bool Map::areStronglyConected(vector<POI *> &POIs) {
     if (!this->graph.isTarjanSolved())
         this->graph.tarjanStronglyConnectedComponents();
 
@@ -234,7 +235,8 @@ bool Map::areStronglyConected(vector<Local *> &POIs) {
     bool firstTime = true;
     unsigned lowlink;
 
-    for (auto loc : POIs) {
+    for (auto poi : POIs) {
+        Local * loc = poi->getLoc();
         Vertex<Local *> * v = this->graph.findVertex(loc);
         if (v == NULL) throw NonExistingVertex(loc->getId());
         if (firstTime) {
@@ -298,53 +300,55 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
     return this->graph.getDijkstraWeightTo(to->getInfo());
 }
 
-double Map::getTotalWeight(vector<unsigned> &poi_ids) {
+double Map::getTotalWeight(vector<POI *> &poi_ids) {
+    vector<double> weights = getPartedWeights(poi_ids);
     double weight = 0;
-
-    int origin_id = poi_ids[0];
-
-    for (int i = 0; i < poi_ids.size(); i++) {
-        if (i == poi_ids.size() - 1)
-            weight += getWeight(poi_ids[i], origin_id);
-
-        else
-            weight += getWeight(poi_ids[i], poi_ids[i + 1]);
+    for (auto w : weights) {
+        weight += w;
     }
-
     return weight;
 }
 
-pair<vector<Local *>, double> Map::minimumWeightTour(vector<unsigned> *poi_ids)
+pair<vector<Local *>, double> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon)
 {
-    vector<unsigned> res;
+    return pair<vector<Local *>, double>();
+    // sort(poi_ids->begin(), poi_ids->end());
 
-    sort(poi_ids->begin(), poi_ids->end());
-
-    double cost, minCost = INT64_MAX;
-
-    do {
-        cost = getTotalWeight(*poi_ids);
-
-        if (cost < minCost)
-        {
-            minCost = cost;
-
-            res = *poi_ids;
-        }
-    } while (next_permutation(poi_ids->begin(), poi_ids->end()));
-
-    vector<Local *> path;
-    vector<Local *> *twoPointPath;
-    twoPointPath = this->getPath(res[0], res[1]);
-    path = *twoPointPath;
-    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
-        twoPointPath = this->getPath(*it, *(it+1));
-        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
-    }
-    twoPointPath = this->getPath(res.back(), res[0]);
-    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
-
-    return pair<vector<Local *>, double>(path, minCost);
+//    double cost, minCost = INT64_MAX;
+//
+//    vector<vector<POI *>> candidates;
+//
+//    Date startDate = (*pois)[0]->getDate();
+//    Time startTime = (*pois)[0]->getTime();
+//
+//    do {
+//        vector<double> weights = getPartedWeights(*pois);
+//        for (auto tripWeight : weights) {
+//
+//        }
+//
+//        cost = getTotalWeight(*pois);
+//
+//        if (cost < minCost)
+//        {
+//            minCost = cost;
+//
+//            candidates.push_back(*pois);
+//        }
+//    } while (next_permutation(pois->begin(), pois->end()));
+//
+//    vector<Local *> path;
+//    vector<Local *> *twoPointPath;
+//    twoPointPath = this->getPath(res[0], res[1]);
+//    path = *twoPointPath;
+//    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
+//        twoPointPath = this->getPath(*it, *(it+1));
+//        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+//    }
+//    twoPointPath = this->getPath(res.back(), res[0]);
+//    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+//
+//    return pair<vector<Local *>, double>(path, minCost);
 }
 
 void Map::viewGraphConectivity() {
@@ -357,7 +361,7 @@ void Map::viewGraphConectivity() {
 
 }
 
-void Map::viewTour(vector<Local *> path, double weight, vector<Local *> pois, bool api) {
+void Map::viewTour(vector<Local *> path, double weight, vector<POI *> pois, bool api) {
     cout << "Tour total weight: " << weight << endl;
     if (!api) {
         for (int i = 0; i < (path).size()-1; i++) {
@@ -399,24 +403,24 @@ void Map::viewTour(vector<Local *> path, double weight, vector<Local *> pois, bo
         }
 
         for (auto poiID : pois) {
-            graphViewer->setVertexColor(poiID->getId(), GREEN);
-            graphViewer->setVertexSize(poiID->getId(), 30);
+            graphViewer->setVertexColor(poiID->getLoc()->getId(), GREEN);
+            graphViewer->setVertexSize(poiID->getLoc()->getId(), 30);
             if (poiID == pois[0]) continue;
-            switch (this->locs[poiID->getId()]) {
+            switch (this->locs[poiID->getLoc()->getId()]) {
                 case Tag::DEFAULT:
-                    graphViewer->setVertexLabel(poiID->getId(), "POI");
+                    graphViewer->setVertexLabel(poiID->getLoc()->getId(), "POI");
                     break;
                 case Tag::PRISON:
-                    graphViewer->setVertexLabel(poiID->getId(), "POI/Prison");
+                    graphViewer->setVertexLabel(poiID->getLoc()->getId(), "POI/Prison");
                     break;
                 case Tag::POLICE:
-                    graphViewer->setVertexLabel(poiID->getId(), "POI/Police");
+                    graphViewer->setVertexLabel(poiID->getLoc()->getId(), "POI/Police");
                     break;
                 case Tag::COURT:
-                    graphViewer->setVertexLabel(poiID->getId(), "POI/Court");
+                    graphViewer->setVertexLabel(poiID->getLoc()->getId(), "POI/Court");
                     break;
                 case Tag::HQ:
-                    graphViewer->setVertexLabel(poiID->getId(), "POI/HQ");
+                    graphViewer->setVertexLabel(poiID->getLoc()->getId(), "POI/HQ");
                     break;
             }
         }
@@ -468,5 +472,21 @@ string Map::giveColorToSSC(int ssc) {
             sscToColor[ssc] = LIGHT_GRAY;
             return sscToColor[ssc];
     }
+}
+
+vector<double> Map::getPartedWeights(vector<POI *> &poi_ids) {
+    vector<double> weights;
+
+    int origin_id = poi_ids[0]->getLoc()->getId();
+
+    for (int i = 0; i < poi_ids.size(); i++) {
+        if (i == poi_ids.size() - 1)
+            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), origin_id));
+
+        else
+            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), poi_ids[i + 1]->getLoc()->getId()));
+    }
+
+    return weights;
 }
 
