@@ -97,10 +97,10 @@ void System::viewGraph() {
     map.viewGraph(VIEW);
 }
 
-void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo) {
+void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo, int &algo) {
     string viewWithAPI = "N";
     viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
-    this->map.viewPath(idFrom, idTo, isY(viewWithAPI));
+    this->map.viewPath(idFrom, idTo, isY(viewWithAPI), algo);
 }
 
 void System::applyFloydWarshall() {
@@ -254,6 +254,24 @@ Wagon* System::chooseWagon() {
     return new Wagon(0);
 }
 
+int System::readAlgorithm()
+{
+    vector<string> header = {"Option","Algorithm"};
+    vector<vector<string>> content;
+    vector<string> aux = {"0", "Dijkstra"};
+    content.push_back(aux);
+    aux = {"1", "Floyd-Warshall"};
+    content.push_back(aux);
+    aux = {"2", "A*"};
+    content.push_back(aux);
+    Table<string> data(header, content);
+    cout << data;
+    string option = Util::getInput(isAlgo, "Choose a Algorithm: ", "Invalid Choice");
+
+    return stoi(option);
+}
+
+
 Table<string> toTable(const vector<POI *> &container, const System *sys) {
     vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Time to pass"};
     vector<vector<string>> content;
@@ -272,6 +290,12 @@ Table<string> toTable(const vector<POI *> &container, const System *sys) {
     }
     Table<string> data(header, content);
     return data;
+}
+
+bool isAlgo(const string &toTest){
+    if (!isNum(toTest)) return false;
+    int n = stoi(toTest);
+    return n == 0 || n == 1 || n == 2;
 }
 
 bool isWagonOption(const string &toTest) {

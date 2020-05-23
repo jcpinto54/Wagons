@@ -35,7 +35,7 @@ class Map {
 
     bool directed = true;
 
-    vector<Local *> *getPath(unsigned idFrom, unsigned idTo);
+    vector<Local *> *getPath(unsigned idFrom, unsigned idTo, int algo);
 
     string giveColorToSSC(int ssc);
     unordered_map<int, string> sscToColor;
@@ -57,8 +57,8 @@ public:
 
     bool isDirected() const;
 
-    void viewPath(unsigned idFrom, unsigned idTo, bool api);
     void viewTour(vector<Local *> path, double weight, pair<Time, unsigned> time, vector<POI *> pois, bool api);
+    void viewPath(unsigned idFrom, unsigned idTo, bool api, int &algo);
 
     void applyFloydWarshall();
 

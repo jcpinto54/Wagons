@@ -34,7 +34,7 @@ public:
 
     void viewGraph();
 
-    void viewPathBetween2Points(unsigned idFrom, unsigned idTo);
+    void viewPathBetween2Points(unsigned idFrom, unsigned idTo, int &algo);
 
     void applyFloydWarshall();
 
@@ -57,9 +57,11 @@ public:
     Wagon* chooseWagon();
 
     void printSuggestions();
+    int readAlgorithm();
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);
 
+bool isAlgo(const string &toTest);
 bool isWagonOption(const string &toTest);
 

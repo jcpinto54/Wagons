@@ -208,8 +208,11 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 if (idFromStr == ":q") break;
                 idToStr = getInput(isNum, "Enter the end vertex id: ", "Invalid Number");
                 if (idToStr == ":q") break;
+
+                int algo = this->sys->readAlgorithm();
+
                 try {
-                    sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr));
+                    sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr), algo);
                 } catch (NonExistingVertex e) {
                     cout << e.getMsg() << endl;
                 }
