@@ -17,6 +17,8 @@ protected:
 
     /// @brief The minute of the Time
     char minute;
+
+    char seconds;
 public:
     /// @brief Constructs a new Time equal to the actual time
     Time();
@@ -24,6 +26,8 @@ public:
     /// @brief Constructs a new Time object
     /// @param h The hour of the new Time
     /// @param m The minutes of the new Time
+    Time(char h, char m, char s);
+
     Time(char h, char m);
 
     /// @brief Constructs a new Time from a string
@@ -65,7 +69,9 @@ public:
     /// @return Returns true if the Time is after the actual Time
     friend bool futureTimeInSameDay(Time time);
 
+    pair<Time, bool> operator+(Time &rhs);
     string str() const;
+
 };
 
 

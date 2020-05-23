@@ -285,9 +285,10 @@ TripMenu::TripMenu(System *system) : Menu(system) {
                     cout << "Not enough POIs: You need at least 2!" << endl;
                     break;
                 }
-                pair<vector<Local *>, double> tour = sys->solvePOITour();
+                Util::triplet<vector<Local *>, double, pair<Time, unsigned>> tour = sys->solvePOITour();
+                if (tour.second == -1.0) break;
                 string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
-                sys->getMap().viewTour(tour.first, tour.second, sys->getPoIs(), Util::isY(viewWithAPI));
+                sys->getMap().viewTour(tour.first, tour.second, tour.third, sys->getPoIs(), Util::isY(viewWithAPI));
             }
                 break;
             case 'I' : {

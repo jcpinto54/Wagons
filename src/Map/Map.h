@@ -58,7 +58,7 @@ public:
     bool isDirected() const;
 
     void viewPath(unsigned idFrom, unsigned idTo, bool api);
-    void viewTour(vector<Local *> path, double weight, vector<POI *> pois, bool api);
+    void viewTour(vector<Local *> path, double weight, pair<Time, unsigned> time, vector<POI *> pois, bool api);
 
     void applyFloydWarshall();
 
@@ -80,7 +80,11 @@ public:
 
 
     // TSP Algorithm
-    pair<vector<Local *>, double> minimumWeightTour(vector<POI *> *pois, Wagon * wagon);
+    // Acerca do valor de retorno:
+    // vector<Local *> - vetor com o caminho de custo mínimo
+    // double - distância/custo do caminho mínimo
+    // pair<Time,unsigned> - duração da viagem. Explicado na declaração da função time to dist no ficheiro Wagon.h.
+    Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTour(vector<POI *> *pois, Wagon * wagon);
 };
 
 /// NonExistingVertex Exception

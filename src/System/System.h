@@ -12,6 +12,8 @@
 /// The System Class
 class System {
 private:
+    string graphPath;
+
     Local *hq;
 
     vector<Wagon *> wagons;
@@ -40,7 +42,7 @@ public:
 
     void readPOIs();
 
-    pair<vector<Local *>, double> solvePOITour();
+    Util::triplet<vector<Local *>, double, pair<Time, unsigned>> solvePOITour();
 
     Map &getMap();
 

@@ -213,7 +213,6 @@ double Map::dist(Local *l1, Local *l2) {
     return sqrt(distXPow + distYPow);
 }
 
-
 int Map::numEdges() {
     return this->graph.getEdgeCounter();
 }
@@ -225,7 +224,6 @@ int Map::numVertex() {
 void Map::setNumEdges(int numEdges) {
     this->graph.setEdgeCounter(numEdges);
 }
-
 
 bool Map::areStronglyConected(vector<POI *> &POIs) {
     if (!this->graph.isTarjanSolved())
@@ -309,46 +307,58 @@ double Map::getTotalWeight(vector<POI *> &poi_ids) {
     return weight;
 }
 
-pair<vector<Local *>, double> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon)
+Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon)
 {
-    return pair<vector<Local *>, double>();
-    // sort(poi_ids->begin(), poi_ids->end());
+    double cost, minCost = INT64_MAX;
 
-//    double cost, minCost = INT64_MAX;
-//
-//    vector<vector<POI *>> candidates;
-//
-//    Date startDate = (*pois)[0]->getDate();
-//    Time startTime = (*pois)[0]->getTime();
-//
-//    do {
-//        vector<double> weights = getPartedWeights(*pois);
-//        for (auto tripWeight : weights) {
-//
-//        }
-//
-//        cost = getTotalWeight(*pois);
-//
-//        if (cost < minCost)
-//        {
-//            minCost = cost;
-//
-//            candidates.push_back(*pois);
-//        }
-//    } while (next_permutation(pois->begin(), pois->end()));
-//
-//    vector<Local *> path;
-//    vector<Local *> *twoPointPath;
-//    twoPointPath = this->getPath(res[0], res[1]);
-//    path = *twoPointPath;
-//    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
-//        twoPointPath = this->getPath(*it, *(it+1));
-//        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
-//    }
-//    twoPointPath = this->getPath(res.back(), res[0]);
-//    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
-//
-//    return pair<vector<Local *>, double>(path, minCost);
+    DateTime start = (*pois)[0]->getDt();
+    vector<POI *> *tempRes = nullptr;
+    vector<unsigned> res;
+    do {
+        bool inTime = true;
+        vector<double> weights = getPartedWeights(*pois);
+        DateTime arrivaltime = start;
+        for (int i = 1; i < weights.size(); i++) {
+            pair<Time, unsigned> takes = wagon->distToTime(weights[i]);
+            arrivaltime = arrivaltime + takes.first;
+            arrivaltime.date += takes.second;
+            if ((*pois)[i]->getDt()< arrivaltime) {
+                inTime = false;
+                break;
+            }
+        }
+        if (!inTime) continue;
+
+        cost = getTotalWeight(*pois);
+
+        if (cost < minCost)
+        {
+            minCost = cost;
+            tempRes = pois;
+        }
+    } while (next_permutation(pois->begin(), pois->end()));
+
+    if (tempRes == nullptr) {
+        cout << "There is no path the Wagon can take to make the tour on time!" << endl;
+        return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(vector<Local *>(), -1.0, pair<Time,unsigned>(Time(), 0));
+    }
+
+    for (auto p : *tempRes) {
+        res.push_back(p->getLoc()->getId());
+    }
+
+    vector<Local *> path;
+    vector<Local *> *twoPointPath;
+    twoPointPath = this->getPath(res[0], res[1]);
+    path = *twoPointPath;
+    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
+        twoPointPath = this->getPath(*it, *(it+1));
+        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+    }
+    twoPointPath = this->getPath(res.back(), res[0]);
+    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+
+    return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
 }
 
 void Map::viewGraphConectivity() {
@@ -361,8 +371,9 @@ void Map::viewGraphConectivity() {
 
 }
 
-void Map::viewTour(vector<Local *> path, double weight, vector<POI *> pois, bool api) {
+void Map::viewTour(vector<Local *> path, double weight, pair<Time, unsigned> time, vector<POI *> pois, bool api) {
     cout << "Tour total weight: " << weight << endl;
+    cout << "Tour duration: " << time.second << " days and " << time.first << endl;
     if (!api) {
         for (int i = 0; i < (path).size()-1; i++) {
             cout << (path)[i]->getId() << " -> ";
@@ -489,4 +500,5 @@ vector<double> Map::getPartedWeights(vector<POI *> &poi_ids) {
 
     return weights;
 }
+
 

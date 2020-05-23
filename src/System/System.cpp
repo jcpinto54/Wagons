@@ -7,14 +7,15 @@
 #include "Utilities/InvalidInput.h"
 #include <unordered_map>
 #include <sys/wait.h>
+#include <Wagon/Wagon.h>
 
 
 using namespace std;
 using namespace Util;
 
 System::System(const string &graphPath) {
+    this->graphPath = graphPath;
     cout << "Loading Graph...\n";
-
     ifstream file;
 
     if (graphPath.find("GridGraphs") != string::npos)
@@ -106,40 +107,71 @@ void System::applyFloydWarshall() {
     this->map.applyFloydWarshall();
 }
 
-
 void System::addPOI() {
     string dateStr, timeStr, locIdStr;
     string addHQ;
     Local *loc;
     if (this->POIs.empty()) {
         addHQ = getInput(isYorN, "Do you want to add the company's hq to the POI(Y/N)?", "Invalid Input");
-    }
-    if (!isY(addHQ) || !this->POIs.empty()) {
-        locIdStr = getInput(isNum, "Enter Local ID: ", "Invalid Number");
-        if (locIdStr == ":q")
-            return;
-        unsigned locId = stoi(locIdStr);
-        try {
-            loc = this->map.findLocal(locId);
-        } catch (NonExistingVertex e) {
-            throw NonExistingVertex(e);
+        if (isN(addHQ)) {
+            locIdStr = getInput(isNum, "Enter Local ID: ", "Invalid Number");
+            if (locIdStr == ":q")
+                return;
+            unsigned locId = stoi(locIdStr);
+            try {
+                loc = this->map.findLocal(locId);
+            } catch (NonExistingVertex e) {
+                throw NonExistingVertex(e);
+            }
         }
-    }
-    else {
-        loc = this->hq;
-    }
-    dateStr = getInput(isDate, "Enter the max date a wagon needs to pass here(DD/MM/YYYY): ", "Invalid Time");
-    if (dateStr == ":q")
+        else {
+            loc = this->hq;
+        }
+
+        while (true) {
+            dateStr = getInput(isDate, "What day do you want to start the tour(DD/MM/YYYY)? ", "Invallid Date");
+            if (dateStr == ":q") {
+                return;
+            }
+            if (Date() < Date(dateStr)) break;
+            cout << "This day was in the past!" << endl;
+        }
+
+        while (true) {
+            timeStr = getInput(isTime,"What time do you want to start the tour(HH:MM:SS)? ", "Invalid Time");
+            if (timeStr == ":q") {
+                return;
+            }
+            if (Date() < Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
+            cout << "Too late to plan for this time!" << endl;
+        }
+        Time t = Time(timeStr);
+        this->POIs.push_back(new POI(loc, Date(dateStr), t));
         return;
-    timeStr = getInput(isTime, "Enter the max time a wagon needs to pass here(HH:MM): ", "Invalid Time");
+    }
+
+    locIdStr = getInput(isNum, "Enter Local ID: ", "Invalid Number");
+    if (locIdStr == ":q")
+        return;
+    unsigned locId = stoi(locIdStr);
+    try {
+        loc = this->map.findLocal(locId);
+    } catch (NonExistingVertex e) {
+        throw NonExistingVertex(e);
+    }
+
+    timeStr = getInput(isTime, "How much time does the wagon have to get from the start POI to here(HH:MM:SS)? ", "Invalid Time");
     if (timeStr == ":q")
         return;
-    POI *poi = new POI(loc, Date(dateStr), Time(timeStr));
+    Date POIDate = this->POIs[0]->getDt().date;
+    Time initTime = this->POIs[0]->getDt().time, time = Time(timeStr);
+    if ((initTime + time).second) POIDate = Date(this->POIs[0]->getDt().date + 1);
+
+    POI *poi = new POI(loc, POIDate, (initTime + time).first);
     if (this->findPOI(poi) != this->POIs.end()) {
         cout << "This point has already been added" << endl;
         return;
     }
-
     this->POIs.push_back(poi);
     bool connected = this->map.areStronglyConected(this->POIs);
     if (!connected) {
@@ -181,7 +213,7 @@ void System::readPOIs() {
     Util::pause();
 }
 
-pair<vector<Local *>, double> System::solvePOITour() {
+Util::triplet<vector<Local *>, double, pair<Time, unsigned>> System::solvePOITour() {
     Wagon * wagon = this->chooseWagon();
     return this->map.minimumWeightTour(&this->POIs, wagon);
 }
@@ -209,26 +241,33 @@ Wagon* System::chooseWagon() {
     aux = {"1", "Speedy","50km/h"};
     content.push_back(aux);
     Table<string> data(header, content);
+    cout << data;
     string option = Util::getInput(isWagonOption, "Choose a Wagon to use: ", "Invalid Choice");
     if (option == ":q")
         return new Wagon(-1);
     switch(stoi(option)) {
         case 0:
-            return new Wagon(40.0/60.0*1000);
+            return new Wagon(40.0/3.6);
         case 1:
-            return new Wagon(50.0/60.0*1000);
+            return new Wagon(50.0/3.6);
     }
     return new Wagon(0);
 }
 
-
 Table<string> toTable(const vector<POI *> &container, const System *sys) {
-    vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Date to Pass", "Time to Pass"};
+    vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Time to pass"};
     vector<vector<string>> content;
     for (auto local : container) {
-        vector<string> aux = {to_string(local->getLoc()->getId()),to_string(local->getLoc()->getX()),
+        vector<string> aux;
+        if (local == container[0]) {
+            aux = {to_string(local->getLoc()->getId()),to_string(local->getLoc()->getX()),
+                                  to_string(local->getLoc()->getY()), tagToStr(local->getLoc()->getTag()),
+                                  "-"};
+        }
+        else
+            aux = {to_string(local->getLoc()->getId()),to_string(local->getLoc()->getX()),
                               to_string(local->getLoc()->getY()), tagToStr(local->getLoc()->getTag()),
-                              local->getDate().str(), local->getTime().str()};
+                              "+"+(local->getDt().time - container[0]->getDt().time).str()};
         content.push_back(aux);
     }
     Table<string> data(header, content);

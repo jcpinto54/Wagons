@@ -15,3 +15,10 @@ bool DateTime::operator<(DateTime &rhs) {
     }
     return false;
 }
+
+DateTime DateTime::operator+(Time &rhs) {
+    pair<Time, bool> sum = this->time + rhs;
+    Date newDate = this->date;
+    if (sum.second) newDate += 1;
+    return DateTime(newDate, sum.first);
+}

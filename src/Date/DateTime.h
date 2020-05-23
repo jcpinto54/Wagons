@@ -10,14 +10,13 @@
 #include "Time.h"
 
 class DateTime {
-private:
-    Date date;
-    Time time;
 public:
     DateTime(const Date &date, const Time &time);
 
-    void operator
+    DateTime operator+(Time &rhs);
     bool operator<(DateTime &rhs);
+    Time time;
+    Date date;
 };
 
 

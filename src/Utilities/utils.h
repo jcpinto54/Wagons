@@ -125,4 +125,22 @@ namespace Util {
 
     bool isN(const string &toTest);
 
+
+    template<class T, class R, class S>
+    class triplet {
+        public:
+        T first;
+        R second;
+        S third;
+
+        triplet() {}
+
+        triplet(T first, R second, S third) : first(first), second(second), third(third) {}
+        triplet(triplet const &t) {
+            this->first = t.first;
+            this->second = t.second;
+            this->third = t.third;
+        }
+    };
+
 }
