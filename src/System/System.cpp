@@ -280,3 +280,7 @@ bool isWagonOption(const string &toTest) {
     int n = stoi(toTest);
     return n == 0 || n == 1;
 }
+
+string System::getGraphPath(){
+    return this->graphPath;
+}

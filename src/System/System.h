@@ -22,6 +22,8 @@ private:
 
     Map map;
 public:
+    string getGraphPath();
+
     friend class Menu;
 
     explicit System(const string &graphPath);
