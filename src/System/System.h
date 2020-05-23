@@ -21,6 +21,8 @@ private:
     vector<POI *> POIs;
 
     Map map;
+
+    vector<vector<string>> getSugestions() const;
 public:
     string getGraphPath();
 
@@ -53,6 +55,8 @@ public:
     vector<POI *>::iterator findPOI(const POI * poi);
 
     Wagon* chooseWagon();
+
+    void printSuggestions();
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);

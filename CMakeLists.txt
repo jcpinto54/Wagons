@@ -35,4 +35,5 @@ add_executable(MeatWagons
         src/Local/POI.h
         src/Date/DateTime.cpp
         src/Date/DateTime.h
+#        src/Prisioner/Prisioner.cpp src/Prisioner/Prisioner.h
         )

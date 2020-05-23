@@ -284,3 +284,37 @@ bool isWagonOption(const string &toTest) {
 string System::getGraphPath(){
     return this->graphPath;
 }
+
+
+vector<vector<string>> System::getSugestions() const {
+    if(this->graphPath == "../data/EspinhoFull/"){
+        return vector<vector<string>>({{"15892", "13504", "17126", "8498"},
+                                       {"9882", "9243", "13357", "-"},
+                                       {"305", "10031", "8001", "-"}});
+    } else if(this->graphPath == "../data/EspinhoStrong/"){
+        return vector<vector<string>>({{"6042", "2374", "4818", "6927"},
+                                       {"4377", "4447", "230", "-"},
+                                       {"1211", "75", "4148", "-"}});
+    } else if(this->graphPath == "../data/PenafielFull/"){
+        return vector<vector<string>>({{"5531", "9432", "9051", "2485"},
+                                       {"2167", "5116", "10218", "-"},
+                                       {"8885", "6104", "8313", "-"}});
+    } else if(this->graphPath == "../data/PenafielStrong/"){
+        return vector<vector<string>>({{"962", "3421", "1146", "3620"},
+                                       {"3255", "1326", "3185", "-"},
+                                       {"3469", "3623", "774", "-"}});
+    } else if(this->graphPath == "../data/PortoFull/"){
+        return vector<vector<string>>({{"3754", "4746", "49178", "6638"},
+                                       {"18813", "5764", "38069", "-"},
+                                       {"19020", "15107", "547", "-"}});
+    } else if(this->graphPath == "../data/PortoStrong/"){
+        return vector<vector<string>>({{"9447", "22347", "13991", "14979"},
+                                       {"16993", "16760", "18897", "-"},
+                                       {"16573", "60", "10413", "-"}});
+    }
+}
+
+void System::printSuggestions() {
+    Table<string> sugestions({"Police", "Prison", "Court", "HQ"}, this->getSugestions());
+    cout << "Here's some POI Id's examples:\n" << sugestions;
+}

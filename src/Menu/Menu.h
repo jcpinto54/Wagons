@@ -96,5 +96,4 @@ public:
     ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
     vector<vector<string>> getOptions() const override;
 
-    vector<vector<string>> getSugestions(System *system) const;
 };
