@@ -216,6 +216,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 try {
                     sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr), algo);
                 } catch (NonExistingVertex e) {
+                } catch (NonExistingVertex e) {
                     cout << e.getMsg() << endl;
                 }
             }

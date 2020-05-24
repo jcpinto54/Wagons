@@ -302,17 +302,17 @@ string System::getGraphPath(){
 
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){
-        return vector<vector<string>>({{"14109", "12642", "40", "6861"},
-                                       {"7801", "1710", "17535", "-"},
-                                       {"4648", "8001", "8434", "-"}});
+        return vector<vector<string>>({{"4019", "9247", "14167", "6861"},
+                                       {"6467", "3723", "7763", "-"},
+                                       {"5191", "14777", "5793", "-"}});
     } else if(this->graphPath == "../data/EspinhoStrong/"){
         return vector<vector<string>>({{"6042", "2374", "4818", "6927"},
                                        {"4377", "4447", "230", "-"},
                                        {"1211", "75", "4148", "-"}});
     } else if(this->graphPath == "../data/PenafielFull/"){
-        return vector<vector<string>>({{"10049", "5612", "4674", "159"},
-                                       {"378", "423", "6658", "-"},
-                                       {"6279", "9014", "10218", "-"}});
+        return vector<vector<string>>({{"5933", "9549", "2140", "159"},
+                                       {"4004", "3789", "2529", "-"},
+                                       {"787", "6064", "10021", "-"}});
     } else if(this->graphPath == "../data/PenafielStrong/"){
         return vector<vector<string>>({{"962", "3421", "1146", "3620"},
                                        {"3255", "1326", "3185", "-"},
