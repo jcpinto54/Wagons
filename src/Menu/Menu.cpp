@@ -176,6 +176,9 @@ MainMenu::MainMenu(System *system) : Menu(system) {
             case 'T' :
                 new TripMenu(system);
                 break;
+            case 'M' :
+                new MeatMenu(system);
+                break;
             case 'L' :
                 new InitMenu();
                 break;
@@ -190,6 +193,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
 vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"G", "Graph Menu"},
                                    {"T", "Trip Menu"},
+                                   {"M", "Meat Menu"},
                                    {"L", "Load another Graph"},
                                    {"Q", "Quit Program"}});
 }
@@ -208,9 +212,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 if (idFromStr == ":q") break;
                 idToStr = getInput(isNum, "Enter the end vertex id: ", "Invalid Number");
                 if (idToStr == ":q") break;
-
-                int algo = this->sys->readAlgorithm();
-
+                int algo = sys->readAlgorithm();
                 try {
                     sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr), algo);
                 } catch (NonExistingVertex e) {
@@ -288,12 +290,15 @@ TripMenu::TripMenu(System *system) : Menu(system) {
             }
                 break;
             case 'C' : {
-                if (sys->getPoIs().size() <= 1) {
+                if (sys->getPoIs().size() < 2) {
                     cout << "Not enough POIs: You need at least 2!" << endl;
                     break;
                 }
                 Util::triplet<vector<Local *>, double, pair<Time, unsigned>> tour = sys->solvePOITour();
-                if (tour.second == -1.0) break;
+                if (tour.second == -1.0) {
+                    cout << "There is no path the Wagon can take to make the tour on time!" << endl;
+                    break;
+                }
                 string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
                 sys->getMap().viewTour(tour.first, tour.second, tour.third, sys->getPoIs(), Util::isY(viewWithAPI));
             }
@@ -332,4 +337,77 @@ vector<vector<string>> TripMenu::getOptions() const {
 }
 
 
+MeatMenu::MeatMenu(System *system) : Menu(system) {
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'A' : {
+                sys->addPrisionerTransport();
+            }
+                break;
+            case 'E' : {
+                sys->erasePrisioner();
+            }
+                break;
+            case 'R' : {
+                sys->readPrisionersTransports();
+            }
+                break;
+            case 'C' : {
+                if (sys->getPrisioners().size() < 1) {
+                    cout << "Not enough : You need at least 1!" << endl;
+                    break;
+                }
+                vector<vector<POI *>> poisToAPI;
+                vector<Prisioner *> errors;
+                vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> tours = sys->solvePrisionersTour(errors, poisToAPI);
+                unsigned errorCounters = 0;
+                for (auto e : errors) {
+                    if (e == nullptr) continue;
+                    cout << "Prisioner with ID " << e->getId() << " has an infeasible transport" << endl;
+                    errorCounters++;
+                }
+                cout << "There are " << tours.size() - errorCounters << " tours." << endl;
+                int tourCounter = 1;
+                for (int i = 0; i < tours.size(); i++) {
+                    cout << "Tour " << tourCounter++ << endl;
+                    string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
+                    sys->getMap().viewTour(tours[i].first, tours[i].second, tours[i].third, poisToAPI[i], Util::isY(viewWithAPI));
+                    getInput(isNext, "Write 'next' to advance: ", "You didn't write next!");
+                }
+            }
+                break;
+            case 'I' : {
+                cout << "IMPLEMENTAR" << endl;
+            }
+                break;
+            case 'S' : {
+                sys->printSuggestions();
+            }
+                break;
+            case 'M':
+                return;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> MeatMenu::getOptions() const {
+    return vector<vector<string>>({{"A", "Add Prisioner"},
+                                   {"E", "Erase Prisioner"},
+                                   {"R", "Read Prisioners"},
+                                   {"C", "Calculate Trips"},
+                                   {"I", "Menu Instructions"},
+                                   {"S", "ID Suggestions"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+
+
+bool isNext(const string &toTest) {
+    return (toTest == "next");
+}
 

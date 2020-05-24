@@ -99,20 +99,16 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
     if (to == NULL) {
         throw NonExistingVertex(idTo);
     }
-
     switch (algo) {
         case 2:
             this->graph.aStarShortestPath(from->getInfo(), to->getInfo());
             return this->graph.getSingleSourcePathTo(to->getInfo());
-
         case 1:
             if (this->graph.isFloydWarshallSolved())
                 return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
-
             else
                 cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
-
-        default:
+        case 0:
             this->graph.dijkstraShortestPath(from->getInfo());
             return this->graph.getSingleSourcePathTo(to->getInfo());
 
@@ -124,7 +120,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) 
     double weight;
     try {
         path = this->getPath(idFrom, idTo, algo);
-        weight = this->getWeight(idFrom, idTo);
+        weight = this->getWeight(idFrom, idTo, algo);
     } catch (NonExistingVertex e) {
         throw e;
     }
@@ -278,21 +274,8 @@ bool Map::areStronglyConected(unsigned id1, unsigned id2) {
     return v1->getSSC() == v2->getSSC();
 }
 
-double Map::convertXToAPI(double x) {
-    if (abs(Local::maxX - Local::minX) <= 0.001)
-        return -x * PRECISION;
-    else
-        return (x * PRECISION - Local::minX * PRECISION) / ((Local::maxX - Local::minX)  * PRECISION / (double)this->graphViewer->getWidth());
-}
 
-double Map::convertYToAPI(double y) {
-    if (abs(Local::maxY - Local::minY) <= 0.001)
-        return y;
-    else
-        return ((-y * PRECISION + Local::minY * PRECISION) + (Local::maxY -Local::minY) * PRECISION) / ((Local::maxY - Local::minY) * PRECISION / this->graphViewer->getHeight());
-}
-
-double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
+double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
     Vertex<Local *> *from, *to;
     from = this->graph.findVertex(new Local(idFrom));
     to = this->graph.findVertex(new Local(idTo));
@@ -303,15 +286,24 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
         throw NonExistingVertex(idTo);
     }
 
-    if (this->graph.isFloydWarshallSolved())
-        return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
+    switch (algo) {
+        case 2:
+            this->graph.aStarShortestPath(from->getInfo(), to->getInfo());
+            return this->graph.getSingleSourceWeightTo(to->getInfo());
+        case 1:
+            if (this->graph.isFloydWarshallSolved())
+                return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
+            else
+                cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
+        case 0:
+            this->graph.dijkstraShortestPath(from->getInfo());
+            return this->graph.getSingleSourceWeightTo(to->getInfo());
 
-    this->graph.dijkstraShortestPath(from->getInfo());
-    return this->graph.getDijkstraWeightTo(to->getInfo());
+    }
 }
 
-double Map::getTotalWeight(vector<POI *> &poi_ids) {
-    vector<double> weights = getPartedWeights(poi_ids);
+double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
+    vector<double> weights = getPartedWeights(poi_ids, algo);
     double weight = 0;
     for (auto w : weights) {
         weight += w;
@@ -319,8 +311,7 @@ double Map::getTotalWeight(vector<POI *> &poi_ids) {
     return weight;
 }
 
-Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon)
-{
+Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo) {
     double cost, minCost = INT64_MAX;
 
     DateTime start = (*pois)[0]->getDt();
@@ -328,7 +319,7 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
     vector<unsigned> res;
     do {
         bool inTime = true;
-        vector<double> weights = getPartedWeights(*pois);
+        vector<double> weights = getPartedWeights(*pois, algo);
         DateTime arrivaltime = start;
         for (int i = 1; i < weights.size(); i++) {
             pair<Time, unsigned> takes = wagon->distToTime(weights[i]);
@@ -341,7 +332,7 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
         }
         if (!inTime) continue;
 
-        cost = getTotalWeight(*pois);
+        cost = getTotalWeight(*pois, algo);
 
         if (cost < minCost)
         {
@@ -351,7 +342,6 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
     } while (next_permutation(pois->begin(), pois->end()));
 
     if (tempRes == nullptr) {
-        cout << "There is no path the Wagon can take to make the tour on time!" << endl;
         return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(vector<Local *>(), -1.0, pair<Time,unsigned>(Time(), 0));
     }
 
@@ -361,13 +351,13 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
 
     vector<Local *> path;
     vector<Local *> *twoPointPath;
-    twoPointPath = this->getPath(res[0], res[1]);
+    twoPointPath = this->getPath(res[0], res[1], algo);
     path = *twoPointPath;
     for (auto it = res.begin() + 1; it != res.end()-1; it++) {
-        twoPointPath = this->getPath(*it, *(it+1));
+        twoPointPath = this->getPath(*it, *(it+1), algo);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }
-    twoPointPath = this->getPath(res.back(), res[0]);
+    twoPointPath = this->getPath(res.back(), res[0], algo);
     path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
 
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
@@ -497,20 +487,48 @@ string Map::giveColorToSSC(int ssc) {
     }
 }
 
-vector<double> Map::getPartedWeights(vector<POI *> &poi_ids) {
+vector<double> Map::getPartedWeights(vector<POI *> &poi_ids, int algo) {
     vector<double> weights;
 
     int origin_id = poi_ids[0]->getLoc()->getId();
 
     for (int i = 0; i < poi_ids.size(); i++) {
         if (i == poi_ids.size() - 1)
-            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), origin_id));
+            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), origin_id, algo));
 
         else
-            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), poi_ids[i + 1]->getLoc()->getId()));
+            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), poi_ids[i + 1]->getLoc()->getId(), algo));
     }
 
     return weights;
 }
 
+Tag Map::getTag(unsigned int id) {
+    return locs[id];
+}
+
+bool Map::isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon *w, int algo) {
+    for (int i = 0; i < pois.size(); i++) {
+        if (i%2 == 1) continue;
+        if (poi->getDt().date - pois[i]->getDt().date > 0) return false;
+        if (Time(00,15,01) < poi->getDt().time - pois[i]->getDt().time) return false;
+        double weight = this->getWeight(poi->getLoc()->getId(), pois[i]->getLoc()->getId(), algo);
+        pair<Time, unsigned> timeTaken = w->distToTime(weight);
+        if (timeTaken.second > 0) return false;
+        if (poi->getDt().time - pois[i]->getDt().time < timeTaken.first) return false;
+    }
+    return true;
+}
+
+bool Map::isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon *w, int algo) {
+    for (int i = 0; i < pois.size(); i++) {
+        if (i % 2 == 0) continue;
+        if (poi->getDt().date - pois[i]->getDt().date > 0) return false;
+        double weight = this->getWeight(poi->getLoc()->getId(), pois[i]->getLoc()->getId(), algo);
+        pair<Time, unsigned> timeTaken = w->distToTime(weight);
+        if (timeTaken.second > 0) return false;
+        if (poi->getDt().time - pois[i]->getDt().time < timeTaken.first) return false;
+    }
+    return true;
+}
 

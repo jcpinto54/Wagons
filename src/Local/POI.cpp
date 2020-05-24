@@ -18,3 +18,14 @@ bool POI::operator==(const POI &rhs) const {
 DateTime POI::getDt() const{
     return (dt);
 }
+
+void POI::setLoc(Local *loc) {
+    POI::loc = loc;
+}
+
+void POI::setDt(const DateTime &dt) {
+    POI::dt = dt;
+}
+
+POI::POI() : dt(DateTime(Date(1, 1, 1970), Time(0, 0, 0))) {}
+

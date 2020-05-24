@@ -97,3 +97,17 @@ public:
     vector<vector<string>> getOptions() const override;
 
 };
+
+///@brief MeatMenu
+class MeatMenu : public Menu {
+public:
+    ///@brief MeatMenu Constructor
+    MeatMenu(System *system);
+
+    ///@brief Gets MeatMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
+bool isNext(const string &toTest);
