@@ -158,4 +158,16 @@ public:
 
 };
 
+///@brief FirstSearchMenu
+class FirstSearchMenu : public Menu {
+public:
+    ///@brief FirstSearchMenu Constructor
+    FirstSearchMenu(System *system);
+
+    ///@brief Gets FirstSearchMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
 bool isNext(const string &toTest);

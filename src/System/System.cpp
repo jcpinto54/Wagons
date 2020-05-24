@@ -123,6 +123,14 @@ void System::applyAllPairs(int algo) {
     this->map.applyAllPairs(algo);
 }
 
+void System::applyDfs() {
+    this->map.applyDfs();
+}
+
+void System::applyBfs(Local* const &source) {
+    this->map.applyBfs(source);
+}
+
 void System::addPOI() {
     string dateStr, timeStr, locIdStr;
     string addHQ;

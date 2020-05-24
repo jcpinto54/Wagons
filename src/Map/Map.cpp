@@ -242,6 +242,14 @@ void Map::applyTarjan() {
     this->graph.tarjanStronglyConnectedComponents();
 }
 
+void Map::applyDfs() {
+    this->graph.dfs();
+}
+
+void Map::applyBfs(Local* const &source) {
+    this->graph.bfs(source);
+}
+
 double Map::dist(Local *l1, Local *l2) {
     int distY = l1->getY() - l2->getY();
     int distX = l1->getX() - l2->getX();

@@ -420,6 +420,7 @@ AlgorithmMenu::AlgorithmMenu(System *system) : Menu(system) {
         switch (this->nextMenu) {
             case 'S' : {
                 new ShortestPathMenu(system);
+                break;
             }
             case 'T' : {
                 auto start = high_resolution_clock::now();
@@ -429,7 +430,10 @@ AlgorithmMenu::AlgorithmMenu(System *system) : Menu(system) {
                 cout << "The execution time was: " << duration.count() << " microseconds" << endl;
                 break;
             }
+            case 'F' : {
+                new FirstSearchMenu(system);
                 break;
+            }
             case 'M':
                 return;
             case 'Q':
@@ -443,6 +447,7 @@ AlgorithmMenu::AlgorithmMenu(System *system) : Menu(system) {
 vector<vector<string>> AlgorithmMenu::getOptions() const {
     return vector<vector<string>>({{"S", "Shortest Path Algorithms"},
                                    {"T", "Tarjan / Connectivity Analysis Algorithm"},
+                                   {"F", "First Search Algorithms"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }
@@ -461,6 +466,7 @@ ShortestPathMenu::ShortestPathMenu(System *system) : Menu(system) {
             }
             case 'M':
                 new MainMenu(system);
+                break;
             case 'Q':
                 exit(0);
             default:
@@ -524,6 +530,7 @@ SingleSourceMenu::SingleSourceMenu(System *system) : Menu(system) {
             }
             case 'M':
                 new MainMenu(system);
+                break;
             case 'Q':
                 exit(0);
             default:
@@ -567,6 +574,7 @@ AllPairsMenu::AllPairsMenu(System *system) : Menu(system) {
             }
             case 'M':
                 new MainMenu(system);
+                break;
             case 'Q':
                 exit(0);
             default:
@@ -578,6 +586,58 @@ AllPairsMenu::AllPairsMenu(System *system) : Menu(system) {
 vector<vector<string>> AllPairsMenu::getOptions() const {
     return vector<vector<string>>({{"A", "A Star Algorithm"},
                                    {"F", "Floyd Warshall Algorithm"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+
+FirstSearchMenu::FirstSearchMenu(System *system) : Menu(system) {
+    string idFromStr;
+    Local *from;
+    while (true) {
+        idFromStr = getInput(isNum, "Enter the start vertex id: ", "Invalid Number");
+        if (idFromStr == ":q") break;
+        try {
+            from = sys->getMap().findLocal(stoi(idFromStr));
+        } catch (NonExistingVertex e) {
+            cout << "This is not a vertex!" << endl;
+            continue;
+        }
+        break;
+    }
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'B' : {
+                auto start = high_resolution_clock::now();
+                sys->applyBfs(from);
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+            case 'D' : {
+                auto start = high_resolution_clock::now();
+                sys->applyDfs();
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+            case 'M': {
+                new MainMenu(system);
+                break;
+            }
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> FirstSearchMenu::getOptions() const {
+    return vector<vector<string>>({{"B", "Breadth-first search"},
+                                   {"D", "Depth-first search"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }

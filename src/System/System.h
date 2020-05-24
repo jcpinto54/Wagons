@@ -46,6 +46,8 @@ public:
     void applyAStar(Local* const &origin, Local* const &destiny);
     void applyTarjan();
     void applyAllPairs(int algo);
+    void applyDfs();
+    void applyBfs(Local* const &source);
 
     // POIS
     void addPOI();
