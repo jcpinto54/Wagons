@@ -27,7 +27,7 @@ bool Menu::validOption(const string &option) const {
 char Menu::option() const {
     Table<string> options({"Letter", "Option"}, this->getOptions());
     cout << options;
-    cout << "Choose a option: ";
+    cout << "Choose an option: ";
     string o = this->readOption();
     while (!validOption(o)) {
         cout << options;

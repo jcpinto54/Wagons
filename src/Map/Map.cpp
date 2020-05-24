@@ -105,7 +105,7 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
             return this->graph.getSingleSourcePathTo(to->getInfo());
         case 1:
             if (this->graph.isAllPairsSolved())
-                return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
+                return this->graph.getAllPairsPath(from->getInfo(), to->getInfo());
             else
                 cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
         case 0:
@@ -305,7 +305,7 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
             return this->graph.getSingleSourceWeightTo(to->getInfo());
         case 1:
             if (this->graph.isAllPairsSolved())
-                return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
+                return this->graph.getAllPairsWeight(from->getInfo(), to->getInfo());
             else
                 cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
         case 0:
