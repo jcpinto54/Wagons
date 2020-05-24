@@ -318,9 +318,9 @@ vector<vector<string>> System::getSugestions() const {
                                        {"3255", "1326", "3185", "-"},
                                        {"3469", "3623", "774", "-"}});
     } else if(this->graphPath == "../data/PortoFull/"){
-        return vector<vector<string>>({{"41873", "50780", "16448", "19548"},
-                                       {"10941", "6216", "39923", "-"},
-                                       {"50901", "13272", "8084", "-"}});
+        return vector<vector<string>>({{"6011", "4454", "20423", "19548"},
+                                       {"5531", "20600", "34024", "-"},
+                                       {"768", "15490", "27209", "-"}});
     } else if(this->graphPath == "../data/PortoStrong/"){
         return vector<vector<string>>({{"9447", "22347", "13991", "14979"},
                                        {"16993", "16760", "18897", "-"},
