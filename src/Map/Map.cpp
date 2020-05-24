@@ -312,14 +312,21 @@ double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
 }
 
 Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo) {
-    double cost, minCost = INT64_MAX;
+
+    sort(pois->begin() + 1, pois->end() - 1);
+    double cost, minCost = MAXFLOAT;
 
     DateTime start = (*pois)[0]->getDt();
     vector<POI *> *tempRes = nullptr;
     vector<unsigned> res;
+
+    POI *end = new POI(pois->at(0)->getLoc(), pois->at(0)->getDt().date + 1, pois->at(0)->getDt().time);
+    pois->push_back(end);
+
     do {
         bool inTime = true;
         vector<double> weights = getPartedWeights(*pois, algo);
+
         DateTime arrivaltime = start;
         for (int i = 1; i < weights.size(); i++) {
             pair<Time, unsigned> takes = wagon->distToTime(weights[i]);
@@ -339,7 +346,7 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
             minCost = cost;
             tempRes = pois;
         }
-    } while (next_permutation(pois->begin(), pois->end()));
+    } while (next_permutation(pois->begin() + 1, pois->end() - 1));
 
     if (tempRes == nullptr) {
         return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(vector<Local *>(), -1.0, pair<Time,unsigned>(Time(), 0));
@@ -357,8 +364,6 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
         twoPointPath = this->getPath(*it, *(it+1), algo);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }
-    twoPointPath = this->getPath(res.back(), res[0], algo);
-    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
 
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
 }
@@ -490,13 +495,7 @@ string Map::giveColorToSSC(int ssc) {
 vector<double> Map::getPartedWeights(vector<POI *> &poi_ids, int algo) {
     vector<double> weights;
 
-    int origin_id = poi_ids[0]->getLoc()->getId();
-
     for (int i = 0; i < poi_ids.size(); i++) {
-        if (i == poi_ids.size() - 1)
-            weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), origin_id, algo));
-
-        else
             weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), poi_ids[i + 1]->getLoc()->getId(), algo));
     }
 

@@ -310,7 +310,7 @@ vector<vector<string>> System::getSugestions() const {
                                        {"4377", "4447", "230", "-"},
                                        {"1211", "75", "4148", "-"}});
     } else if(this->graphPath == "../data/PenafielFull/"){
-        return vector<vector<string>>({{"5531", "9432", "9051", "2485"},
+        return vector<vector<string>>({{"5531", "9432", "9051", "159"},
                                        {"2167", "5116", "10218", "-"},
                                        {"8885", "6104", "8313", "-"}});
     } else if(this->graphPath == "../data/PenafielStrong/"){
@@ -688,6 +688,7 @@ vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePris
                 }
             }
         }
+        if (wagonsPois[i].empty()) continue;
         tours.push_back(this->map.minimumWeightTour(&wagonsPois[i], wagon, algo));
         toAPI.push_back(wagonsPois[i]);
         if (tours.back().second == -1.0) {
