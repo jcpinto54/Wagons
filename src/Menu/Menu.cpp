@@ -5,6 +5,7 @@
 
 using namespace std;
 using namespace Util;
+using namespace chrono;
 
 string Menu::readOption() const {
     string input;
@@ -179,6 +180,9 @@ MainMenu::MainMenu(System *system) : Menu(system) {
             case 'M' :
                 new MeatMenu(system);
                 break;
+            case 'A' :
+                new AlgorithmMenu(system);
+                break;
             case 'L' :
                 new InitMenu();
                 break;
@@ -194,6 +198,7 @@ vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"G", "Graph Menu"},
                                    {"T", "Trip Menu"},
                                    {"M", "Meat Menu"},
+                                   {"A", "Algorithm Menu"},
                                    {"L", "Load another Graph"},
                                    {"Q", "Quit Program"}});
 }
@@ -221,10 +226,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
             }
                 break;
             case 'F' : {
-                string floydWarshallConfirmation = "N";
-                floydWarshallConfirmation = Util::getInput(Util::isYorN, "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ", "Invalid Input");
-                if (Util::isY(floydWarshallConfirmation))
-                    sys->applyFloydWarshall();
+                sys->applyFloydWarshall();
             }
                 break;
             case 'C' : {
@@ -402,6 +404,173 @@ vector<vector<string>> MeatMenu::getOptions() const {
                                    {"C", "Calculate Trips"},
                                    {"I", "Menu Instructions"},
                                    {"S", "ID Suggestions"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+
+AlgorithmMenu::AlgorithmMenu(System *system) : Menu(system) {
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'S' : {
+                new ShortestPathMenu(system);
+            }
+            case 'T' : {
+                auto start = high_resolution_clock::now();
+                sys->applyTarjan();
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+                break;
+            case 'M':
+                return;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> AlgorithmMenu::getOptions() const {
+    return vector<vector<string>>({{"S", "Shortest Path Algorithms"},
+                                   {"T", "Tarjan / Connectivity Analysis Algorithm"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+
+ShortestPathMenu::ShortestPathMenu(System *system) : Menu(system) {
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'S' : {
+                new SingleSourceMenu(system);
+                break;
+            }
+            case 'A' : {
+                new AllPairsMenu(system);
+                break;
+            }
+            case 'M':
+                return;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> ShortestPathMenu::getOptions() const {
+    return vector<vector<string>>({{"S", "Single Source Algorithms"},
+                                   {"A", "All Pairs Algorithms"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+
+SingleSourceMenu::SingleSourceMenu(System *system) : Menu(system) {
+    string idFromStr, idToStr;
+    Local *from, *to;
+    while (true) {
+        idFromStr = getInput(isNum, "Enter the start vertex id: ", "Invalid Number");
+        if (idFromStr == ":q") break;
+        try {
+            from = sys->getMap().findLocal(stoi(idFromStr));
+        } catch (NonExistingVertex e) {
+            cout << "This is not a vertex!" << endl;
+            continue;
+        }
+
+        idToStr = getInput(isNum, "Enter the end vertex id: ", "Invalid Number");
+        if (idToStr == ":q") break;
+        try {
+            to = sys->getMap().findLocal(stoi(idToStr));
+        } catch (NonExistingVertex e) {
+            cout << "This is not a vertex!" << endl;
+            continue;
+        }
+        break;
+    }
+    int algo; 
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'D' : {
+                algo = 0;
+                auto start = high_resolution_clock::now();
+                sys->applyDijkstra(from);
+                sys->applySingleSource(to);
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+            case 'A' : {
+                algo = 2;
+                auto start = high_resolution_clock::now();
+                sys->applyAStar(from, to);
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+            case 'M':
+                return;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> SingleSourceMenu::getOptions() const {
+    return vector<vector<string>>({{"D", "Dijkstra Algorithm"},
+                                   {"A", "A Star Algorithm"},
+                                   {"M", "Main Menu"},
+                                   {"Q", "Quit Program"}});
+}
+
+AllPairsMenu::AllPairsMenu(System *system) : Menu(system) {
+    while (true) {
+        this->nextMenu = this->option();
+        switch (this->nextMenu) {
+            case 'A' : {
+                auto start = high_resolution_clock::now();
+
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+            case 'F' : {
+                string floydWarshallConfirmation = "N";
+                floydWarshallConfirmation = Util::getInput(Util::isYorN,
+                                                           "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ",
+                                                           "Invalid Input");
+                auto start = high_resolution_clock::now();
+                if(isY(floydWarshallConfirmation))
+                    sys->applyFloydWarshall(true);
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(stop - start);
+                cout << "The execution time was: " << duration.count() << " microseconds" << endl;
+                break;
+            }
+            case 'M':
+                return;
+            case 'Q':
+                exit(0);
+            default:
+                break;
+        }
+    }
+}
+
+vector<vector<string>> AllPairsMenu::getOptions() const {
+    return vector<vector<string>>({{"A", "A Star Algorithm"},
+                                   {"F", "Floyd Warshall Algorithm"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }

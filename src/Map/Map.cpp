@@ -213,6 +213,22 @@ void Map::applyFloydWarshall() {
     this->graph.floydWarshallShortestPath();
 }
 
+void Map::applyDijkstra(Local* const &origin) {
+    this->graph.dijkstraShortestPath(origin);
+}
+
+void Map::applySingleSource(Local* const &destiny) {
+    this->graph.getSingleSourcePathTo(destiny);
+}
+
+void Map::applyAStar(Local* const &origin, Local* const &destiny) {
+    this->graph.aStarShortestPath(origin, destiny);
+}
+
+void Map::applyTarjan() {
+    this->graph.tarjanStronglyConnectedComponents();
+}
+
 double Map::dist(Local *l1, Local *l2) {
     int distY = l1->getY() - l2->getY();
     int distX = l1->getX() - l2->getX();

@@ -103,8 +103,37 @@ void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo, int 
     this->map.viewPath(idFrom, idTo, isY(viewWithAPI), algo);
 }
 
-void System::applyFloydWarshall() {
-    this->map.applyFloydWarshall();
+void System::applyFloydWarshall(bool testing) {
+    if(this->graphPath == "../data/PortoFull/"){
+        cout << "You cannot apply this algorithm to Porto Full\n";
+        return;
+    }
+    string floydWarshallConfirmation = "Y";
+    if(!testing) {
+        floydWarshallConfirmation = "N";
+        floydWarshallConfirmation = Util::getInput(Util::isYorN,
+                                                   "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ",
+                                                   "Invalid Input");
+    }
+    if (Util::isY(floydWarshallConfirmation)) {
+        this->map.applyFloydWarshall();
+    }
+}
+
+void System::applyDijkstra(Local* const &origin){
+    this->map.applyDijkstra(origin);
+}
+
+void System::applySingleSource(Local* const &destiny){
+    this->map.applySingleSource(destiny);
+}
+
+void System::applyAStar(Local* const &origin, Local* const &destiny){
+    this->map.applyAStar(origin, destiny);
+}
+
+void System::applyTarjan(){
+    this->map.applyTarjan();
 }
 
 void System::addPOI() {

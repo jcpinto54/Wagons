@@ -59,6 +59,10 @@ public:
     void viewPath(unsigned idFrom, unsigned idTo, bool api, int &algo);
 
     void applyFloydWarshall();
+    void applyDijkstra(Local* const &origin);
+    void applySingleSource(Local* const &destiny);
+    void applyAStar(Local* const &origin, Local* const &destiny);
+    void applyTarjan();
 
     double dist(Local *l1, Local *l2);
 

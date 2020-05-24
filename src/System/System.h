@@ -10,6 +10,8 @@
 #include "Map/Map.h"
 #include "Prisioner/Prisioner.h"
 
+using namespace std::chrono;
+
 /// The System Class
 class System {
 private:
@@ -39,7 +41,11 @@ public:
     void viewGraph();
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo, int &algo);
 
-    void applyFloydWarshall();
+    void applyFloydWarshall(bool testing = false);
+    void applyDijkstra(Local* const &origin);
+    void applySingleSource(Local* const &destiny);
+    void applyAStar(Local* const &origin, Local* const &destiny);
+    void applyTarjan();
 
     // POIS
     void addPOI();
