@@ -552,38 +552,6 @@ vector<T> *Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
 }
 
 template<class T>
-void Graph<T>::dijkstraShortestPathAllPairs()
-{
-    if (this->allPairsSolved) return;
-
-    dist.clear();
-    dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
-    pred.clear();
-    pred = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
-
-
-    int i = 0, j = 0;
-    for (auto v1 : vertexSet)
-    {
-        for (auto v2 : vertexSet)
-        {
-            dijkstraShortestPath(v1->info);
-
-            if (dist[i][j] > v2->dist)
-            {
-                dist[i][j] = v2->dist;
-                pred[i][j] = v2->path;
-            }
-
-            j++;
-        }
-        i++;
-    }
-
-    allPairsSolved = true;
-}
-
-template<class T>
 void Graph<T>::aStarShortestPathAllPairs()
 {
     if (this->allPairsSolved) return;

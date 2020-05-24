@@ -213,8 +213,21 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) 
     }
 }
 
-void Map::applyFloydWarshall() {
-    this->graph.dijkstraShortestPathAllPairs();
+void Map::applyAllPairs(int algo) {
+
+    switch (algo)
+    {
+        case 0:
+            this->graph.floydWarshallShortestPath();
+            break;
+
+        case 1:
+            this->graph.aStarShortestPathAllPairs();
+            break;
+
+        default:
+            break;
+    }
 }
 
 double Map::dist(Local *l1, Local *l2) {

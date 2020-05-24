@@ -36,7 +36,7 @@ public:
 
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo, int &algo);
 
-    void applyFloydWarshall();
+    void applyAllPairs(int algo);
 
     void addPOI();
 
@@ -58,10 +58,13 @@ public:
 
     void printSuggestions();
     int readAlgorithm();
+
+    int readAllPairsAlgorithm();
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);
 
 bool isAlgo(const string &toTest);
+bool isAllPairsAlgo(const string &toTest);
 bool isWagonOption(const string &toTest);
 

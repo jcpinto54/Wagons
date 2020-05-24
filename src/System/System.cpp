@@ -103,8 +103,8 @@ void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo, int 
     this->map.viewPath(idFrom, idTo, isY(viewWithAPI), algo);
 }
 
-void System::applyFloydWarshall() {
-    this->map.applyFloydWarshall();
+void System::applyAllPairs(int algo) {
+    this->map.applyAllPairs(algo);
 }
 
 void System::addPOI() {
@@ -271,6 +271,21 @@ int System::readAlgorithm()
     return stoi(option);
 }
 
+int System::readAllPairsAlgorithm()
+{
+    vector<string> header = {"Option","Algorithm"};
+    vector<vector<string>> content;
+    vector<string> aux = {"0", "Floyd-Warshall"};
+    content.push_back(aux);
+    aux = {"1", "A*"};
+    content.push_back(aux);
+    Table<string> data(header, content);
+    cout << data;
+    string option = Util::getInput(isAllPairsAlgo, "Choose a Algorithm: ", "Invalid Choice");
+
+    return stoi(option);
+}
+
 
 Table<string> toTable(const vector<POI *> &container, const System *sys) {
     vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Time to pass"};
@@ -296,6 +311,12 @@ bool isAlgo(const string &toTest){
     if (!isNum(toTest)) return false;
     int n = stoi(toTest);
     return n == 0 || n == 1 || n == 2;
+}
+
+bool isAllPairsAlgo(const string &toTest){
+    if (!isNum(toTest)) return false;
+    int n = stoi(toTest);
+    return n == 0 || n == 1;
 }
 
 bool isWagonOption(const string &toTest) {
