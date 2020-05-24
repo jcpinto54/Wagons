@@ -139,7 +139,7 @@ class Graph {
     // Data Structures for FloydWarshall Algorithm
     vector<vector<double>> dist;
     vector<vector<Vertex<T>*>> pred;
-    bool floydWarshallSolved = false;
+    bool allPairsSolved = false;
 
 public:
     Vertex<T> *findVertex(const T &in) const;
@@ -167,12 +167,15 @@ public:
     void floydWarshallShortestPath();
     vector<T> *getfloydWarshallPath(const T &origin, const T &dest) const;
     double getFloydWarshallWeight(const T &origin, const T &dest) const;
-    bool isFloydWarshallSolved() const;
+    bool isAllPairsSolved() const;
 
     // Tarjan Algorithm / Strongly Connected Components "finder"
     void tarjanStronglyConnectedComponents();
     void tarjanDfs(Vertex<T> *at);
     bool isTarjanSolved() const;
+
+    void dijkstraShortestPathAllPairs();
+    void aStarShortestPathAllPairs();
 };
 
 template<class T>
@@ -336,17 +339,17 @@ void Graph<T>::dijkstraShortestPath(const T &origin) {
         v->dist = INF;
         v->path = nullptr;
     }
-    auto s = findVertex(origin);
+    Vertex<T> *s = findVertex(origin);
     s->dist = 0;
     MutablePriorityQueue<Vertex<T>> q;
     q.insert(s);
     while(!q.empty())
     {
-        auto v = q.extractMin();
-        for(auto &e : v->adj)
+        Vertex<T> *v = q.extractMin();
+        for(Edge<T> &e : v->adj)
         {
-            auto od = e.dest->dist;
-            auto w = e.dest;
+            double od = e.dest->dist;
+            Vertex<T> *w = e.dest;
             if(v->dist + e.weight < w->dist)
             {
                 w->dist = v->dist + e.weight;
@@ -482,7 +485,7 @@ void Graph<T>::aStarShortestPath(const T &orig, const T &destiny)
 
 template<class T>
 void Graph<T>::floydWarshallShortestPath() {
-    if (this->floydWarshallSolved) return;
+    if (this->allPairsSolved) return;
 
     dist.clear();
     dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
@@ -522,12 +525,12 @@ void Graph<T>::floydWarshallShortestPath() {
             j = 0;
         }
     }
-    floydWarshallSolved = true;
+    allPairsSolved = true;
 }
 
 template<class T>
-bool Graph<T>::isFloydWarshallSolved() const {
-    return floydWarshallSolved;
+bool Graph<T>::isAllPairsSolved() const {
+    return allPairsSolved;
 }
 
 template<class T>
@@ -557,6 +560,33 @@ vector<T> *Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
     return res;
 }
 
+template<class T>
+void Graph<T>::aStarShortestPathAllPairs()
+{
+    if (this->allPairsSolved) return;
+
+    dist.clear();
+    dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
+    pred.clear();
+    pred = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
+
+    int i = 0, j = 0;
+    for (auto v1 : vertexSet)
+    {
+        for (auto v2 : vertexSet)
+        {
+            aStarShortestPath(v1->info, v2->info);
+            dist[i][j] = v2->dist;
+            pred[i][j] = v2->path;
+
+            j++;
+        }
+        j = 0;
+        i++;
+    }
+
+    allPairsSolved = true;
+}
 
 template<class T>
 bool Graph<T>::addVertex(Vertex<T> *in) {

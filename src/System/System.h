@@ -39,7 +39,7 @@ public:
     void viewGraph();
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo, int &algo);
 
-    void applyFloydWarshall();
+    void applyAllPairs(int algo);
 
     // POIS
     void addPOI();
@@ -59,6 +59,7 @@ public:
 
     int readAlgorithm();
 
+<<<<<<< HEAD
     // Prisioners
     const vector<Prisioner *> & getPrisioners() const;
     vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> solvePrisionersTour(vector<Prisioner *> &prisVecForErrors, vector<vector<POI *>> &toAPI);
@@ -70,10 +71,14 @@ public:
     void erasePrisioner();
     void readPrisionersTransports();
     Prisioner *findPrisioner(POI*start, POI*end);
+=======
+    int readAllPairsAlgorithm();
+>>>>>>> allpairs
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);
 
 bool isAlgo(const string &toTest);
+bool isAllPairsAlgo(const string &toTest);
 bool isWagonOption(const string &toTest);
 bool isTransportOption(const string &toTest);

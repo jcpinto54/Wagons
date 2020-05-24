@@ -104,7 +104,7 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
             this->graph.aStarShortestPath(from->getInfo(), to->getInfo());
             return this->graph.getSingleSourcePathTo(to->getInfo());
         case 1:
-            if (this->graph.isFloydWarshallSolved())
+            if (this->graph.isAllPairsSolved())
                 return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
             else
                 cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
@@ -116,7 +116,7 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
 }
 
 void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) {
-    vector<Local *> *path;
+    vector<Local *> *path = new vector<Local*>();
     double weight;
     try {
         path = this->getPath(idFrom, idTo, algo);
@@ -209,8 +209,21 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) 
     }
 }
 
-void Map::applyFloydWarshall() {
-    this->graph.floydWarshallShortestPath();
+void Map::applyAllPairs(int algo) {
+
+    switch (algo)
+    {
+        case 0:
+            this->graph.floydWarshallShortestPath();
+            break;
+
+        case 1:
+            this->graph.aStarShortestPathAllPairs();
+            break;
+
+        default:
+            break;
+    }
 }
 
 double Map::dist(Local *l1, Local *l2) {
@@ -286,6 +299,7 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
         throw NonExistingVertex(idTo);
     }
 
+<<<<<<< HEAD
     switch (algo) {
         case 2:
             this->graph.aStarShortestPath(from->getInfo(), to->getInfo());
@@ -298,6 +312,10 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
         case 0:
             this->graph.dijkstraShortestPath(from->getInfo());
             return this->graph.getSingleSourceWeightTo(to->getInfo());
+=======
+    if (this->graph.isAllPairsSolved())
+        return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
+>>>>>>> allpairs
 
     }
 }
@@ -358,12 +376,23 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
 
     vector<Local *> path;
     vector<Local *> *twoPointPath;
+<<<<<<< HEAD
     twoPointPath = this->getPath(res[0], res[1], algo);
     path = *twoPointPath;
     for (auto it = res.begin() + 1; it != res.end()-1; it++) {
         twoPointPath = this->getPath(*it, *(it+1), algo);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }
+=======
+    twoPointPath = this->getPath(res[0], res[1], 1);
+    path = *twoPointPath;
+    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
+        twoPointPath = this->getPath(*it, *(it+1), 1);
+        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+    }
+    twoPointPath = this->getPath(res.back(), res[0], 1);
+    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+>>>>>>> allpairs
 
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
 }

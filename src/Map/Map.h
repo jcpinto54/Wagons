@@ -58,7 +58,7 @@ public:
     void viewTour(vector<Local *> path, double weight, pair<Time, unsigned> time, vector<POI *> pois, bool api);
     void viewPath(unsigned idFrom, unsigned idTo, bool api, int &algo);
 
-    void applyFloydWarshall();
+    void applyAllPairs(int algo);
 
     double dist(Local *l1, Local *l2);
 
