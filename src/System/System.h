@@ -41,11 +41,11 @@ public:
     void viewGraph();
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo, int &algo);
 
-    void applyFloydWarshall(bool testing = false);
     void applyDijkstra(Local* const &origin);
     void applySingleSource(Local* const &destiny);
     void applyAStar(Local* const &origin, Local* const &destiny);
     void applyTarjan();
+    void applyAllPairs(int algo);
 
     // POIS
     void addPOI();
@@ -76,10 +76,13 @@ public:
     void erasePrisioner();
     void readPrisionersTransports();
     Prisioner *findPrisioner(POI*start, POI*end);
+    
+    int readAllPairsAlgorithm();
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);
 
 bool isAlgo(const string &toTest);
+bool isAllPairsAlgo(const string &toTest);
 bool isWagonOption(const string &toTest);
 bool isTransportOption(const string &toTest);

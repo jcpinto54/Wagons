@@ -103,23 +103,6 @@ void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo, int 
     this->map.viewPath(idFrom, idTo, isY(viewWithAPI), algo);
 }
 
-void System::applyFloydWarshall(bool testing) {
-    if(this->graphPath == "../data/PortoFull/"){
-        cout << "You cannot apply this algorithm to Porto Full\n";
-        return;
-    }
-    string floydWarshallConfirmation = "Y";
-    if(!testing) {
-        floydWarshallConfirmation = "N";
-        floydWarshallConfirmation = Util::getInput(Util::isYorN,
-                                                   "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ",
-                                                   "Invalid Input");
-    }
-    if (Util::isY(floydWarshallConfirmation)) {
-        this->map.applyFloydWarshall();
-    }
-}
-
 void System::applyDijkstra(Local* const &origin){
     this->map.applyDijkstra(origin);
 }
@@ -134,6 +117,10 @@ void System::applyAStar(Local* const &origin, Local* const &destiny){
 
 void System::applyTarjan(){
     this->map.applyTarjan();
+}
+
+void System::applyAllPairs(int algo) {
+    this->map.applyAllPairs(algo);
 }
 
 void System::addPOI() {
@@ -301,6 +288,21 @@ int System::readAlgorithm()
     return stoi(option);
 }
 
+int System::readAllPairsAlgorithm()
+{
+    vector<string> header = {"Option","Algorithm"};
+    vector<vector<string>> content;
+    vector<string> aux = {"0", "Floyd-Warshall"};
+    content.push_back(aux);
+    aux = {"1", "A*"};
+    content.push_back(aux);
+    Table<string> data(header, content);
+    cout << data;
+    string option = Util::getInput(isAllPairsAlgo, "Choose a Algorithm: ", "Invalid Choice");
+
+    return stoi(option);
+}
+
 
 Table<string> toTable(const vector<POI *> &container, const System *sys) {
     vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Time to pass"};
@@ -323,6 +325,18 @@ Table<string> toTable(const vector<POI *> &container, const System *sys) {
 }
 
 
+bool isAllPairsAlgo(const string &toTest){
+    if (!isNum(toTest)) return false;
+    int n = stoi(toTest);
+    return n == 0 || n == 1;
+}
+
+bool isWagonOption(const string &toTest) {
+    if (toTest == ":q") return true;
+    if (!isNum(toTest)) return false;
+    int n = stoi(toTest);
+    return n == 0 || n == 1;
+}
 
 string System::getGraphPath(){
     return this->graphPath;
@@ -331,25 +345,25 @@ string System::getGraphPath(){
 
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){
-        return vector<vector<string>>({{"15892", "13504", "17126", "8498"},
-                                       {"9882", "9243", "13357", "-"},
-                                       {"305", "10031", "8001", "-"}});
+        return vector<vector<string>>({{"4019", "9247", "14167", "6861"},
+                                       {"6467", "3723", "7763", "-"},
+                                       {"5191", "14777", "5793", "-"}});
     } else if(this->graphPath == "../data/EspinhoStrong/"){
         return vector<vector<string>>({{"6042", "2374", "4818", "6927"},
                                        {"4377", "4447", "230", "-"},
                                        {"1211", "75", "4148", "-"}});
     } else if(this->graphPath == "../data/PenafielFull/"){
-        return vector<vector<string>>({{"5531", "9432", "9051", "2485"},
-                                       {"2167", "5116", "10218", "-"},
-                                       {"8885", "6104", "8313", "-"}});
+        return vector<vector<string>>({{"5933", "9549", "2140", "159"},
+                                       {"4004", "3789", "2529", "-"},
+                                       {"787", "6064", "10021", "-"}});
     } else if(this->graphPath == "../data/PenafielStrong/"){
         return vector<vector<string>>({{"962", "3421", "1146", "3620"},
                                        {"3255", "1326", "3185", "-"},
                                        {"3469", "3623", "774", "-"}});
     } else if(this->graphPath == "../data/PortoFull/"){
-        return vector<vector<string>>({{"3754", "4746", "49178", "6638"},
-                                       {"18813", "5764", "38069", "-"},
-                                       {"19020", "15107", "547", "-"}});
+        return vector<vector<string>>({{"6011", "4454", "20423", "19548"},
+                                       {"5531", "20600", "34024", "-"},
+                                       {"768", "15490", "27209", "-"}});
     } else if(this->graphPath == "../data/PortoStrong/"){
         return vector<vector<string>>({{"9447", "22347", "13991", "14979"},
                                        {"16993", "16760", "18897", "-"},
@@ -717,6 +731,7 @@ vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePris
                 }
             }
         }
+        if (wagonsPois[i].empty()) continue;
         tours.push_back(this->map.minimumWeightTour(&wagonsPois[i], wagon, algo));
         toAPI.push_back(wagonsPois[i]);
         if (tours.back().second == -1.0) {
@@ -754,13 +769,6 @@ bool isAlgo(const string &toTest){
     if (!isNum(toTest)) return false;
     int n = stoi(toTest);
     return n == 0 || n == 1 || n == 2;
-}
-
-bool isWagonOption(const string &toTest) {
-    if (toTest == ":q") return true;
-    if (!isNum(toTest)) return false;
-    int n = stoi(toTest);
-    return n == 0 || n == 1;
 }
 
 bool isTransportOption(const string &toTest) {

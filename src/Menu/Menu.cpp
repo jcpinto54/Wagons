@@ -221,12 +221,17 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 try {
                     sys->viewPathBetween2Points(stoi(idFromStr), stoi(idToStr), algo);
                 } catch (NonExistingVertex e) {
+                } catch (NonExistingVertex e) {
                     cout << e.getMsg() << endl;
                 }
             }
                 break;
-            case 'F' : {
-                sys->applyFloydWarshall();
+            case 'A' : {
+                int algo = this->sys->readAllPairsAlgorithm();
+                string allPairsConfirmation = "N";
+                allPairsConfirmation = Util::getInput(Util::isYorN, "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ", "Invalid Input");
+                if (Util::isY(allPairsConfirmation))
+                    sys->applyAllPairs(algo);
             }
                 break;
             case 'C' : {
@@ -259,8 +264,8 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
 
 vector<vector<string>> GraphMenu::getOptions() const {
     return vector<vector<string>>({{"V", "View Graph"},
-                                   {"P", "Path between two Vertices"},
-                                   {"F", "Apply Floyd-Warshall algortihm"},
+                                   {"P", "Path between two vertexes"},
+                                   {"A", "Path between all pairs of vertexes"},
                                    {"C", "View Graph Conectivity"},
                                    {"I", "Instruction for this Menu"},
                                    {"S", "ID Suggestions"},
@@ -410,6 +415,7 @@ vector<vector<string>> MeatMenu::getOptions() const {
 
 AlgorithmMenu::AlgorithmMenu(System *system) : Menu(system) {
     while (true) {
+        sys->getMap().resetTarjanSolved();
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'S' : {
@@ -454,7 +460,7 @@ ShortestPathMenu::ShortestPathMenu(System *system) : Menu(system) {
                 break;
             }
             case 'M':
-                return;
+                new MainMenu(system);
             case 'Q':
                 exit(0);
             default:
@@ -517,7 +523,7 @@ SingleSourceMenu::SingleSourceMenu(System *system) : Menu(system) {
                 break;
             }
             case 'M':
-                return;
+                new MainMenu(system);
             case 'Q':
                 exit(0);
             default:
@@ -535,11 +541,12 @@ vector<vector<string>> SingleSourceMenu::getOptions() const {
 
 AllPairsMenu::AllPairsMenu(System *system) : Menu(system) {
     while (true) {
+        sys->getMap().resetAllPairsSolved();
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'A' : {
                 auto start = high_resolution_clock::now();
-
+                sys->applyAllPairs(1);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<microseconds>(stop - start);
                 cout << "The execution time was: " << duration.count() << " microseconds" << endl;
@@ -552,14 +559,14 @@ AllPairsMenu::AllPairsMenu(System *system) : Menu(system) {
                                                            "Invalid Input");
                 auto start = high_resolution_clock::now();
                 if(isY(floydWarshallConfirmation))
-                    sys->applyFloydWarshall(true);
+                    sys->applyAllPairs(0);
                 auto stop = high_resolution_clock::now();
                 auto duration = duration_cast<microseconds>(stop - start);
                 cout << "The execution time was: " << duration.count() << " microseconds" << endl;
                 break;
             }
             case 'M':
-                return;
+                new MainMenu(system);
             case 'Q':
                 exit(0);
             default:
