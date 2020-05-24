@@ -106,7 +106,7 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
             return this->graph.getSingleSourcePathTo(to->getInfo());
 
         case 1:
-            if (this->graph.isFloydWarshallSolved())
+            if (this->graph.isAllPairsSolved())
                 return this->graph.getfloydWarshallPath(from->getInfo(), to->getInfo());
 
             else
@@ -120,7 +120,7 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
 }
 
 void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) {
-    vector<Local *> *path;
+    vector<Local *> *path = new vector<Local*>();
     double weight;
     try {
         path = this->getPath(idFrom, idTo, algo);
@@ -214,7 +214,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) 
 }
 
 void Map::applyFloydWarshall() {
-    this->graph.floydWarshallShortestPath();
+    this->graph.dijkstraShortestPathAllPairs();
 }
 
 double Map::dist(Local *l1, Local *l2) {
@@ -303,7 +303,7 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo) {
         throw NonExistingVertex(idTo);
     }
 
-    if (this->graph.isFloydWarshallSolved())
+    if (this->graph.isAllPairsSolved())
         return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
 
     this->graph.dijkstraShortestPath(from->getInfo());
