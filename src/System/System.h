@@ -59,7 +59,6 @@ public:
 
     int readAlgorithm();
 
-<<<<<<< HEAD
     // Prisioners
     const vector<Prisioner *> & getPrisioners() const;
     vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> solvePrisionersTour(vector<Prisioner *> &prisVecForErrors, vector<vector<POI *>> &toAPI);
@@ -71,9 +70,8 @@ public:
     void erasePrisioner();
     void readPrisionersTransports();
     Prisioner *findPrisioner(POI*start, POI*end);
-=======
+    
     int readAllPairsAlgorithm();
->>>>>>> allpairs
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);

@@ -309,8 +309,6 @@ Table<string> toTable(const vector<POI *> &container, const System *sys) {
 }
 
 
-<<<<<<< HEAD
-=======
 bool isAllPairsAlgo(const string &toTest){
     if (!isNum(toTest)) return false;
     int n = stoi(toTest);
@@ -323,7 +321,6 @@ bool isWagonOption(const string &toTest) {
     int n = stoi(toTest);
     return n == 0 || n == 1;
 }
->>>>>>> allpairs
 
 string System::getGraphPath(){
     return this->graphPath;
@@ -756,13 +753,6 @@ bool isAlgo(const string &toTest){
     if (!isNum(toTest)) return false;
     int n = stoi(toTest);
     return n == 0 || n == 1 || n == 2;
-}
-
-bool isWagonOption(const string &toTest) {
-    if (toTest == ":q") return true;
-    if (!isNum(toTest)) return false;
-    int n = stoi(toTest);
-    return n == 0 || n == 1;
 }
 
 bool isTransportOption(const string &toTest) {

@@ -299,23 +299,18 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
         throw NonExistingVertex(idTo);
     }
 
-<<<<<<< HEAD
     switch (algo) {
         case 2:
             this->graph.aStarShortestPath(from->getInfo(), to->getInfo());
             return this->graph.getSingleSourceWeightTo(to->getInfo());
         case 1:
-            if (this->graph.isFloydWarshallSolved())
+            if (this->graph.isAllPairsSolved())
                 return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
             else
                 cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
         case 0:
             this->graph.dijkstraShortestPath(from->getInfo());
             return this->graph.getSingleSourceWeightTo(to->getInfo());
-=======
-    if (this->graph.isAllPairsSolved())
-        return this->graph.getFloydWarshallWeight(from->getInfo(), to->getInfo());
->>>>>>> allpairs
 
     }
 }
@@ -376,23 +371,12 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
 
     vector<Local *> path;
     vector<Local *> *twoPointPath;
-<<<<<<< HEAD
     twoPointPath = this->getPath(res[0], res[1], algo);
     path = *twoPointPath;
     for (auto it = res.begin() + 1; it != res.end()-1; it++) {
         twoPointPath = this->getPath(*it, *(it+1), algo);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }
-=======
-    twoPointPath = this->getPath(res[0], res[1], 1);
-    path = *twoPointPath;
-    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
-        twoPointPath = this->getPath(*it, *(it+1), 1);
-        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
-    }
-    twoPointPath = this->getPath(res.back(), res[0], 1);
-    path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
->>>>>>> allpairs
 
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
 }
