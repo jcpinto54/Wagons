@@ -221,11 +221,12 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 }
             }
                 break;
-            case 'F' : {
-                string floydWarshallConfirmation = "N";
-                floydWarshallConfirmation = Util::getInput(Util::isYorN, "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ", "Invalid Input");
-                if (Util::isY(floydWarshallConfirmation))
-                    sys->applyFloydWarshall();
+            case 'A' : {
+                int algo = this->sys->readAllPairsAlgorithm();
+                string allPairsConfirmation = "N";
+                allPairsConfirmation = Util::getInput(Util::isYorN, "Applying this algorithm for city graphs is not recomended because it can take a while(several minutes).\nAre you sure you want to continue?(Y/N) ", "Invalid Input");
+                if (Util::isY(allPairsConfirmation))
+                    sys->applyAllPairs(algo);
             }
                 break;
             case 'C' : {
@@ -258,8 +259,8 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
 
 vector<vector<string>> GraphMenu::getOptions() const {
     return vector<vector<string>>({{"V", "View Graph"},
-                                   {"P", "Path between two Vertices"},
-                                   {"F", "Apply Floyd-Warshall algortihm"},
+                                   {"P", "Path between two vertexes"},
+                                   {"A", "Path between all pairs of vertexes"},
                                    {"C", "View Graph Conectivity"},
                                    {"I", "Instruction for this Menu"},
                                    {"S", "ID Suggestions"},
