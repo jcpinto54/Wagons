@@ -6,9 +6,11 @@
 #include <utility>
 #include "Utilities/InvalidInput.h"
 #include <unordered_map>
-#include <sys/wait.h>
 #include <Wagon/Wagon.h>
 
+#if defined(__linux__) || defined(__APPLE__)
+#include <sys/wait.h>
+#endif
 
 using namespace std;
 using namespace Util;
@@ -90,7 +92,9 @@ System::System(const string &graphPath) {
 }
 
 System::~System() {
+    #if defined(__linux__) || defined(__APPLE__)
     wait(NULL);
+    #endif
 }
 
 void System::viewGraph() {
@@ -391,6 +395,7 @@ vector<vector<string>> System::getSugestions() const {
                                        {"52", "203", "131", "-"},
                                        {"34", "233", "171", "-"}});
     }
+    return vector<vector<string>>();
 }
 
 void System::printSuggestions() {
