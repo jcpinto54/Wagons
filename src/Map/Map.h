@@ -35,17 +35,15 @@ class Map {
 
     bool directed = true;
 
+    double getWeight(unsigned idFrom, unsigned idTo, int algo);
     vector<Local *> *getPath(unsigned idFrom, unsigned idTo, int algo);
 
     string giveColorToSSC(int ssc);
     unordered_map<int, string> sscToColor;
 
-    double getWeight(unsigned idFrom, unsigned idTo);
-    double getTotalWeight(vector<POI *> &poi_ids);
-    vector<double> getPartedWeights(vector<POI *> &poi_ids);
+    double getTotalWeight(vector<POI *> &poi_ids, int algo);
+    vector<double> getPartedWeights(vector<POI *> &poi_ids, int algo);
 
-    double convertXToAPI(double x);
-    double convertYToAPI(double y);
 public:
     Map();
 
@@ -78,13 +76,17 @@ public:
 
     void viewGraphConectivity();
 
+    Tag getTag(unsigned id);
+
+    bool isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
+    bool isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
 
     // TSP Algorithm
     // Acerca do valor de retorno:
     // vector<Local *> - vetor com o caminho de custo mínimo
     // double - distância/custo do caminho mínimo
     // pair<Time,unsigned> - duração da viagem. Explicado na declaração da função time to dist no ficheiro Wagon.h.
-    Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTour(vector<POI *> *pois, Wagon * wagon);
+    Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo);
 };
 
 /// NonExistingVertex Exception

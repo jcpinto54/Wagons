@@ -4,7 +4,6 @@ project(MeatWagons)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(src)
-
 add_executable(MeatWagons
         src/Date/Date.cpp
         src/Date/Date.h
@@ -35,5 +34,6 @@ add_executable(MeatWagons
         src/Local/POI.h
         src/Date/DateTime.cpp
         src/Date/DateTime.h
-#        src/Prisioner/Prisioner.cpp src/Prisioner/Prisioner.h
+        src/Prisioner/Prisioner.cpp
+        src/Prisioner/Prisioner.h
         )

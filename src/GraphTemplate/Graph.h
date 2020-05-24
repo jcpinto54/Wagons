@@ -159,7 +159,7 @@ public:
     // Dijkstra
     void dijkstraShortestPath(const T &s);
     vector<T> *getSingleSourcePathTo(const T &dest) const;
-    double getDijkstraWeightTo(const T &dest) const;
+    double getSingleSourceWeightTo(const T &dest) const;
 
     void aStarShortestPath(const T &orig, const T &destiny);
 
@@ -380,7 +380,7 @@ vector<T> *Graph<T>::getSingleSourcePathTo(const T &dest) const{
 }
 
 template<class T>
-double Graph<T>::getDijkstraWeightTo(const T &dest) const{
+double Graph<T>::getSingleSourceWeightTo(const T &dest) const{
     Vertex<T> *v = findVertex(dest);
 
     if (v == nullptr || v->dist == INF)

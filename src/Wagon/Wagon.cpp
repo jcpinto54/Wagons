@@ -24,6 +24,5 @@ pair<Time, unsigned> Wagon::distToTime(double dist) {
     m %= 60;
     h %= 24;
     s %= 60;
-    cout << Time(h, m, s) << endl;
     return pair<Time, unsigned>(Time(h, m, s), days);
 }
