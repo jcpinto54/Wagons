@@ -392,7 +392,8 @@ double Graph<T>::getDijkstraWeightTo(const T &dest) const{
 template<class T>
 void Graph<T>::aStarShortestPath(const T &orig, const T &destiny)
 {
-    if (std::is_same<T, Local*>::value) {
+    if (std::is_same<T, Local*>::value) { //A* algorithm only works for Local objects
+        //Cast to Local
         Local *origin = (Local *) orig;
         Local *dest = (Local *) destiny;
 
@@ -408,46 +409,54 @@ void Graph<T>::aStarShortestPath(const T &orig, const T &destiny)
             return;
         }
 
+        //Clear vertexSet for algorithm
         for (Vertex<T>* v : vertexSet) {
             v->path = nullptr;
             v->dist = INF;
         }
 
+        //Find Vertexes relative to passed arguments
         Vertex<Local *> *s = findVertex(origin), *d = findVertex(dest);
+
+        //Setting origins distance as euclidian distance to destiny
         s->dist = origin->dist(dest);
+
+        //Create minimum priority queue required by algorithm
         MutablePriorityQueue<Vertex<Local *>> q;
         q.insert(s);
 
-        while (!q.empty()) {
+        while (!q.empty()) { //Only ends when queue is empty if destiny vertex not found
+            // Extract minimum vertex in queue
             Vertex<Local *> *v = q.extractMin();
 
+            // Ends when destiny vertex end
             if (v == d)
                 break;
 
-            for (auto &e : v->adj) {
-                auto od = e.dest->dist;
-                auto w = e.dest;
-                auto l = v->info;
+            for (auto &e : v->adj) { //Iterate through adjacent edges
+                auto w = e.dest; //Vertex for edge destiny
+                auto od = w->dist; //Old distance
+                auto l = v->info; //Local (info of vertex)
 
-                //
-                double h = v->dist - l->dist(dest) + e.weight + l->dist(dest);
+                // h is the distance calculated with euclidean distance
+                double h = v->dist - l->dist(dest) + e.weight + w->info->dist(dest);
 
-                if (h < w->dist) {
+                if (h < w->dist) { //if calculated distance smaller than current distance, replace it and path
                     w->dist = h;
                     w->path = v;
 
-                    if (od == INF)
+                    if (od == INF) //if old distance still same as setup, put vertex in the queue
                         q.insert(w);
-                    else
+                    else //if not, decrease key
                         q.decreaseKey(w);
                 }
             }
         }
 
-        Vertex<Local *> *v = d;
-        double l = 0;
+        Vertex<Local *> *v = d; //vertex variable intialized with destiny vertex
+        double l = 0; //variable for total weight
 
-        while (v->path != NULL)
+        while (v->path != NULL) //sum the total weight of destinys path
         {
             for (auto e : v->path->getAdj())
             {
