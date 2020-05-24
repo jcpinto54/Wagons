@@ -58,7 +58,16 @@ public:
     void viewTour(vector<Local *> path, double weight, pair<Time, unsigned> time, vector<POI *> pois, bool api);
     void viewPath(unsigned idFrom, unsigned idTo, bool api, int &algo);
 
+    void applyDijkstra(Local* const &origin);
+    void applySingleSource(Local* const &destiny);
+    void applyAStar(Local* const &origin, Local* const &destiny);
+    void applyTarjan();
     void applyAllPairs(int algo);
+    void applyDfs();
+    void applyBfs(Local* const &source);
+
+    void resetAllPairsSolved();
+    void resetTarjanSolved();
 
     double dist(Local *l1, Local *l2);
 

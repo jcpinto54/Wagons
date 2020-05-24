@@ -110,4 +110,64 @@ public:
 
 };
 
+///@brief AlgorithmMenu
+class AlgorithmMenu : public Menu {
+public:
+    ///@brief AlgorithmMenu Constructor
+    AlgorithmMenu(System *system);
+
+    ///@brief Gets AlgorithmMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
+///@brief ShortestPathMenu
+class ShortestPathMenu : public Menu {
+public:
+    ///@brief ShortestPathMenu Constructor
+    ShortestPathMenu(System *system);
+
+    ///@brief Gets ShortestPathMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
+///@brief SingleSourceMenu
+class SingleSourceMenu : public Menu {
+public:
+    ///@brief SingleSourceMenu Constructor
+    SingleSourceMenu(System *system);
+
+    ///@brief Gets SingleSourceMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
+///@brief AllPairsMenu
+class AllPairsMenu : public Menu {
+public:
+    ///@brief AllPairsMenu Constructor
+    AllPairsMenu(System *system);
+
+    ///@brief Gets AllPairsMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
+///@brief FirstSearchMenu
+class FirstSearchMenu : public Menu {
+public:
+    ///@brief FirstSearchMenu Constructor
+    FirstSearchMenu(System *system);
+
+    ///@brief Gets FirstSearchMenu in organized manner
+    ///@return Returns a matrix(n*2). The first column is a letter representing an option, and the second is the corresponding
+    vector<vector<string>> getOptions() const override;
+
+};
+
 bool isNext(const string &toTest);

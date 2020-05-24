@@ -103,8 +103,32 @@ void System::viewPathBetween2Points(unsigned int idFrom, unsigned int idTo, int 
     this->map.viewPath(idFrom, idTo, isY(viewWithAPI), algo);
 }
 
+void System::applyDijkstra(Local* const &origin){
+    this->map.applyDijkstra(origin);
+}
+
+void System::applySingleSource(Local* const &destiny){
+    this->map.applySingleSource(destiny);
+}
+
+void System::applyAStar(Local* const &origin, Local* const &destiny){
+    this->map.applyAStar(origin, destiny);
+}
+
+void System::applyTarjan(){
+    this->map.applyTarjan();
+}
+
 void System::applyAllPairs(int algo) {
     this->map.applyAllPairs(algo);
+}
+
+void System::applyDfs() {
+    this->map.applyDfs();
+}
+
+void System::applyBfs(Local* const &source) {
+    this->map.applyBfs(source);
 }
 
 void System::addPOI() {
@@ -329,25 +353,25 @@ string System::getGraphPath(){
 
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){
-        return vector<vector<string>>({{"15892", "13504", "17126", "8498"},
-                                       {"9882", "9243", "13357", "-"},
-                                       {"305", "10031", "8001", "-"}});
+        return vector<vector<string>>({{"4019", "9247", "14167", "6861"},
+                                       {"6467", "3723", "7763", "-"},
+                                       {"5191", "14777", "5793", "-"}});
     } else if(this->graphPath == "../data/EspinhoStrong/"){
         return vector<vector<string>>({{"6042", "2374", "4818", "6927"},
                                        {"4377", "4447", "230", "-"},
                                        {"1211", "75", "4148", "-"}});
     } else if(this->graphPath == "../data/PenafielFull/"){
-        return vector<vector<string>>({{"5531", "9432", "9051", "159"},
-                                       {"2167", "5116", "10218", "-"},
-                                       {"8885", "6104", "8313", "-"}});
+        return vector<vector<string>>({{"5933", "9549", "2140", "159"},
+                                       {"4004", "3789", "2529", "-"},
+                                       {"787", "6064", "10021", "-"}});
     } else if(this->graphPath == "../data/PenafielStrong/"){
         return vector<vector<string>>({{"962", "3421", "1146", "3620"},
                                        {"3255", "1326", "3185", "-"},
                                        {"3469", "3623", "774", "-"}});
     } else if(this->graphPath == "../data/PortoFull/"){
-        return vector<vector<string>>({{"3754", "4746", "49178", "6638"},
-                                       {"18813", "5764", "38069", "-"},
-                                       {"19020", "15107", "547", "-"}});
+        return vector<vector<string>>({{"6011", "4454", "20423", "19548"},
+                                       {"5531", "20600", "34024", "-"},
+                                       {"768", "15490", "27209", "-"}});
     } else if(this->graphPath == "../data/PortoStrong/"){
         return vector<vector<string>>({{"9447", "22347", "13991", "14979"},
                                        {"16993", "16760", "18897", "-"},

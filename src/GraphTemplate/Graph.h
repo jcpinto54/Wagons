@@ -175,7 +175,8 @@ public:
     void tarjanDfs(Vertex<T> *at);
     bool isTarjanSolved() const;
 
-
+    void resetAllPairsSolved();
+    void resetTarjanSolved();
 };
 
 template<class T>
@@ -574,6 +575,7 @@ void Graph<T>::aStarShortestPathAllPairs()
     int i = 0, j = 0;
     for (auto v1 : vertexSet)
     {
+        cout << "Working... - " << i << "/" << this->vertexSet.size() << endl;
         for (auto v2 : vertexSet)
         {
             // For each pair of vertices compute A* algorithm
@@ -639,6 +641,10 @@ bool Graph<T>::isAllPairsSolved() const {
     return allPairsSolved;
 }
 
+template<class T>
+void Graph<T>::resetAllPairsSolved() {
+    this->allPairsSolved = false;
+}
 
 /******************** Conectivity Analisys ********************/
 
@@ -711,6 +717,12 @@ void Graph<T>::tarjanDfs(Vertex<T> *at) {
 template<class T>
 bool Graph<T>::isTarjanSolved() const {
     return tarjanSolved;
+}
+
+template<class T>
+void Graph<T>::resetTarjanSolved() {
+    this->tarjanSolved = false;
+
 }
 
 #endif /* GRAPH_H_ */

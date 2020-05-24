@@ -9,6 +9,9 @@
 #include "Wagon/Wagon.h"
 #include "Map/Map.h"
 #include "Prisioner/Prisioner.h"
+#include <chrono>
+
+using namespace chrono;
 
 /// The System Class
 class System {
@@ -35,11 +38,20 @@ public:
 
     ~System();
 
+    Map &getMap();
+
     //GUI interface
     void viewGraph();
     void viewPathBetween2Points(unsigned idFrom, unsigned idTo, int &algo);
 
+    // Apply graph
+    void applyDijkstra(Local* const &origin);
+    void applySingleSource(Local* const &destiny);
+    void applyAStar(Local* const &origin, Local* const &destiny);
+    void applyTarjan();
     void applyAllPairs(int algo);
+    void applyDfs();
+    void applyBfs(Local* const &source);
 
     // POIS
     void addPOI();
@@ -48,16 +60,10 @@ public:
     void readPOIs();
     const vector<POI*> &getPoIs() const;
     vector<POI *>::iterator findPOI(const POI * poi);
-
     Util::triplet<vector<Local *>, double, pair<Time, unsigned>> solvePOITour();
 
-    Map &getMap();
-
+    // Wagon
     Wagon* chooseWagon();
-
-    void printSuggestions();
-
-    int readAlgorithm();
 
     // Prisioners
     const vector<Prisioner *> & getPrisioners() const;
@@ -72,6 +78,8 @@ public:
     Prisioner *findPrisioner(POI*start, POI*end);
     
     int readAllPairsAlgorithm();
+    void printSuggestions();
+    int readAlgorithm();
 };
 
 Table<string> toTable(const vector<POI *> &container, const System *sys);
