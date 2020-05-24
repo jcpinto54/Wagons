@@ -361,13 +361,13 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
 
     vector<Local *> path;
     vector<Local *> *twoPointPath;
-    twoPointPath = this->getPath(res[0], res[1]);
+    twoPointPath = this->getPath(res[0], res[1], 1);
     path = *twoPointPath;
     for (auto it = res.begin() + 1; it != res.end()-1; it++) {
-        twoPointPath = this->getPath(*it, *(it+1));
+        twoPointPath = this->getPath(*it, *(it+1), 1);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }
-    twoPointPath = this->getPath(res.back(), res[0]);
+    twoPointPath = this->getPath(res.back(), res[0], 1);
     path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
 
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));

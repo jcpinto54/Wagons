@@ -173,6 +173,9 @@ public:
     void tarjanStronglyConnectedComponents();
     void tarjanDfs(Vertex<T> *at);
     bool isTarjanSolved() const;
+
+    void dijkstraShortestPathAllPairs();
+    void aStarShortestPathAllPairs();
 };
 
 template<class T>
@@ -548,6 +551,65 @@ vector<T> *Graph<T>::getfloydWarshallPath(const T &orig, const T &dest) const{
     return res;
 }
 
+template<class T>
+void Graph<T>::dijkstraShortestPathAllPairs()
+{
+    dist.clear();
+    dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
+    pred.clear();
+    pred = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
+
+    int i = 0, j = 0;
+    for (auto v1 : vertexSet)
+    {
+        for (auto v2 : vertexSet)
+        {
+            dist[i][j] = INT64_MAX;
+            j++;
+        }
+        j = 0;
+        i++;
+    }
+
+    i = 0, j = 0;
+    for (auto v1 : vertexSet)
+    {
+        dijkstraShortestPath(v1->info);
+
+        for (auto v2 : vertexSet)
+        {
+            if (dist[i][j] > v2->dist)
+                dist[i][j] = v2->dist;
+
+            j++;
+        }
+        i++;
+    }
+}
+
+template<class T>
+void Graph<T>::aStarShortestPathAllPairs()
+{
+    dist.clear();
+    dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
+    pred.clear();
+    pred = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
+
+    int i = 0, j = 0;
+    for (auto v1 : vertexSet)
+    {
+        for (auto v2 : vertexSet)
+        {
+            aStarShortestPath(v1->info, v2->info);
+            dist[i][j] = v2->dist;
+            pred[i][j] = v2->path;
+
+            j++;
+        }
+        j = 0;
+        i++;
+    }
+}
 
 template<class T>
 bool Graph<T>::addVertex(Vertex<T> *in) {
