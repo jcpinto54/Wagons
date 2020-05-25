@@ -756,8 +756,8 @@ vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePris
         toAPI.push_back(wagonsPois[i]);
         // If tour is unfeasable, this means: there isn't a path that doesn't reach late to a POI.
         if (tours.back().second == -1.0) {
-            if (wagonsPois[i].size() != 2) {
-                cout << "wagonPois[i].size() should be 2!" << endl;
+            if (wagonsPois[i].size() != 3) {
+                cout << "wagonPois[i].size() should be 3!" << endl;
                 exit(1);
             }
             Prisioner *p = this->findPrisioner(wagonsPois[i][0], wagonsPois[i][1]);

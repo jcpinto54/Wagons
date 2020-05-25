@@ -351,6 +351,7 @@ double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
     return weight;
 }
 
+// This is a TSP solution
 Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo) {
     // Sort is needed to make next_permutation() work. (See cycle condition)
     sort(pois->begin() + 1, pois->end() - 1);

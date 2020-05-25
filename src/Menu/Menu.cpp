@@ -387,6 +387,7 @@ MeatMenu::MeatMenu(System *system) : Menu(system) {
                 cout << "There are " << tours.size() - errorCounters << " tours." << endl;
                 int tourCounter = 1;
                 for (int i = 0; i < tours.size(); i++) {
+                    if (errors[i] != nullptr) continue;
                     cout << "Tour " << tourCounter++ << endl;
                     string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
                     sys->getMap().viewTour(tours[i].first, tours[i].second, tours[i].third, poisToAPI[i], Util::isY(viewWithAPI));
