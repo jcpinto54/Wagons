@@ -4,6 +4,7 @@
 
 #include "Map.h"
 #include "Utilities/utils.h"
+#define MAXFLOAT 9e300
 
 void Map::viewGraph(ViewGraph type) {
 
@@ -113,6 +114,7 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
             return this->graph.getSingleSourcePathTo(to->getInfo());
 
     }
+    return new vector<Local *>();
 }
 
 void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) {
@@ -336,6 +338,7 @@ double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
             return this->graph.getSingleSourceWeightTo(to->getInfo());
 
     }
+    return 1.0;
 }
 
 double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
@@ -421,7 +424,7 @@ void Map::viewGraphConectivity() {
     if (this->graph.isTarjanSolved()) this->graph.tarjanStronglyConnectedComponents();
     this->viewGraph(CONECTIVITY);
     for (Vertex<Local *> *v : this->graph.getVertexSet()) {
-        this->graphViewer->setVertexColor(v->getInfo()->getId(), giveColorToSSC(v->getSSC()));
+        this->graphViewer->setVertexColor(v->getInfo()->getId(), giveColorToSCC(v->getSSC()));
     }
     this->graphViewer->rearrange();
 
@@ -495,50 +498,51 @@ void Map::viewTour(vector<Local *> path, double weight, pair<Time, unsigned> tim
     }
 }
 
-string Map::giveColorToSSC(int ssc) {
-    if (!sscToColor[ssc].empty()) return sscToColor[ssc];
-    int a = sscToColor.size();
+string Map::giveColorToSCC(int scc) {
+    if (!sccToColor[scc].empty()) return sccToColor[scc];
+    int a = sccToColor.size();
     switch(a % 13) {
         case 0:
-            sscToColor[ssc] = DARK_GRAY;
-            return sscToColor[ssc];
+            sccToColor[scc] = DARK_GRAY;
+            return sccToColor[scc];
         case 1:
-            sscToColor[ssc] = RED;
-            return sscToColor[ssc];
+            sccToColor[scc] = RED;
+            return sccToColor[scc];
         case 2:
-            sscToColor[ssc] = CYAN;
-            return sscToColor[ssc];
+            sccToColor[scc] = CYAN;
+            return sccToColor[scc];
         case 3:
-            sscToColor[ssc] = MAGENTA;
-            return sscToColor[ssc];
+            sccToColor[scc] = MAGENTA;
+            return sccToColor[scc];
         case 4:
-            sscToColor[ssc] = BLUE;
-            return sscToColor[ssc];
+            sccToColor[scc] = BLUE;
+            return sccToColor[scc];
         case 5:
-            sscToColor[ssc] = YELLOW;
-            return sscToColor[ssc];
+            sccToColor[scc] = YELLOW;
+            return sccToColor[scc];
         case 6:
-            sscToColor[ssc] = GREEN;
-            return sscToColor[ssc];
+            sccToColor[scc] = GREEN;
+            return sccToColor[scc];
         case 7:
-            sscToColor[ssc] = ORANGE;
-            return sscToColor[ssc];
+            sccToColor[scc] = ORANGE;
+            return sccToColor[scc];
         case 8:
-            sscToColor[ssc] = GRAY;
-            return sscToColor[ssc];
+            sccToColor[scc] = GRAY;
+            return sccToColor[scc];
         case 9:
-            sscToColor[ssc] = PINK;
-            return sscToColor[ssc];
+            sccToColor[scc] = PINK;
+            return sccToColor[scc];
         case 10:
-            sscToColor[ssc] = BLACK;
-            return sscToColor[ssc];
+            sccToColor[scc] = BLACK;
+            return sccToColor[scc];
         case 11:
-            sscToColor[ssc] = WHITE;
-            return sscToColor[ssc];
+            sccToColor[scc] = WHITE;
+            return sccToColor[scc];
         case 12:
-            sscToColor[ssc] = LIGHT_GRAY;
-            return sscToColor[ssc];
+            sccToColor[scc] = LIGHT_GRAY;
+            return sccToColor[scc];
     }
+    return PINK;
 }
 
 vector<double> Map::getPartedWeights(vector<POI *> &poi_ids, int algo) {

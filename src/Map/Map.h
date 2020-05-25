@@ -38,8 +38,8 @@ class Map {
     double getWeight(unsigned idFrom, unsigned idTo, int algo);
     vector<Local *> *getPath(unsigned idFrom, unsigned idTo, int algo);
 
-    string giveColorToSSC(int ssc);
-    unordered_map<int, string> sscToColor;
+    string giveColorToSCC(int scc);
+    unordered_map<int, string> sccToColor;
 
     double getTotalWeight(vector<POI *> &poi_ids, int algo);
     vector<double> getPartedWeights(vector<POI *> &poi_ids, int algo);
