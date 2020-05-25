@@ -177,6 +177,7 @@ public:
 
     void resetAllPairsSolved();
     void resetTarjanSolved();
+    void resetDijkstraSolved();
 };
 
 template<class T>
@@ -758,6 +759,11 @@ template<class T>
 void Graph<T>::resetTarjanSolved() {
     this->tarjanSolved = false;
 
+}
+
+template<class T>
+void Graph<T>::resetDijkstraSolved() {
+    this->dijkstraSolved.first = false;
 }
 
 #endif /* GRAPH_H_ */

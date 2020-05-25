@@ -609,3 +609,7 @@ void Map::resetTarjanSolved() {
     this->graph.resetTarjanSolved();
 }
 
+void Map::resetDijkstraSolved() {
+    this->graph.resetDijkstraSolved();
+}
+

@@ -519,6 +519,7 @@ SingleSourceMenu::SingleSourceMenu(System *system) : Menu(system) {
     }
     int algo; 
     while (true) {
+        sys->getMap().resetDijkstraSolved();
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'D' : {

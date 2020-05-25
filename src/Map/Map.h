@@ -72,6 +72,7 @@ public:
 
     void resetAllPairsSolved();
     void resetTarjanSolved();
+    void resetDijkstraSolved();
 
     Local *findLocal(unsigned id);
     double dist(Local *l1, Local *l2);
