@@ -350,7 +350,6 @@ string System::getGraphPath(){
     return this->graphPath;
 }
 
-
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){
         return vector<vector<string>>({{"4019", "9247", "14167", "6861"},
@@ -472,7 +471,7 @@ void System::prisonTransfer() {
         if (dateStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr)) break;
+        if (Date() <= Date(dateStr)) break;
         cout << "This day was in the past!" << endl;
     }
 
@@ -481,7 +480,7 @@ void System::prisonTransfer() {
         if (timeStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
+        if (Date() <= Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
         cout << "Too late to plan for this time!" << endl;
     }
     DateTime dt = DateTime(Date(dateStr), Time(timeStr));
@@ -533,7 +532,7 @@ void System::attendCourt() {
         if (dateStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr)) break;
+        if (Date() <= Date(dateStr)) break;
         cout << "This day was in the past!" << endl;
     }
 
@@ -542,7 +541,7 @@ void System::attendCourt() {
         if (timeStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
+        if (Date() <= Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
         cout << "Too late to plan for this time!" << endl;
     }
     DateTime dt = DateTime(Date(dateStr), Time(timeStr));
@@ -594,7 +593,7 @@ void System::policeToPrison() {
         if (dateStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr)) break;
+        if (Date() <= Date(dateStr)) break;
         cout << "This day was in the past!" << endl;
     }
 
@@ -603,7 +602,7 @@ void System::policeToPrison() {
         if (timeStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
+        if (Date() <= Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
         cout << "Too late to plan for this time!" << endl;
     }
     DateTime dt = DateTime(Date(dateStr), Time(timeStr));
@@ -655,7 +654,7 @@ void System::communityService() {
         if (dateStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr)) break;
+        if (Date() <= Date(dateStr)) break;
         cout << "This day was in the past!" << endl;
     }
 
@@ -664,7 +663,7 @@ void System::communityService() {
         if (timeStr == ":q") {
             return;
         }
-        if (Date() < Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
+        if (Date() <= Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
         cout << "Too late to plan for this time!" << endl;
     }
     DateTime dt = DateTime(Date(dateStr), Time(timeStr));
@@ -709,39 +708,57 @@ const vector<Prisioner *> & System::getPrisioners() const{
     return prisioners;
 }
 
+// This function manages the transport of prisioners and if it divides the transports in more than 1 trip
 vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePrisionersTour(vector<Prisioner *> &prisVecForErrors, vector<vector<POI *>> &toAPI) {
+    // Choose a type of wagon
     Wagon * wagon = this->chooseWagon();
+    // Choose what algorithm to use to compute paths
     int algo = this->readAlgorithm();
     vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> tours;
+    // Matrix that contains the path that each wagon will make. Size of the first dimension is the max number of wagons
+    //      Note: We won't ever need more wagons than prisioners!
     vector<vector<POI *>> wagonsPois(this->prisioners.size());
+    // Counter of "ready-to-go" prisioners. Being ready means a prisioner is associated with a wagon
     unsigned readyCounter = 0;
     for (int i = 0; i < this->prisioners.size(); i++) {
+        // If all prisioners are "ready-to-go", stop
         if (readyCounter == this->prisioners.size()) break;
+
         for (auto prisioner : this->prisioners) {
+            // If prisioner is ready, jump him.
             if (prisioner->isReady()) {
                 continue;
             }
+            // If this prisioner is the first one to go to this wagon, then add him without checking compatibility
             if (wagonsPois[i].empty()) {
                 wagonsPois[i].push_back(prisioner->getStart());
                 wagonsPois[i].push_back(prisioner->getEnd());
                 prisioner->setReady(true);
                 readyCounter++;
-            } else {
+            } else { // wagon is not empty so check if new route is compatible
+                // If Prisioner's Start POI is compatible, then temporarily add the first POI to the wagon tour
                 if (this->map.isStartPoiCompatible(prisioner->getStart(), wagonsPois[i], wagon, algo)) {
                     wagonsPois[i].push_back(prisioner->getStart());
+                    // If Prisioner's End POI is also compatible, then definetly add both POIs
                     if (this->map.isEndPoiCompatible(prisioner->getEnd(), wagonsPois[i], wagon, algo)) {
                         wagonsPois[i].push_back(prisioner->getEnd());
                         prisioner->setReady(true);
                         readyCounter++;
-                    } else {
+                    }
+                    // If Prisioner's End POI is not compatible, then remove the Start POI that you temporarily added
+                    else {
                         wagonsPois[i].pop_back();
                     }
                 }
             }
         }
+        // If wagon has no prisioners, continue to next wagon
         if (wagonsPois[i].empty()) continue;
+        // Calculate a wagon tour
         tours.push_back(this->map.minimumWeightTour(&wagonsPois[i], wagon, algo));
+        // Vector of POIs that will be passed to the API so it can draw the tour
         toAPI.push_back(wagonsPois[i]);
+        // If tour is unfeasable, this means: there isn't a path that doesn't reach late to a POI.
         if (tours.back().second == -1.0) {
             if (wagonsPois[i].size() != 2) {
                 cout << "wagonPois[i].size() should be 2!" << endl;
@@ -752,10 +769,13 @@ vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePris
                 cout << "Prisioner doesn't exists!" << endl;
                 exit(1);
             }
+            // Store unfeasable tour's information
             prisVecForErrors.push_back(p);
         }
         else prisVecForErrors.push_back(nullptr);
     }
+
+    // Reset prisioners being ready for later calculations
     for (auto p : this->prisioners) {
         p->setReady(false);
     }

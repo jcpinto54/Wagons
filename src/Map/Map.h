@@ -46,18 +46,18 @@ class Map {
 
 public:
     Map();
-
     void init(unordered_map<unsigned,Vertex<Local *> *> &map);
 
-    void viewGraph(ViewGraph type);
-
     void setDirected(bool directed);
-
     bool isDirected() const;
 
+    // Viewer functions
+    void viewGraph(ViewGraph type);
     void viewTour(vector<Local *> path, double weight, pair<Time, unsigned> time, vector<POI *> pois, bool api);
     void viewPath(unsigned idFrom, unsigned idTo, bool api, int &algo);
+    void viewGraphConectivity();
 
+    // Apply algorithms
     void applyDijkstra(Local* const &origin);
     void applySingleSource(Local* const &destiny);
     void applyAStar(Local* const &origin, Local* const &destiny);
@@ -66,29 +66,21 @@ public:
     void applyDfs();
     void applyBfs(Local* const &source);
 
-    void resetAllPairsSolved();
-    void resetTarjanSolved();
-
-    double dist(Local *l1, Local *l2);
-
-    int numVertex();
-
-    int numEdges();
-
-    void setNumEdges(int numEdges);
-
-
+    // Consulting Tarjan algorithm results
     bool areStronglyConected(vector<POI *> &POIs);
     bool areStronglyConected(unsigned id1, unsigned id2);
 
-    Local *findLocal(unsigned id);
+    void resetAllPairsSolved();
+    void resetTarjanSolved();
 
-    void viewGraphConectivity();
+    Local *findLocal(unsigned id);
+    double dist(Local *l1, Local *l2);
 
     Tag getTag(unsigned id);
 
-    bool isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
-    bool isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
+    int numVertex();
+    int numEdges();
+    void setNumEdges(int numEdges);
 
     // TSP Algorithm
     // Acerca do valor de retorno:
@@ -96,6 +88,9 @@ public:
     // double - distância/custo do caminho mínimo
     // pair<Time,unsigned> - duração da viagem. Explicado na declaração da função time to dist no ficheiro Wagon.h.
     Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo);
+    bool isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
+    bool isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
+
 };
 
 /// NonExistingVertex Exception

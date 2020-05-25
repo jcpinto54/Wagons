@@ -311,7 +311,6 @@ bool Map::areStronglyConected(unsigned id1, unsigned id2) {
     return v1->getSSC() == v2->getSSC();
 }
 
-
 double Map::getWeight(unsigned int idFrom, unsigned int idTo, int algo) {
     Vertex<Local *> *from, *to;
     from = this->graph.findVertex(new Local(idFrom));
@@ -349,52 +348,65 @@ double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
 }
 
 Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo) {
-
+    // Sort is needed to make next_permutation() work. (See cycle condition)
     sort(pois->begin() + 1, pois->end() - 1);
     double cost, minCost = MAXFLOAT;
 
+    // start is used to see if a tour doesn't make the wagon be late
     DateTime start = (*pois)[0]->getDt();
     vector<POI *> *tempRes = nullptr;
     vector<unsigned> res;
 
+    // Add a POI at the end equal to the first one, but with "unlimited time" to reach it. So the path returns to the original place.
     POI *end = new POI(pois->at(0)->getLoc(), pois->at(0)->getDt().date + 1, pois->at(0)->getDt().time);
     pois->push_back(end);
 
     do {
         bool inTime = true;
+        // weights is a vector of the weights between all POIs in vector (*pois). weights[0] = distance(pois->at(0), pois->at(1))
         vector<double> weights = getPartedWeights(*pois, algo);
 
+        // Arrival at the POIs. Never goes down
         DateTime arrivaltime = start;
         for (int i = 1; i < weights.size(); i++) {
+            // Time to travel between 2 POIs
             pair<Time, unsigned> takes = wagon->distToTime(weights[i]);
             arrivaltime = arrivaltime + takes.first;
             arrivaltime.date += takes.second;
+            // If we arrive after the desired time, then we are late
             if ((*pois)[i]->getDt()< arrivaltime) {
                 inTime = false;
                 break;
             }
         }
+        // We don't want a path that makes us get late
         if (!inTime) continue;
 
         cost = getTotalWeight(*pois, algo);
 
+        // If we found a new best path, then remember it
         if (cost < minCost)
         {
             minCost = cost;
             tempRes = pois;
         }
+            // Permutate the order of the POIs
     } while (next_permutation(pois->begin() + 1, pois->end() - 1));
 
+    // If we didn't find a path that reaches all POIs in time
     if (tempRes == nullptr) {
         return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(vector<Local *>(), -1.0, pair<Time,unsigned>(Time(), 0));
     }
 
+    // Convert vector of POIs to vector of POI ids
     for (auto p : *tempRes) {
         res.push_back(p->getLoc()->getId());
     }
 
     vector<Local *> path;
     vector<Local *> *twoPointPath;
+    // Next 6 lines of code:
+    //  Transform the vector of POI ids into a vector of Local *, that is the sequence of points of the result path.
     twoPointPath = this->getPath(res[0], res[1], algo);
     path = *twoPointPath;
     for (auto it = res.begin() + 1; it != res.end()-1; it++) {
@@ -532,7 +544,7 @@ string Map::giveColorToSSC(int ssc) {
 vector<double> Map::getPartedWeights(vector<POI *> &poi_ids, int algo) {
     vector<double> weights;
 
-    for (int i = 0; i < poi_ids.size(); i++) {
+    for (int i = 0; i < poi_ids.size() - 1; i++) {
             weights.push_back(getWeight(poi_ids[i]->getLoc()->getId(), poi_ids[i + 1]->getLoc()->getId(), algo));
     }
 
@@ -543,26 +555,41 @@ Tag Map::getTag(unsigned int id) {
     return locs[id];
 }
 
+// Check if a start POI is compatible with a vector of POIs that the wagon (*w) will travel through.
+//  algo is used to know what path algorithm to use
+//  poi is "trying" to get inside pois.
 bool Map::isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon *w, int algo) {
     for (int i = 0; i < pois.size(); i++) {
+        // Start POIs haven't got odd indices. This is an assumption for this algorithm
         if (i%2 == 1) continue;
+        // Checks if the poi date is on the same day as all of POIs inside pois
         if (poi->getDt().date - pois[i]->getDt().date > 0) return false;
+        // Two start transport times cannot differ by more than 15 minutes
         if (Time(00,15,01) < poi->getDt().time - pois[i]->getDt().time) return false;
         double weight = this->getWeight(poi->getLoc()->getId(), pois[i]->getLoc()->getId(), algo);
         pair<Time, unsigned> timeTaken = w->distToTime(weight);
+        // If trip between poi and a POI in pois takes more than a day, then return false
         if (timeTaken.second > 0) return false;
+        // Checks if trip between poi and any of the POIs causes the wagon to be late
         if (poi->getDt().time - pois[i]->getDt().time < timeTaken.first) return false;
     }
     return true;
 }
 
+// Check if a end POI is compatible with a vector of POIs that the wagon (*w) will travel through.
+//  algo is used to know what path algorithm to use
+//  poi is "trying" to get inside pois.
 bool Map::isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon *w, int algo) {
     for (int i = 0; i < pois.size(); i++) {
+        // End POIs only got odd indices. This is an assumption for this algorithm
         if (i % 2 == 0) continue;
+        // Checks if the poi date is on the same day as all of POIs inside pois
         if (poi->getDt().date - pois[i]->getDt().date > 0) return false;
         double weight = this->getWeight(poi->getLoc()->getId(), pois[i]->getLoc()->getId(), algo);
         pair<Time, unsigned> timeTaken = w->distToTime(weight);
+        // If trip between poi and a POI in pois takes more than a day, then return false
         if (timeTaken.second > 0) return false;
+        // Checks if trip between poi and any of the POIs causes the wagon to be late
         if (poi->getDt().time - pois[i]->getDt().time < timeTaken.first) return false;
     }
     return true;
