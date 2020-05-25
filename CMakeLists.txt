@@ -3,7 +3,7 @@ project(MeatWagons)
 
 set(CMAKE_CXX_STANDARD 11)
 
-link_libraries(ws2_32 wsock32)
+#link_libraries(ws2_32 wsock32)
 
 include_directories(src)
 add_executable(MeatWagons
