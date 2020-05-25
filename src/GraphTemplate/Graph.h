@@ -593,6 +593,41 @@ void Graph<T>::aStarShortestPathAllPairs()
     allPairsSolved = true;
 }
 
+// This function is not working properly
+template<class T>
+void Graph<T>::dijkstraShortestPathAllPairs()
+{
+    if (this->allPairsSolved) return;
+
+    // Clear dist and pred matrices. Explained in Floyd Warshall
+    dist.clear();
+    dist = vector<vector<double>>(vertexSet.size(), vector<double>(vertexSet.size(), INT64_MAX));
+    pred.clear();
+    pred = vector<vector<Vertex<T>*>>(vertexSet.size(), vector<Vertex<T>*>(vertexSet.size(), NULL));
+
+
+    int i = 0, j = 0;
+    for (auto v1 : vertexSet)
+    {
+        // Compute dijkstra one time per line of matrices
+        dijkstraShortestPath(v1->info);
+        for (auto v2 : vertexSet)
+        {
+            // Store results
+            if (dist[i][j] > v2->dist)
+            {
+                dist[i][j] = v2->dist;
+                pred[i][j] = v2->path;
+            }
+            j++;
+        }
+        i++;
+    }
+
+    allPairsSolved = true;
+}
+
+
 // After preprocessing the graph with an "All Pairs" algorithm call this function to get a path
 template<class T>
 vector<T> *Graph<T>::getAllPairsPath(const T &orig, const T &dest) const{
