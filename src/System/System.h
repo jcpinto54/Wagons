@@ -20,8 +20,6 @@ private:
 
     Local *hq;
 
-    vector<Wagon *> wagons;
-
     vector<POI *> POIs;
 
     vector<Prisioner *> prisioners;
@@ -30,8 +28,6 @@ private:
 
     vector<vector<string>> getSugestions() const;
 public:
-    string getGraphPath();
-
     friend class Menu;
 
     explicit System(const string &graphPath);

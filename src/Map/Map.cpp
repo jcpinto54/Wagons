@@ -3,9 +3,10 @@
 //
 
 #include "Map.h"
-#include "Utilities/utils.h"
-#define MAXFLOAT 9e300
 
+#if !(defined(__linux__) || defined(__APPLE__))
+#define MAXFLOAT 9e300
+#endif
 void Map::viewGraph(ViewGraph type) {
 
     graphViewer->closeWindow();

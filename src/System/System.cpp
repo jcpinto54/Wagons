@@ -1,12 +1,6 @@
 #include "System.h"
-#include "Utilities/utils.h"
 #include <fstream>
-#include <algorithm>
-#include <sstream>
-#include <utility>
 #include "Utilities/InvalidInput.h"
-#include <unordered_map>
-#include <Wagon/Wagon.h>
 
 #if defined(__linux__) || defined(__APPLE__)
 #include <sys/wait.h>
@@ -350,9 +344,6 @@ bool isWagonOption(const string &toTest) {
     return n == 0 || n == 1;
 }
 
-string System::getGraphPath(){
-    return this->graphPath;
-}
 
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){
