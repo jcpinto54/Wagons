@@ -84,6 +84,7 @@ public:
     void setNumEdges(int numEdges);
 
     Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo);
+    Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTourWithTime(vector<POI *> *pois, Wagon * wagon, int algo);
     bool isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
     bool isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
 

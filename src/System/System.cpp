@@ -129,8 +129,8 @@ void System::applyBfs(Local* const &source) {
     this->map.applyBfs(source);
 }
 
-void System::addPOI() {
-    string dateStr, timeStr, locIdStr;
+void System::addPOINoTime() {
+    string locIdStr;
     string addHQ;
     Local *loc;
     if (this->POIs.empty()) {
@@ -150,25 +150,7 @@ void System::addPOI() {
             loc = this->hq;
         }
 
-        while (true) {
-            dateStr = getInput(isDate, "What day do you want to start the tour(DD/MM/YYYY)? ", "Invallid Date");
-            if (dateStr == ":q") {
-                return;
-            }
-            if (Date() < Date(dateStr)) break;
-            cout << "This day was in the past!" << endl;
-        }
-
-        while (true) {
-            timeStr = getInput(isTime,"What time do you want to start the tour(HH:MM:SS)? ", "Invalid Time");
-            if (timeStr == ":q") {
-                return;
-            }
-            if (Date() < Date(dateStr) || Date() == Date(dateStr) && Time() < Time(timeStr)) break;
-            cout << "Too late to plan for this time!" << endl;
-        }
-        Time t = Time(timeStr);
-        this->POIs.push_back(new POI(loc, Date(dateStr), t));
+        this->POIs.push_back(new POI(loc, Date() + 1 + this->POIs.size(), Time()));
         return;
     }
 
@@ -182,14 +164,8 @@ void System::addPOI() {
         throw NonExistingVertex(e);
     }
 
-    timeStr = getInput(isTime, "How much time does the wagon have to get from the start POI to here(HH:MM:SS)? ", "Invalid Time");
-    if (timeStr == ":q")
-        return;
-    Date POIDate = this->POIs[0]->getDt().date;
-    Time initTime = this->POIs[0]->getDt().time, time = Time(timeStr);
-    if ((initTime + time).second) POIDate = Date(this->POIs[0]->getDt().date + 1);
 
-    POI *poi = new POI(loc, POIDate, (initTime + time).first);
+    POI *poi = new POI(loc, Date() + 1 + this->POIs.size(), Time());
     if (this->findPOI(poi) != this->POIs.end()) {
         cout << "This point has already been added" << endl;
         return;
@@ -308,9 +284,8 @@ int System::readAllPairsAlgorithm()
     return stoi(option);
 }
 
-
 Table<string> toTable(const vector<POI *> &container, const System *sys) {
-    vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag", "Time to pass"};
+    vector<string> header = {"Local ID", "X Coordinate", "Y Coordinate", "Tag"};
     vector<vector<string>> content;
     for (auto local : container) {
         vector<string> aux;
@@ -321,14 +296,12 @@ Table<string> toTable(const vector<POI *> &container, const System *sys) {
         }
         else
             aux = {to_string(local->getLoc()->getId()),to_string(local->getLoc()->getX()),
-                              to_string(local->getLoc()->getY()), tagToStr(local->getLoc()->getTag()),
-                              "+"+(local->getDt().time - container[0]->getDt().time).str()};
+                              to_string(local->getLoc()->getY()), tagToStr(local->getLoc()->getTag())};
         content.push_back(aux);
     }
     Table<string> data(header, content);
     return data;
 }
-
 
 bool isAllPairsAlgo(const string &toTest){
     if (!isNum(toTest)) return false;
@@ -342,7 +315,6 @@ bool isWagonOption(const string &toTest) {
     int n = stoi(toTest);
     return n == 0 || n == 1;
 }
-
 
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){ //police | prison | court | hq
@@ -751,7 +723,7 @@ vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePris
         // If wagon has no prisioners, continue to next wagon
         if (wagonsPois[i].empty()) continue;
         // Calculate a wagon tour
-        tours.push_back(this->map.minimumWeightTour(&wagonsPois[i], wagon, algo));
+        tours.push_back(this->map.minimumWeightTourWithTime(&wagonsPois[i], wagon, algo));
         // Vector of POIs that will be passed to the API so it can draw the tour
         toAPI.push_back(wagonsPois[i]);
         // If tour is unfeasable, this means: there isn't a path that doesn't reach late to a POI.

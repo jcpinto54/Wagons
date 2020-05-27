@@ -290,7 +290,7 @@ TripMenu::TripMenu(System *system) : Menu(system) {
         switch (this->nextMenu) {
             case 'A' : {
                 try {
-                    sys->addPOI();
+                    sys->addPOINoTime();
                 } catch (ImpossiblePath e) {
                     cout << e.getMsg() << endl;
                 } catch (NonExistingVertex e) {

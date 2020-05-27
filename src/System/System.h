@@ -50,7 +50,7 @@ public:
     void applyBfs(Local* const &source);
 
     // POIS
-    void addPOI();
+    void addPOINoTime();
     void erasePOI();
     vector<POI *>::iterator findPOI(unsigned id);
     void readPOIs();

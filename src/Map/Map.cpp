@@ -362,6 +362,54 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
     double cost, minCost = MAXFLOAT;
 
     // start is used to see if a tour doesn't make the wagon be late
+    vector<POI *> *tempRes = nullptr;
+    vector<unsigned> res;
+
+    do {
+        bool inTime = true;
+
+        cost = getTotalWeight(*pois, algo);
+
+        // If we found a new best path, then remember it
+        if (cost < minCost)
+        {
+            minCost = cost;
+            tempRes = pois;
+        }
+            // Permutate the order of the POIs
+    } while (next_permutation(pois->begin() + 1, pois->end() - 1));
+
+
+    // Convert vector of POIs to vector of POI ids
+    for (auto p : *tempRes) {
+        res.push_back(p->getLoc()->getId());
+    }
+
+    vector<Local *> path;
+    vector<Local *> *twoPointPath;
+    // Next 6 lines of code:
+    //  Transform the vector of POI ids into a vector of Local *, that is the sequence of points of the result path.
+    twoPointPath = this->getPath(res[0], res[1], algo);
+    path = *twoPointPath;
+    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
+        twoPointPath = this->getPath(*it, *(it+1), algo);
+        path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
+    }
+
+    return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
+}
+
+// Possible TSP Algorithm
+// Acerca do valor de retorno:
+// vector<Local *> - vetor com o caminho de custo mínimo
+// double - distância/custo do caminho mínimo
+// pair<Time,unsigned> - duração da viagem. Explicado na declaração da função distToTime no ficheiro Wagon.h.
+Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTourWithTime(vector<POI *> *pois, Wagon * wagon, int algo) {
+    // Sort is needed to make next_permutation() work. (See cycle condition)
+    sort(pois->begin() + 1, pois->end() - 1);
+    double cost, minCost = MAXFLOAT;
+
+    // start is used to see if a tour doesn't make the wagon be late
     DateTime start = (*pois)[0]->getDt();
     vector<POI *> *tempRes = nullptr;
     vector<unsigned> res;
@@ -399,7 +447,7 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
             minCost = cost;
             tempRes = pois;
         }
-            // Permutate the order of the POIs
+        // Permutate the order of the POIs
     } while (next_permutation(pois->begin() + 1, pois->end() - 1));
 
     // If we didn't find a path that reaches all POIs in time
