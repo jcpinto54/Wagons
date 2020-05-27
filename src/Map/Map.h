@@ -83,11 +83,6 @@ public:
     int numEdges();
     void setNumEdges(int numEdges);
 
-    // TSP Algorithm
-    // Acerca do valor de retorno:
-    // vector<Local *> - vetor com o caminho de custo mínimo
-    // double - distância/custo do caminho mínimo
-    // pair<Time,unsigned> - duração da viagem. Explicado na declaração da função time to dist no ficheiro Wagon.h.
     Util::triplet<vector<Local *>, double, pair<Time, unsigned>> minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo);
     bool isStartPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);
     bool isEndPoiCompatible(POI * poi, vector<POI *> pois, Wagon * w, int algo);

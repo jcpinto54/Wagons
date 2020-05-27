@@ -290,7 +290,6 @@ int System::readAlgorithm()
     Table<string> data(header, content);
     cout << data;
     string option = Util::getInput(isAlgo, "Choose a Algorithm: ", "Invalid Choice");
-
     return stoi(option);
 }
 
@@ -346,30 +345,32 @@ bool isWagonOption(const string &toTest) {
 
 
 vector<vector<string>> System::getSugestions() const {
-    if(this->graphPath == "../data/EspinhoFull/"){
-        return vector<vector<string>>({{"4019", "9247", "14167", "6861"},
-                                       {"6467", "3723", "7763", "-"},
-                                       {"5191", "14777", "5793", "-"}});
+    if(this->graphPath == "../data/EspinhoFull/"){ //police | prison | court | hq
+        return vector<vector<string>>({{"4019", "14167", "9247", "6861"},
+                                       {"6467", "7763", "3723", "-"},
+                                       {"5191", "5793", "14777", "-"}});
     } else if(this->graphPath == "../data/EspinhoStrong/"){
-        return vector<vector<string>>({{"6042", "2374", "4818", "6927"},
-                                       {"4377", "4447", "230", "-"},
-                                       {"1211", "75", "4148", "-"}});
+        return vector<vector<string>>({{"6480", "4598", "1", "6927"},
+                                       {"3751", "6186", "4690", "-"},
+                                       {"4217", "6374", "6854", "-"}});
     } else if(this->graphPath == "../data/PenafielFull/"){
-        return vector<vector<string>>({{"5933", "9549", "2140", "159"},
-                                       {"4004", "3789", "2529", "-"},
-                                       {"787", "6064", "10021", "-"}});
+        return vector<vector<string>>({{"5933", "5612", "9549", "159"},
+                                       {"4004", "423", "3789", "-"},
+                                       {"787", "9014", "6064", "-"}});
     } else if(this->graphPath == "../data/PenafielStrong/"){
-        return vector<vector<string>>({{"962", "3421", "1146", "3620"},
-                                       {"3255", "1326", "3185", "-"},
-                                       {"3469", "3623", "774", "-"}});
+        return vector<vector<string>>({{"3881", "2846", "2596", "3620"},
+                                       {"74", "525", "2218", "-"},
+                                       {"3570", "2527", "8", "-"}});
     } else if(this->graphPath == "../data/PortoFull/"){
         return vector<vector<string>>({{"6011", "4454", "20423", "19548"},
                                        {"5531", "20600", "34024", "-"},
-                                       {"768", "15490", "27209", "-"}});
+                                       {"768", "35190", "25229", "-"},
+                                       {"11768", "15490", "27209", "-"}});
     } else if(this->graphPath == "../data/PortoStrong/"){
-        return vector<vector<string>>({{"9447", "22347", "13991", "14979"},
-                                       {"16993", "16760", "18897", "-"},
-                                       {"16573", "60", "10413", "-"}});
+        return vector<vector<string>>({{"4438", "14376", "8343", "14979"},
+                                       {"13611", "22656", "1196", "-"},
+                                       {"13832", "17069", "8787", "-"},
+                                       {"15616", "18793", "2356", "-"}});
     } else if (this->graphPath == "../data/GridGraphs/4x4/") {
         return vector<vector<string>>({{"10", "3", "11", "0"},
                                        {"17", "23", "20", "-"}});
@@ -407,7 +408,6 @@ void System::addPrisionerTransport() {
     Table<string> data(header, content);
     cout << data;
     string optionStr = Util::getInput(isTransportOption, "Choose a transport type: ", "Invalid Choice");
-    if (optionStr == ":q") return;
     int option = stoi(optionStr);
 
     switch(option) {
@@ -791,12 +791,12 @@ Prisioner *System::findPrisioner(POI *start, POI *end) {
 
 bool isAlgo(const string &toTest){
     if (!isNum(toTest)) return false;
+    if (toTest == ":q") return false;
     int n = stoi(toTest);
     return n == 0 || n == 1 || n == 2;
 }
 
 bool isTransportOption(const string &toTest) {
-    if (toTest == ":q") return true;
     if (!isNum(toTest)) return false;
     int n = stoi(toTest);
     return n == 0 || n == 1 || n == 2 || n == 3;

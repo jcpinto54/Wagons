@@ -351,7 +351,11 @@ double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
     return weight;
 }
 
-// This is a TSP solution
+// Possible TSP Algorithm
+// Acerca do valor de retorno:
+// vector<Local *> - vetor com o caminho de custo mínimo
+// double - distância/custo do caminho mínimo
+// pair<Time,unsigned> - duração da viagem. Explicado na declaração da função distToTime no ficheiro Wagon.h.
 Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightTour(vector<POI *> *pois, Wagon * wagon, int algo) {
     // Sort is needed to make next_permutation() work. (See cycle condition)
     sort(pois->begin() + 1, pois->end() - 1);

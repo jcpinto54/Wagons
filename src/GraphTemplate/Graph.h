@@ -457,21 +457,6 @@ void Graph<T>::aStarShortestPath(const T &orig, const T &destiny)
             }
         }
 
-        Vertex<Local *> *v = d; //vertex variable intialized with destiny vertex
-        double l = 0; //variable for total weight
-
-        while (v->path != NULL) //sum the total weight of path of destiny
-        {
-            for (auto e : v->path->getAdj())
-            {
-                if (e.dest->info->getId() == v->info->getId())
-                {
-                    l += e.weight;
-                    break;
-                }
-            }
-            v = v->path;
-        }
     }
     else
         cout << "A* algorithm only works for 'Local *' objects" << endl;
