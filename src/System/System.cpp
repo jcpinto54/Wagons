@@ -321,9 +321,9 @@ bool isWagonOption(const string &toTest) {
 
 vector<vector<string>> System::getSugestions() const {
     if(this->graphPath == "../data/EspinhoFull/"){ //police | prison | court | hq
-        return vector<vector<string>>({{"4019", "14167", "9247", "6861"},
-                                       {"6467", "7763", "3723", "-"},
-                                       {"5191", "5793", "14777", "-"}});
+        return vector<vector<string>>({{"39", "5105", "4780", "6861"},
+                                       {"123", "14382", "7731", "-"},
+                                       {"7246", "5098", "14183", "-"}});
     } else if(this->graphPath == "../data/EspinhoStrong/"){
         return vector<vector<string>>({{"6480", "4598", "1", "6927"},
                                        {"3751", "6186", "4690", "-"},
