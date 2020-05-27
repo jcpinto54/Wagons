@@ -233,6 +233,7 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 } catch (...) {
                     cout << "Error in in sys->viewPathBetween2Points";
                 }
+                sys->getMap().resetPrintedFloydWarshallVerification();
             }
                 break;
             case 'A' : {
@@ -318,6 +319,8 @@ TripMenu::TripMenu(System *system) : Menu(system) {
                 }
                 string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
                 sys->getMap().viewTour(tour.first, tour.second, tour.third, sys->getPoIs(), Util::isY(viewWithAPI));
+
+                sys->getMap().resetPrintedFloydWarshallVerification();
             }
                 break;
             case 'I' : {
@@ -393,7 +396,9 @@ MeatMenu::MeatMenu(System *system) : Menu(system) {
                     sys->getMap().viewTour(tours[i].first, tours[i].second, tours[i].third, poisToAPI[i], Util::isY(viewWithAPI));
                     getInput(isNext, "Write 'next' to advance: ", "You didn't write next!");
                 }
+                sys->getMap().resetPrintedFloydWarshallVerification();
             }
+
                 break;
             case 'I' : {
                 cout << "Instructions for this Menu:" << endl

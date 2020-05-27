@@ -108,8 +108,10 @@ vector<Local *> *Map::getPath(unsigned int idFrom, unsigned int idTo, int algo) 
         case 1:
             if (this->graph.isAllPairsSolved())
                 return this->graph.getAllPairsPath(from->getInfo(), to->getInfo());
-            else
+            else if(!printedFloydWarshallVerification) {
                 cout << "Floyd-Warshall not calculated! (Default is Dijkstra)" << endl;
+                printedFloydWarshallVerification = true;
+            }
         case 0:
             this->graph.dijkstraShortestPath(from->getInfo());
             return this->graph.getSingleSourcePathTo(to->getInfo());
@@ -127,6 +129,7 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) 
     } catch (NonExistingVertex e) {
         throw e;
     }
+
     if (path->empty()) {
         cout << "There is no path between these points!" << endl;
         return;
@@ -189,12 +192,12 @@ void Map::viewPath(unsigned int idFrom, unsigned int idTo, bool api, int &algo) 
             graphViewer->setEdgeThickness(idEdge, 5);
             graphViewer->setEdgeColor(idEdge, "green");
             greenEdges.push_back(idEdge);
-            if (!this->directed) {
+            /*if (!this->directed) {
                 unsigned idEdgeBack = edgeIds[pair<Local *, Local *>(*(it + 1), *it)];
                 graphViewer->setEdgeThickness(idEdgeBack, 5);
                 graphViewer->setEdgeColor(idEdgeBack, "green");
                 greenEdges.push_back(idEdgeBack);
-            }
+            }*/
             if (it == (*path).begin()) continue;
 
             switch (this->locs[(*it)->getId()]) {
@@ -470,7 +473,6 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
         twoPointPath = this->getPath(*it, *(it+1), algo);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }
-
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
 }
 
@@ -663,5 +665,9 @@ void Map::resetTarjanSolved() {
 
 void Map::resetDijkstraSolved() {
     this->graph.resetDijkstraSolved();
+}
+
+void Map::resetPrintedFloydWarshallVerification() {
+    this->printedFloydWarshallVerification = false;
 }
 

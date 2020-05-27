@@ -44,6 +44,8 @@ class Map {
     double getTotalWeight(vector<POI *> &poi_ids, int algo);
     vector<double> getPartedWeights(vector<POI *> &poi_ids, int algo);
 
+    bool printedFloydWarshallVerification = false;
+
 public:
     Map();
     void init(unordered_map<unsigned,Vertex<Local *> *> &map);
@@ -73,6 +75,7 @@ public:
     void resetAllPairsSolved();
     void resetTarjanSolved();
     void resetDijkstraSolved();
+    void resetPrintedFloydWarshallVerification();
 
     Local *findLocal(unsigned id);
     double dist(Local *l1, Local *l2);
