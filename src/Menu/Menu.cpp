@@ -277,7 +277,7 @@ vector<vector<string>> GraphMenu::getOptions() const {
                                    {"P", "Path between two vertexes"},
                                    {"A", "Path between all pairs of vertexes"},
                                    {"C", "View Graph Conectivity"},
-                                   {"I", "Instruction for this Menu"},
+                                   {"I", "Menu Instructions"},
                                    {"S", "ID Suggestions"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
@@ -397,7 +397,11 @@ MeatMenu::MeatMenu(System *system) : Menu(system) {
                 break;
             case 'I' : {
                 cout << "Instructions for this Menu:" << endl
-                    << "- It works with a vector of Prisioners" << endl;
+                        << "- It works with a vector of prisioners" << endl
+                        << "- When a prisioner is added, you are asked to choose a type of transport" << endl
+                        << "- If you want more than one prisioner just add more than one prisioner" << endl
+                        << "- You can leave this menu and the inserted prisioners will still be here" << endl
+                        << "- If you want to know the optimal path that executes all the requested prisioner transports, then calculate the path('C')" << endl;
             }
                 break;
             case 'S' : {
