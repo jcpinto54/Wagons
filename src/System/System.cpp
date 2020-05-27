@@ -266,6 +266,8 @@ int System::readAlgorithm()
     Table<string> data(header, content);
     cout << data;
     string option = Util::getInput(isAlgo, "Choose a Algorithm: ", "Invalid Choice");
+    if (option == ":q")
+        return -1;
     return stoi(option);
 }
 
@@ -280,7 +282,8 @@ int System::readAllPairsAlgorithm()
     Table<string> data(header, content);
     cout << data;
     string option = Util::getInput(isAllPairsAlgo, "Choose a Algorithm: ", "Invalid Choice");
-
+    if (option == ":q")
+        return -1;
     return stoi(option);
 }
 
@@ -326,9 +329,9 @@ vector<vector<string>> System::getSugestions() const {
                                        {"3751", "6186", "4690", "-"},
                                        {"4217", "6374", "6854", "-"}});
     } else if(this->graphPath == "../data/PenafielFull/"){
-        return vector<vector<string>>({{"5933", "5612", "9549", "159"},
-                                       {"4004", "423", "3789", "-"},
-                                       {"787", "9014", "6064", "-"}});
+        return vector<vector<string>>({{"7486", "5871", "10112", "159"},
+                                       {"6", "3520", "247", "-"},
+                                       {"1440", "2114", "1938", "-"}});
     } else if(this->graphPath == "../data/PenafielStrong/"){
         return vector<vector<string>>({{"3881", "2846", "2596", "3620"},
                                        {"74", "525", "2218", "-"},
@@ -381,6 +384,8 @@ void System::addPrisionerTransport() {
     cout << data;
     string optionStr = Util::getInput(isTransportOption, "Choose a transport type: ", "Invalid Choice");
 
+    if (optionStr == ":q")
+        return;
     int option = stoi(optionStr);
 
     switch(option) {
@@ -784,6 +789,7 @@ bool isAlgo(const string &toTest){
 
 bool isTransportOption(const string &toTest) {
     if (!isNum(toTest)) return false;
+    if (toTest == ":q") return false;
     int n = stoi(toTest);
     return n == 0 || n == 1 || n == 2 || n == 3;
 
