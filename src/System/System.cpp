@@ -490,6 +490,7 @@ void System::prisonTransfer() {
         return;
     }
     if (!this->map.areStronglyConected(resId, objId)) {
+        cout << "These 2 points don't belong to the same strongly connected component!" << endl;
         return;
     }
 
@@ -555,6 +556,7 @@ void System::attendCourt() {
         return;
     }
     if (!this->map.areStronglyConected(resId, objId)) {
+        cout << "These 2 points don't belong to the same strongly connected component!" << endl;
         return;
     }
 
@@ -619,6 +621,7 @@ void System::policeToPrison() {
         return;
     }
     if (!this->map.areStronglyConected(resId, objId)) {
+        cout << "These 2 points don't belong to the same strongly connected component!" << endl;
         return;
     }
 
@@ -679,6 +682,7 @@ void System::communityService() {
         return;
     }
     if (!this->map.areStronglyConected(resId, objId)) {
+        cout << "Point with ID you chose does not belong to the same strongly connected component!\nSuggestions:\nPorto - 17309\nPenafiel - 524\nEspinho - 45" << endl;
         return;
     }
 

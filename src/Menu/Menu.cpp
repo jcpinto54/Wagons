@@ -406,7 +406,8 @@ MeatMenu::MeatMenu(System *system) : Menu(system) {
                         << "- When a prisioner is added, you are asked to choose a type of transport" << endl
                         << "- If you want more than one prisioner just add more than one prisioner" << endl
                         << "- You can leave this menu and the inserted prisioners will still be here" << endl
-                        << "- If you want to know the optimal path that executes all the requested prisioner transports, then calculate the path('C')" << endl;
+                        << "- If you want to know the optimal path that executes all the requested prisioner transports, then calculate the path('C')" << endl
+                        << "- If start times differ in more than 15 minutes, a new trip is added for the prisioner" << endl;
             }
                 break;
             case 'S' : {
