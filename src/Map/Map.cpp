@@ -466,7 +466,7 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
     //  Transform the vector of POI ids into a vector of Local *, that is the sequence of points of the result path.
     twoPointPath = this->getPath(res[0], res[1], algo);
     path = *twoPointPath;
-    for (auto it = res.begin() + 1; it != res.end()-1; it++) {
+    for (auto it = res.begin() + 1; it != res.end()-2; it++) {
         twoPointPath = this->getPath(*it, *(it+1), algo);
         path.insert(path.end(), twoPointPath->begin() + 1, twoPointPath->end());
     }

@@ -380,6 +380,7 @@ void System::addPrisionerTransport() {
     Table<string> data(header, content);
     cout << data;
     string optionStr = Util::getInput(isTransportOption, "Choose a transport type: ", "Invalid Choice");
+
     int option = stoi(optionStr);
 
     switch(option) {
@@ -483,6 +484,9 @@ void System::prisonTransfer() {
         cout << "The prisioner's objective must be a prison!"  << endl;
         return;
     }
+    if (!this->map.areStronglyConected(resId, objId)) {
+        return;
+    }
 
     timeStr = getInput(isTime, "Enter the time it can take to reach the other prison(HH:MM:SS): ", "Invalid Time");
     if (timeStr == ":q") return;
@@ -490,7 +494,8 @@ void System::prisonTransfer() {
     DateTime dtObjective = dt + t;
     objective->setDt(dtObjective);
 
-    this->prisioners.push_back(new Prisioner(res, objective, PRISON_TRANSFER));
+
+        this->prisioners.push_back(new Prisioner(res, objective, PRISON_TRANSFER));
 }
 
 void System::attendCourt() {
@@ -542,6 +547,9 @@ void System::attendCourt() {
     }
     if (this->map.getTag(objId) != COURT) {
         cout << "The prisioner's objective must be a court!"  << endl;
+        return;
+    }
+    if (!this->map.areStronglyConected(resId, objId)) {
         return;
     }
 
@@ -605,6 +613,9 @@ void System::policeToPrison() {
         cout << "The prisioner's objective must be a prison!"  << endl;
         return;
     }
+    if (!this->map.areStronglyConected(resId, objId)) {
+        return;
+    }
 
     timeStr = getInput(isTime, "Enter the time it can take to reach the prison(HH:MM:SS): ", "Invalid Time");
     if (timeStr == ":q") return;
@@ -660,6 +671,9 @@ void System::communityService() {
         objective->setLoc(this->map.findLocal(objId));
     } catch (NonExistingVertex e) {
         cout << e.getMsg() << endl;
+        return;
+    }
+    if (!this->map.areStronglyConected(resId, objId)) {
         return;
     }
 
@@ -721,7 +735,7 @@ vector<triplet<vector<Local *>, double, pair<Time, unsigned>>> System::solvePris
             }
         }
         // If wagon has no prisioners, continue to next wagon
-        if (wagonsPois[i].empty()) continue;
+        if (wagonsPois[i].empty()) break;
         // Calculate a wagon tour
         tours.push_back(this->map.minimumWeightTourWithTime(&wagonsPois[i], wagon, algo));
         // Vector of POIs that will be passed to the API so it can draw the tour
