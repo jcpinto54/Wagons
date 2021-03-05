@@ -1,2 +1,2 @@
-# MeatWagons
+# Wagons
 Projeto CAL

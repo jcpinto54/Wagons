@@ -2,8 +2,8 @@
 // Created by joao on 23/05/20.
 //
 
-#ifndef MEATWAGONS_DATETIME_H
-#define MEATWAGONS_DATETIME_H
+#ifndef Wagons_DATETIME_H
+#define Wagons_DATETIME_H
 
 
 #include "Date.h"
@@ -20,4 +20,4 @@ public:
 };
 
 
-#endif //MEATWAGONS_DATETIME_H
+#endif //Wagons_DATETIME_H

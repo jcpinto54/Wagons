@@ -261,7 +261,7 @@ int System::readAlgorithm()
     content.push_back(aux);
     aux = {"1", "Floyd-Warshall"};
     content.push_back(aux);
-    aux = {"2", "A*"};
+    aux = {"2", "A* - May have Problems"};
     content.push_back(aux);
     Table<string> data(header, content);
     cout << data;
@@ -277,7 +277,7 @@ int System::readAllPairsAlgorithm()
     vector<vector<string>> content;
     vector<string> aux = {"0", "Floyd-Warshall"};
     content.push_back(aux);
-    aux = {"1", "A*"};
+    aux = {"1", "A* - May have Problems"};
     content.push_back(aux);
     Table<string> data(header, content);
     cout << data;

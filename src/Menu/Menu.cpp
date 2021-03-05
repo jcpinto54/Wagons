@@ -176,7 +176,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
                 new TripMenu(system);
                 break;
             case 'M' :
-                new MeatMenu(system);
+                new InmateMenu(system);
                 break;
             case 'A' :
                 new AlgorithmMenu(system);
@@ -195,7 +195,7 @@ MainMenu::MainMenu(System *system) : Menu(system) {
 vector<vector<string>> MainMenu::getOptions() const {
     return vector<vector<string>>({{"G", "Graph Menu"},
                                    {"T", "Trip Menu"},
-                                   {"M", "Meat Menu"},
+                                   {"M", "Inmate Menu"},
                                    {"A", "Algorithm Menu"},
                                    {"L", "Load another Graph"},
                                    {"Q", "Quit Program"}});
@@ -203,6 +203,7 @@ vector<vector<string>> MainMenu::getOptions() const {
 
 GraphMenu::GraphMenu(System *system) : Menu(system) {
     while (true) {
+        sys->getMap().resetPrintedFloydWarshallVerification();
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'V' : {
@@ -233,7 +234,6 @@ GraphMenu::GraphMenu(System *system) : Menu(system) {
                 } catch (...) {
                     cout << "Error in in sys->viewPathBetween2Points";
                 }
-                sys->getMap().resetPrintedFloydWarshallVerification();
             }
                 break;
             case 'A' : {
@@ -287,7 +287,8 @@ vector<vector<string>> GraphMenu::getOptions() const {
 
 TripMenu::TripMenu(System *system) : Menu(system) {
         while (true) {
-        this->nextMenu = this->option();
+            sys->getMap().resetPrintedFloydWarshallVerification();
+            this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'A' : {
                 try {
@@ -320,7 +321,6 @@ TripMenu::TripMenu(System *system) : Menu(system) {
                 string viewWithAPI = Util::getInput(Util::isYorN, "Do you want to view the path in a gui mode?(Y/N) ", "Invalid Input");
                 sys->getMap().viewTour(tour.first, tour.second, tour.third, sys->getPoIs(), Util::isY(viewWithAPI));
 
-                sys->getMap().resetPrintedFloydWarshallVerification();
             }
                 break;
             case 'I' : {
@@ -357,8 +357,9 @@ vector<vector<string>> TripMenu::getOptions() const {
 }
 
 
-MeatMenu::MeatMenu(System *system) : Menu(system) {
+InmateMenu::InmateMenu(System *system) : Menu(system) {
     while (true) {
+        sys->getMap().resetPrintedFloydWarshallVerification();
         this->nextMenu = this->option();
         switch (this->nextMenu) {
             case 'A' : {
@@ -396,7 +397,6 @@ MeatMenu::MeatMenu(System *system) : Menu(system) {
                     sys->getMap().viewTour(tours[i].first, tours[i].second, tours[i].third, poisToAPI[i], Util::isY(viewWithAPI));
                     getInput(isNext, "Write 'next' to advance: ", "You didn't write next!");
                 }
-                sys->getMap().resetPrintedFloydWarshallVerification();
             }
 
                 break;
@@ -424,7 +424,7 @@ MeatMenu::MeatMenu(System *system) : Menu(system) {
     }
 }
 
-vector<vector<string>> MeatMenu::getOptions() const {
+vector<vector<string>> InmateMenu::getOptions() const {
     return vector<vector<string>>({{"A", "Add Prisioner"},
                                    {"E", "Erase Prisioner"},
                                    {"R", "Read Prisioners"},
@@ -564,7 +564,7 @@ SingleSourceMenu::SingleSourceMenu(System *system) : Menu(system) {
 
 vector<vector<string>> SingleSourceMenu::getOptions() const {
     return vector<vector<string>>({{"D", "Dijkstra Algorithm"},
-                                   {"A", "A Star Algorithm"},
+                                   {"A", "A Star Algorithm - May have Problems"},
                                    {"M", "Main Menu"},
                                    {"Q", "Quit Program"}});
 }
@@ -617,6 +617,7 @@ FirstSearchMenu::FirstSearchMenu(System *system) : Menu(system) {
     string idFromStr;
     Local *from;
     while (true) {
+        sys->getMap().resetFirstSearch();
         idFromStr = getInput(isNum, "Enter the start vertex id: ", "Invalid Number");
         if (idFromStr == ":q") break;
         try {

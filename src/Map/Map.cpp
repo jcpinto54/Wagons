@@ -354,7 +354,7 @@ double Map::getTotalWeight(vector<POI *> &poi_ids, int algo) {
     return weight;
 }
 
-// Possible TSP Algorithm
+// Possible TSP Algorithm without considering time
 // Acerca do valor de retorno:
 // vector<Local *> - vetor com o caminho de custo mínimo
 // double - distância/custo do caminho mínimo
@@ -364,7 +364,6 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
     sort(pois->begin() + 1, pois->end() - 1);
     double cost, minCost = MAXFLOAT;
 
-    // start is used to see if a tour doesn't make the wagon be late
     vector<POI *> *tempRes = nullptr;
     vector<unsigned> res;
 
@@ -402,7 +401,7 @@ Util::triplet<vector<Local *>, double, pair<Time, unsigned>> Map::minimumWeightT
     return Util::triplet<vector<Local *>, double, pair<Time, unsigned>>(path, minCost, wagon->distToTime(minCost));
 }
 
-// Possible TSP Algorithm
+// Possible TSP Algorithm considering time
 // Acerca do valor de retorno:
 // vector<Local *> - vetor com o caminho de custo mínimo
 // double - distância/custo do caminho mínimo
@@ -671,3 +670,6 @@ void Map::resetPrintedFloydWarshallVerification() {
     this->printedFloydWarshallVerification = false;
 }
 
+void Map::resetFirstSearch() {
+    this->graph.resetFirstSearch();
+}

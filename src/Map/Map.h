@@ -76,6 +76,7 @@ public:
     void resetTarjanSolved();
     void resetDijkstraSolved();
     void resetPrintedFloydWarshallVerification();
+    void resetFirstSearch();
 
     Local *findLocal(unsigned id);
     double dist(Local *l1, Local *l2);

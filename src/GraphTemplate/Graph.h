@@ -147,14 +147,13 @@ public:
     bool addVertex(Vertex<T> *in);
     bool addEdge(const T &sourc, const T &dest, double w);
     int getNumVertex() const;
-
     void setEdgeCounter(int edgeCounter);
-
     int getEdgeCounter() const;
-
     vector<Vertex<T> *> getVertexSet() const;
+
     vector<T> dfs() const;
     vector<T> bfs(const T &source) const;
+    void resetFirstSearch();
 
     // Single Source Paths Algorithms
     void dijkstraShortestPath(const T &s);
@@ -326,6 +325,12 @@ vector<T> Graph<T>::bfs(const T & source) const {
     return res;
 }
 
+template<class T>
+void Graph<T>::resetFirstSearch() {
+    for (auto it = this->vertexSet.begin(); it != this->vertexSet.end(); it++) {
+        (*it)->visited = false;
+    }
+}
 
 /**************** Single Source Shortest Path algorithms ************/
 
@@ -420,39 +425,36 @@ void Graph<T>::aStarShortestPath(const T &orig, const T &destiny)
         }
 
         //Find Vertexes relative to passed arguments
-        Vertex<Local *> *s = findVertex(origin), *d = findVertex(dest);
+        Vertex<Local *> *start = findVertex(origin), *destination = findVertex(dest);
 
         //Setting origins distance as euclidian distance to destiny
-        s->dist = origin->dist(dest);
+        start->dist = origin->dist(dest);
 
         //Create minimum priority queue to store the vertices to process
         MutablePriorityQueue<Vertex<Local *>> q;
-        q.insert(s);
+        q.insert(start);
 
         while (!q.empty()) { //Only ends when queue is empty if destiny vertex not found
             // Extract minimum vertex in queue
-            Vertex<Local *> *v = q.extractMin();
+            Vertex<Local *> *vertexFromQueue = q.extractMin();
 
             // Ends when destiny vertex end
-            if (v == d)
+            if (vertexFromQueue == destination)
                 break;
 
-            for (auto &e : v->adj) { //Iterate through adjacent edges
-                auto w = e.dest; //Vertex for edge destiny
-                auto od = w->dist; //Old distance
-                auto l = v->info; //Local (info of vertex)
+            for (auto &edge : vertexFromQueue->adj) { //Iterate through adjacent edges
 
                 // h is the distance calculated with euclidean distance
-                double h = v->dist - l->dist(dest) + e.weight + w->info->dist(dest);
+                double h = vertexFromQueue->dist - vertexFromQueue->info->dist(dest) + edge.weight + edge.dest->info->dist(dest);
 
-                if (h < w->dist) { //if calculated distance (weight + euclidean distance) is smaller than current distance, replace it and path
-                    w->dist = h;
-                    w->path = v;
+                if (h < edge.dest->dist) { //if calculated distance (weight + euclidean distance) is smaller than current distance, replace it and path
+                    edge.dest->dist = h;
+                    edge.dest->path = vertexFromQueue;
 
-                    if (od == INF) //if old distance still same as setup, put vertex in the queue
-                        q.insert(w);
-                    else //if not, decrease key
-                        q.decreaseKey(w);
+//                    if (edge.dest->dist < INF) //if old distance still same as setup, put vertex in the queue
+                        q.insert(edge.dest);
+                    if (edge.dest->dist != INF) //if not, decrease key
+                        q.decreaseKey(edge.dest);
                 }
             }
         }
@@ -491,7 +493,13 @@ double Graph<T>::getSingleSourceWeightTo(const T &dest) const{
     return v->dist;
 }
 
-
+template<class T>
+void Graph<T>::resetDijkstraSolved() {
+    this->dijkstraSolved.first = false;
+    for (auto it = this->vertexSet.begin(); it != this->vertexSet.end(); it++) {
+        (*it)->visited = false;
+    }
+}
 
 /**************** All Pairs Shortest Path  ***************/
 
@@ -743,12 +751,9 @@ bool Graph<T>::isTarjanSolved() const {
 template<class T>
 void Graph<T>::resetTarjanSolved() {
     this->tarjanSolved = false;
-
-}
-
-template<class T>
-void Graph<T>::resetDijkstraSolved() {
-    this->dijkstraSolved.first = false;
+    for (auto it = this->vertexSet.begin(); it != this->vertexSet.end(); it++) {
+        (*it)->visited = false;
+    }
 }
 
 #endif /* GRAPH_H_ */

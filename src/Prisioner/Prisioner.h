@@ -2,8 +2,8 @@
 // Created by joao on 23/05/20.
 //
 
-#ifndef MEATWAGONS_PRISIONER_H
-#define MEATWAGONS_PRISIONER_H
+#ifndef Wagons_PRISIONER_H
+#define Wagons_PRISIONER_H
 
 
 #include <Local/Local.h>
@@ -37,4 +37,4 @@ public:
 };
 
 
-#endif //MEATWAGONS_PRISIONER_H
+#endif //Wagons_PRISIONER_H
